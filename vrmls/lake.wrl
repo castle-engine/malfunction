@@ -1,0 +1,39 @@
+#VRML V1.0 ascii
+
+Group{
+  PerspectiveCamera {
+    position 14137.833984375 -13130.8837890625 1922.942138671875
+    orientation 0.683455407619476 0.499964147806168 0.53190666437149 1.87388277053833
+  }
+
+  Separator {
+    DirectionalLight { direction 0 0 -1 }
+    Scale { scaleFactor 100 100 100 }
+    WWWInline { name "lake_bl.wrl" }
+  }
+
+  MalfunctionLevelInfo {
+    sky "lake_sky"
+    type "planet"
+  }
+
+  MalfunctionNotMovingEnemy {
+    kind "destroyer"
+    position -16075 3582 401
+    #-10400 600 -1800
+  }
+  MalfunctionCircleMovingEnemy {
+    kind "hedgehog"
+    circleCenter -16075 3582 1300
+    #-10400 600 -940
+    circleRadius 600
+  }
+  MalfunctionCircleMovingEnemy {
+    kind "hedgehog"
+    circleCenter -16075 3582 2200
+    #-10400 600 0
+    circleRadius 300
+  }
+
+  MalfunctionHuntingEnemy { kind "tieftr" position -2600 1400 1600 }
+}

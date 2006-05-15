@@ -1,0 +1,48 @@
+#VRML V1.0 ascii
+
+Group{
+  PerspectiveCamera {
+    position 1557 -4114 -125
+    direction 12 127 8
+    up 0 0 1
+  }
+
+  Separator {
+    DirectionalLight { direction 0 0 -1 }
+
+    Texture2 { filename "../textures/chaos_dots_gs.jpg" }
+    Texture2Transform { scaleFactor 4 4 }
+    ShapeHints {
+      vertexOrdering COUNTERCLOCKWISE
+      shapeType SOLID
+      creaseAngle 1
+    }
+
+    Scale { scaleFactor 200 200 200 }
+    WWWInline { name "wawoz_bl.wrl" }
+  }
+
+  MalfunctionLevelInfo {
+    sky "foggy_sky"
+    type "planet"
+  }
+
+  Fog {
+    color 0.8 0.8 0.8
+    fogType "LINEAR"
+    volumetric TRUE
+    volumetricDirection 0 0 -1
+    volumetricVisibilityStart -1194.45
+    visibilityRange 1844.78 # 650.33 + 1194.45
+  }
+
+  MalfunctionHuntingEnemy { kind "tieftr" position -1200 -700 300 }
+  MalfunctionCircleMovingEnemy { kind "hedgehog"
+    circleCenter -2780 130 850
+    circleRadius 500 }
+  MalfunctionCircleMovingEnemy { kind "destroyer"
+    circleCenter 827 770 2202
+    circleRadius 500 }
+  MalfunctionHuntingEnemy { kind "tieftr" position -1267 3867 566 }
+  MalfunctionHuntingEnemy { kind "tieftr" position 173 3167 1465 }
+}

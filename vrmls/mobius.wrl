@@ -1,0 +1,46 @@
+#VRML V1.0 ascii
+
+Group{
+  PerspectiveCamera {
+    position 780 4996 87
+    direction -8 -54 0
+    up 0 0 1
+  }
+
+  Separator {
+    DirectionalLight { color 1 1 1 direction -1 -1 -1 }
+#    PointLight { location 0 0 0 }
+#    PointLight { color 0 1 0 location 200 0 0 }
+
+    Scale { scaleFactor 200 200 200 }
+    WWWInline { name "mobius_bl.wrl" }
+  }
+  
+  MalfunctionLevelInfo {
+    sky "thespace"
+    type "space"
+  }  
+  
+  # przy temple
+  MalfunctionHuntingEnemy { kind "tieftr" position 31 -2 588 }
+  MalfunctionCircleMovingEnemy { kind "hedgehog" 
+    circleCenter 31 -2 88 
+    circleRadius 200 }
+
+  # w srodku CenterSphere
+  MalfunctionCircleMovingEnemy { kind "tieftr" 
+    circleCenter -2266 -2010 190 
+    circleRadius 700 
+    uniqueCircleMovingSpeed 0.6 }  
+  MalfunctionHuntingEnemy { kind "tieftr" position -2339 -577 114 }
+
+  # przy trzonie EnterprPlate
+  MalfunctionCircleMovingEnemy { kind "destroyer" 
+    circleCenter 3176 -10529 -3478 
+    circleRadius 1000 }
+  MalfunctionHuntingEnemy { kind "destroyer" position 2626 -10451 -3186 }  
+
+  # w klatce
+  MalfunctionNotMovingEnemy { kind "hedgehog" position -5562 -5132 -23 }
+  MalfunctionNotMovingEnemy { kind "hedgehog" position -5593 -5443 197 }
+}
