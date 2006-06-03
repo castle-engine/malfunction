@@ -263,15 +263,15 @@ begin
  try
   levelScene := TVRMLFlatSceneGL.Create(ParseVRMLFile(vrmlSceneFName, false),
     true, roSceneAsAWhole);
-  levelScene.Attrib_UseLights := true;
-  levelScene.Attrib_FirstGLFreeLight := 1; { swiatla 0 bedziemy uzywac }
+  levelScene.Attributes.UseLights := true;
+  levelScene.Attributes.FirstGLFreeLight := 1; { swiatla 0 bedziemy uzywac }
   levelScene.GetPerspectiveCamera(playerShip.shipPos, playerShip.shipDir, playerShip.shipUp);
   levelInfo := TNodeMalfunctionLevelInfo(levelScene.RootNode.FindNode(TNodeMalfunctionLevelInfo, true));
   levelType := TLevelType(ArrayPosText(levelInfo.FdType.Value, ['planet', 'space'] ));
 
   { This causes much better much, see e.g. on lake.wrl level
     when looking at textures in the distance (e.g. at the plate texture). }
-  levelScene.Attrib_TextureMinFilter := GL_LINEAR_MIPMAP_LINEAR;
+  levelScene.Attributes.TextureMinFilter := GL_LINEAR_MIPMAP_LINEAR;
 
   { Calculate LevelBox }
   LevelBoxIndex := levelScene.ShapeStates.IndexOfShapeWithParentNamed('LevelBox');
