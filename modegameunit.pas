@@ -207,7 +207,7 @@ begin
    RocketsRender;
 
    glDisable(GL_DEPTH_TEST);
-   ProjectionGLPushPop(draw2d, 0, Ortho2dProjMatrix(0, 640, 0, 480));
+   glProjectionPushPopOrtho2D(Draw2d, 0, 0, 640, 0, 480);
  glPopAttrib;
 end;
 
