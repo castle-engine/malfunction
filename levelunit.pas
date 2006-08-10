@@ -282,7 +282,7 @@ begin
      as it should not be visible).
      This way we can comfortably set LevelBox from Blender. }
    LevelBox := levelScene.ShapeStates[LevelBoxIndex].BoundingBox;
-   levelScene.ShapeStates[LevelBoxIndex].ShapeNode.FreeRemovingFromAllParents;
+   levelScene.ShapeStates[LevelBoxIndex].ShapeNode.FreeRemovingFromAllParentNodes;
    levelScene.ChangedAll;
   end else
   begin
@@ -316,7 +316,7 @@ begin
 
   {read enemy ships from file}
   enemyShips := TEnemyShipsList.Create;
-  levelScene.RootNode.EnumNodes(TNodeGeneralMalfunctionEnemy,
+  levelScene.RootNode.EnumerateNodes(TNodeGeneralMalfunctionEnemy,
     TEnemiesConstructor.ConstructEnemy, true);
 
   {reset some ship variables}
