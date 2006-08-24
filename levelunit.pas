@@ -265,7 +265,7 @@ begin
     true, roSceneAsAWhole);
   levelScene.Attributes.UseLights := true;
   levelScene.Attributes.FirstGLFreeLight := 1; { swiatla 0 bedziemy uzywac }
-  levelScene.GetPerspectiveCamera(playerShip.shipPos, playerShip.shipDir, playerShip.shipUp);
+  levelScene.GetPerspectiveViewpoint(playerShip.shipPos, playerShip.shipDir, playerShip.shipUp);
   levelInfo := TNodeMalfunctionLevelInfo(levelScene.RootNode.FindNode(TNodeMalfunctionLevelInfo, true));
   levelType := TLevelType(ArrayPosText(levelInfo.FdType.Value, ['planet', 'space'] ));
 
