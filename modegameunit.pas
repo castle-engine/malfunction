@@ -124,8 +124,8 @@ procedure draw2d(draw2dData: integer);
 
     procedure LevelBoxPosToPixel(const pos: TVector3Single; var x, y: TGLint);
     begin
-     x := Round(MapRange(pos[0], levelBox[0, 0], levelBox[1, 0], Extended(MinInsideX), Extended(MaxInsideX)));
-     y := Round(MapRange(pos[1], levelBox[0, 1], levelBox[1, 1], Extended(MinInsideY), Extended(MaxInsideY)));
+     x := Round(MapRange(pos[0], levelBox[0, 0], levelBox[1, 0], MinInsideX, MaxInsideX));
+     y := Round(MapRange(pos[1], levelBox[0, 1], levelBox[1, 1], MinInsideY, MaxInsideY));
     end;
 
   var i: integer;
