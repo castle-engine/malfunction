@@ -257,6 +257,7 @@ procedure LoadLevel(const vrmlSceneFName: string);
 var vMiddle, vSizes: TVector3Single;
     halfMaxSize: Single;
     LevelBoxIndex: integer;
+    EnemiesConstructor: TEnemiesConstructor;
 begin
  FreeLevel;
 
@@ -317,7 +318,7 @@ begin
   {read enemy ships from file}
   enemyShips := TEnemyShipsList.Create;
   levelScene.RootNode.EnumerateNodes(TNodeGeneralMalfunctionEnemy,
-    TEnemiesConstructor.ConstructEnemy, true);
+    @EnemiesConstructor.ConstructEnemy, true);
 
   {reset some ship variables}
   playerShip.shipRotationSpeed := 0.0;

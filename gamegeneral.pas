@@ -112,14 +112,14 @@ procedure SetGameMode(value: TGameMode);
 begin
  Check(value <> modeNone, 'Can''t SetGameMode to modeNone');
 
- if @gameModeExit[fGameMode] <> nil then gameModeExit[fGameMode];
+ if gameModeExit[fGameMode] <> nil then gameModeExit[fGameMode];
 
  glw.OnDraw := nil;
  glw.OnKeyDown := nil;
  glw.OnKeyUp := nil;
  glw.OnIdle := nil;
 
- if @gameModeEnter[value] <> nil then gameModeEnter[value];
+ if gameModeEnter[value] <> nil then gameModeEnter[value];
  fGameMode := value;
 
  glw.PostRedisplay;
@@ -148,7 +148,7 @@ end;
 procedure Close(glwin: TGLWindow);
 begin
  if (fGameMode <> modeNone) and
-    (@gameModeExit[fGameMode] <> nil) then gameModeExit[fGameMode];
+    (gameModeExit[fGameMode] <> nil) then gameModeExit[fGameMode];
  fGameMode := modeNone;
 
  FreeAndNil(GLWinMessagesTheme.Font);
@@ -159,9 +159,9 @@ end;
 initialization
  glw := TGLWindow_malfunc.Create;
  glw.SetDemoOptions(K_None, #0, true);
- glw.OnCloseQuery := CloseQuery;
- glw.OnInit := Init;
- glw.OnClose := Close;
+ glw.OnCloseQuery := @CloseQuery;
+ glw.OnInit := @Init;
+ glw.OnClose := @Close;
 
  {leave OnResize to nil - dont set default projection matrix
   (we will set it in modeEnter, and because we can't be resized -

@@ -91,7 +91,7 @@ begin
 
  { parse params }
  glw.ParseParameters(StandardParseOptions);
- ParseParameters(Options, OptionProc, nil);
+ ParseParameters(Options, @OptionProc, nil);
  if Parameters.High > 0 then
   raise EInvalidParams.Create('Unrecognized parameter : ' + Parameters[1]);
 

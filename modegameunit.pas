@@ -84,9 +84,9 @@ begin
      'Everything will work correctly but the results will not be as beatiful '+
      'as they could be.');
 
- glw.OnDraw := draw;
- glw.OnKeyDown := KeyDown;
- glw.OnIdle := idle;
+ glw.OnDraw := @draw;
+ glw.OnKeyDown := @KeyDown;
+ glw.OnIdle := @idle;
 
  glw.AutoRedisplay := true;
 
@@ -207,7 +207,7 @@ begin
    RocketsRender;
 
    glDisable(GL_DEPTH_TEST);
-   glProjectionPushPopOrtho2D(Draw2d, 0, 0, 640, 0, 480);
+   glProjectionPushPopOrtho2D(@Draw2d, 0, 0, 640, 0, 480);
  glPopAttrib;
 end;
 

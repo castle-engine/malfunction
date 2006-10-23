@@ -54,8 +54,8 @@ procedure KeyDown(glwin: TGLWindow; key: TKey; c: char); forward;
 procedure modeEnter;
 begin
  ProjectionGLOrtho(0, glw.width, 0, glw.height);
- glw.OnDraw := draw;
- glw.OnKeyDown := KeyDown;
+ glw.OnDraw := @draw;
+ glw.OnKeyDown := @KeyDown;
 end;
 
 procedure modeExit;
