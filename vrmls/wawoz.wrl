@@ -34,6 +34,11 @@ Group{
     volumetricDirection 0 0 -1
     volumetricVisibilityStart -1194.45
     visibilityRange 1844.78 # 650.33 + 1194.45
+    alternative Fog {
+      color 0.8 0.8 0.8
+      fogType "LINEAR"
+      visibilityRange 9220 # 1844 * 5
+    }
   }
 
   MalfunctionHuntingEnemy { kind "tieftr" position -1200 -700 300 }
