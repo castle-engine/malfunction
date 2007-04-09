@@ -30,7 +30,7 @@ implementation
 uses VectorMath, SysUtils, OpenGLh, GLWindow, GameGeneral, KambiGLUtils,
   KambiUtils, LevelUnit, Boxes3d, GLWinMessages, PlayerShipUnit, Images,
   BackgroundGL, ShipsAndRockets, TimeMessages, Keys, KambiFilesUtils,
-  KambiStringUtils;
+  KambiStringUtils, VRMLFlatSceneGL;
 
 var kokpitbg_list: TGLuint;
     crossh_list: TGLuint;
@@ -199,7 +199,7 @@ begin
 
  playerShip.PlayerShipApplyMatrix;
 
- levelScene.Render(nil);
+ levelScene.Render(nil, tgAll);
  ShipsRender;
 
  glPushAttrib(GL_ENABLE_BIT);

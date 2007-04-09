@@ -258,6 +258,7 @@ var vMiddle, vSizes: TVector3Single;
     halfMaxSize: Single;
     LevelBoxIndex: integer;
     EnemiesConstructor: TEnemiesConstructor;
+    DummyGravityUp: TVector3Single;
 begin
  FreeLevel;
 
@@ -266,7 +267,11 @@ begin
     true, roSceneAsAWhole);
   levelScene.Attributes.UseLights := true;
   levelScene.Attributes.FirstGLFreeLight := 1; { swiatla 0 bedziemy uzywac }
-  levelScene.GetPerspectiveViewpoint(playerShip.shipPos, playerShip.shipDir, playerShip.shipUp);
+  levelScene.GetPerspectiveViewpoint(playerShip.shipPos, playerShip.shipDir,
+    playerShip.shipUp,
+    { We don't need GravityUp, we know it should be +Z in malfunction
+      levels. }
+    DummyGravityUp);
   levelInfo := TNodeMalfunctionLevelInfo(levelScene.RootNode.FindNode(TNodeMalfunctionLevelInfo, true));
   levelType := TLevelType(ArrayPosText(levelInfo.FdType.Value, ['planet', 'space'] ));
 
@@ -328,7 +333,7 @@ begin
   { zeby pierwsze OnDraw gry nie zajmowalo zbyt duzo czasu zeby enemyShips
     nie strzelaly od razu kilkoma rakietami na starcie po zaladowaniu
     levelu. }
-  levelScene.PrepareRender(true, true, false, false);
+  levelScene.PrepareRender([tgAll], true, true, false, false);
 
   TimeMsg.Clear;
   TimeMsg.Show('Level '+vrmlSceneFName+' loaded.');

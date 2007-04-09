@@ -430,7 +430,7 @@ begin
    glMultMatrix(TransformToCoordsNoScaleMatrix(
      ShipPos, GoodShipUp, VectorProduct(ShipDir, GoodShipUp), ShipDir));
 
-   EnemyShipVRMLs[Kind].Render(nil);
+   EnemyShipVRMLs[Kind].Render(nil, tgAll);
  glPopMatrix;
 end;
 
@@ -628,7 +628,7 @@ begin
    glTranslated(rocPos[0], rocPos[1], rocPos[2]);
    axis := VectorProduct(modelDir3d, rocDir);
    glRotated(RadToDeg(AngleRadBetweenVectors(modelDir3d, rocDir)), axis[0], axis[1], axis[2]);
-   rocketVRML.Render(nil);
+   rocketVRML.Render(nil, tgAll);
  glPopMatrix;
 end;
 
