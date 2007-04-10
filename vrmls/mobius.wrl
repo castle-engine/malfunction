@@ -1,10 +1,19 @@
 #VRML V1.0 ascii
 
 Group{
-  PerspectiveCamera {
-    position 780 4996 87
-    direction -8 -54 0
-    up 0 0 1
+  # Camera settings "encoded" in the VRML declaration below :
+  # direction -8.063474655151367 -54.428459167480469 0
+  # up -0.000000004076628 4.47924151103507E-008 1
+  # gravityUp 0 0 1
+  Separator {
+    Transform {
+      translation 780 4996 87
+      rotation 1 0 0 1.570796370506287
+    }
+    PerspectiveCamera {
+      position 0 0 0 # camera position is expressed by translation
+      orientation 2.9505193310797E-007 1 0 2.99451470375061
+    }
   }
 
   Separator {
@@ -15,30 +24,30 @@ Group{
     Scale { scaleFactor 200 200 200 }
     WWWInline { name "mobius_bl.wrl" }
   }
-  
+
   MalfunctionLevelInfo {
     sky "thespace"
     type "space"
-  }  
-  
+  }
+
   # przy temple
   MalfunctionHuntingEnemy { kind "tieftr" position 31 -2 588 }
-  MalfunctionCircleMovingEnemy { kind "hedgehog" 
-    circleCenter 31 -2 88 
+  MalfunctionCircleMovingEnemy { kind "hedgehog"
+    circleCenter 31 -2 88
     circleRadius 200 }
 
   # w srodku CenterSphere
-  MalfunctionCircleMovingEnemy { kind "tieftr" 
-    circleCenter -2266 -2010 190 
-    circleRadius 700 
-    uniqueCircleMovingSpeed 0.6 }  
+  MalfunctionCircleMovingEnemy { kind "tieftr"
+    circleCenter -2266 -2010 190
+    circleRadius 700
+    uniqueCircleMovingSpeed 0.6 }
   MalfunctionHuntingEnemy { kind "tieftr" position -2339 -577 114 }
 
   # przy trzonie EnterprPlate
-  MalfunctionCircleMovingEnemy { kind "destroyer" 
-    circleCenter 3176 -10529 -3478 
+  MalfunctionCircleMovingEnemy { kind "destroyer"
+    circleCenter 3176 -10529 -3478
     circleRadius 1000 }
-  MalfunctionHuntingEnemy { kind "destroyer" position 2626 -10451 -3186 }  
+  MalfunctionHuntingEnemy { kind "destroyer" position 2626 -10451 -3186 }
 
   # w klatce
   MalfunctionNotMovingEnemy { kind "hedgehog" position -5562 -5132 -23 }
