@@ -275,10 +275,6 @@ begin
   levelInfo := TNodeMalfunctionLevelInfo(levelScene.RootNode.FindNode(TNodeMalfunctionLevelInfo, true));
   levelType := TLevelType(ArrayPosText(levelInfo.FdType.Value, ['planet', 'space'] ));
 
-  { This causes much better much, see e.g. on lake.wrl level
-    when looking at textures in the distance (e.g. at the plate texture). }
-  levelScene.Attributes.TextureMinFilter := GL_LINEAR_MIPMAP_LINEAR;
-
   { Calculate LevelBox }
   LevelBoxIndex := levelScene.ShapeStates.IndexOfShapeWithParentNamed('LevelBox');
   if LevelBoxIndex <> -1 then
