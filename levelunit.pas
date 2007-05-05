@@ -329,7 +329,7 @@ begin
   { zeby pierwsze OnDraw gry nie zajmowalo zbyt duzo czasu zeby enemyShips
     nie strzelaly od razu kilkoma rakietami na starcie po zaladowaniu
     levelu. }
-  levelScene.PrepareRender([tgAll], true, true, false, false);
+  levelScene.PrepareRender([tgAll], [prBackground, prBoundingBox]);
 
   TimeMsg.Clear;
   TimeMsg.Show('Level '+vrmlSceneFName+' loaded.');

@@ -106,7 +106,7 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure draw2d(draw2dData: integer);
+procedure draw2d(draw2dData: Pointer);
 
   procedure radarDraw2d;
   const
@@ -207,7 +207,7 @@ begin
    RocketsRender;
 
    glDisable(GL_DEPTH_TEST);
-   glProjectionPushPopOrtho2D(@Draw2d, 0, 0, 640, 0, 480);
+   glProjectionPushPopOrtho2D(@Draw2d, nil, 0, 640, 0, 480);
  glPopAttrib;
 end;
 
