@@ -135,7 +135,7 @@ begin
          '  C = crosshair on/off' +nl+
          '  R = radar on/off' +nl+
          '  Esc = exit to menu' +nl+
-         '  F10 = save screen to PNG' +nl+
+         '  F5 = save screen to PNG' +nl+
          nl+
          'There is only one goal: destroy all enemy ships on every level.' +nl+
          nl+

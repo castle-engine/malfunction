@@ -79,7 +79,7 @@ begin
  { set current directory; we will load files throughout whole program
    using relative paths, like 'images/menubg.png'. This line is responsible
    for making these relative paths valid. }
- ChangeDir(ProgramDataPath);
+ ChangeDir(ProgramDataPath + 'data');
 
  { set initial size/fullscreen mode }
  if (glwm.ScreenWidth = 640) and (glwm.ScreenHeight = 480) then
