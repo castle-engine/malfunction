@@ -62,7 +62,7 @@ begin
         'By default, window size will be 640x480 (if your screen has size'+nl+
         '  640x480 then we will run in --fullscreen).'+nl+
         nl+
-        SCamelotProgramHelpSuffix(DisplayProgramName, Version, true));
+        SVrmlEngineProgramHelpSuffix(DisplayProgramName, Version, true));
       ProgramBreak;
      end;
   1: begin

@@ -1,5 +1,5 @@
 {
-  Copyright 2003-2005 Michalis Kamburelis.
+  Copyright 2003-2007 Michalis Kamburelis.
 
   This file is part of "malfunction".
 
@@ -34,7 +34,8 @@ unit ShipsAndRockets;
 
 interface
 
-uses GLWindow, SysUtils, OpenGLh, VectorMath, KambiUtils, KambiClassUtils;
+uses GLWindow, SysUtils, OpenGLh, VectorMath, KambiUtils, KambiClassUtils,
+  KambiTimeUtils;
 
 {$define read_interface}
 
