@@ -152,7 +152,7 @@ end;
 
 procedure InitGLwin(glwin: TGLWindow);
 begin
- listBgDraw := LoadImageToDispList(imagesDir +'menubg.png', [TRGBImage], [], glw.width, glw.height);
+ listBgDraw := LoadImageToDisplayList(imagesDir +'menubg.png', [TRGBImage], [], glw.width, glw.height);
  menuFont := TGLBitmapFont.Create(@BFNT_Isuckatgolf_m32);
 end;
 

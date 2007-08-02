@@ -255,7 +255,7 @@ begin
  kokpit_img := LoadImage(imagesDir +'kokpit.png', [TAlphaImage], [ilcAlphaAdd]);
  try
   kokpit_img.Resize(glw.width, kokpit_img.Height * glwin.Height div 480);
-  kokpitbg_list := ImageDrawToDispList(kokpit_img);
+  kokpitbg_list := ImageDrawToDisplayList(kokpit_img);
  finally kokpit_img.Free end;
 
  { przyjmujemy ze crosshair.png bylo przygotowane dla ekranu 640x480.
@@ -266,7 +266,7 @@ begin
   crossh_orig_height := crossh_img.Height;
   crossh_img.Resize(crossh_img.Width * glw.width div 640,
                     crossh_img.Height * glw.height div 480);
-  crossh_list := ImageDrawToDispList(crossh_img);
+  crossh_list := ImageDrawToDisplayList(crossh_img);
  finally crossh_img.Free end;
 
  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
@@ -308,12 +308,12 @@ starocie : crosshair rysowany jakby XORem
 ------------------------------------------------------------
 stary sposob ladowania kokpit.png
 
-  function LoadAlphaImgToDispList(const imgFName: string; w, h: integer): TGLuint;
+  function LoadAlphaImgToDisplayList(const imgFName: string; w, h: integer): TGLuint;
   var img: TImage;
   begin
    img := LoadImage(imagesDir +imgFName, frWithAlpha, false, w, h);
    try
-    result := ImageDrawToDispList(img);
+    result := ImageDrawToDisplayList(img);
    finally ImageFree(img) end;
   end;
 *)
