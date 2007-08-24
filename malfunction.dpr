@@ -81,6 +81,10 @@ begin
    for making these relative paths valid. }
  ChangeDir(ProgramDataPath + 'data');
 
+ { This must be done before initial Glwn.ScreenWidth, since Glwm.ScreenWidth
+   already initializes display. }
+ Glw.ParseParameters([poDisplay]);
+
  { set initial size/fullscreen mode }
  if (glwm.ScreenWidth = 640) and (glwm.ScreenHeight = 480) then
   glw.FullScreen := true else
@@ -104,7 +108,7 @@ end.
 
 {
   Local Variables:
-  kam-compile-release-command-win32: "clean_glwindow_unit && fpcrelease"
-  kam-compile-release-command-unix: "clean_glwindow_unit && fpcreleaseb -dGLWINDOW_XLIB"
+  kam-compile-release-command-unix:  "./compile_unix.sh && mv -fv malfunction ~/bin/"
+  kam-compile-release-command-win32: "./compile_win32.sh"
   End:
 }
