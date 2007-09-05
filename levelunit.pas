@@ -284,7 +284,7 @@ begin
      as it should not be visible).
      This way we can comfortably set LevelBox from Blender. }
    LevelBox := levelScene.ShapeStates[LevelBoxIndex].BoundingBox;
-   levelScene.ShapeStates[LevelBoxIndex].ShapeNode.FreeRemovingFromAllParentNodes;
+   levelScene.ShapeStates[LevelBoxIndex].ShapeNode.FreeRemovingFromAllParents;
    levelScene.ChangedAll;
   end else
   begin
