@@ -276,7 +276,7 @@ begin
   levelType := TLevelType(ArrayPosText(levelInfo.FdType.Value, ['planet', 'space'] ));
 
   { Calculate LevelBox }
-  LevelBoxIndex := levelScene.ShapeStates.IndexOfShapeWithParentNamed('LevelBox');
+  LevelBoxIndex := levelScene.ShapeStates.IndexOfBlenderMesh('LevelBox');
   if LevelBoxIndex <> -1 then
   begin
    { When node with name 'LevelBox' is found, then we calculate our
