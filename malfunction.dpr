@@ -108,7 +108,7 @@ end.
 
 {
   Local Variables:
-  kam-compile-release-command-unix:  "./compile_unix.sh && mv -fv malfunction ~/bin/"
-  kam-compile-release-command-win32: "./compile_win32.sh"
+  kam-compile-release-command-unix:    "./compile_unix.sh && mv -fv malfunction ~/bin/"
+  kam-compile-release-command-windows: "./compile_windows.sh"
   End:
 }
