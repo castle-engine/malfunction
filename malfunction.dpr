@@ -99,9 +99,8 @@ begin
  if Parameters.High > 0 then
   raise EInvalidParams.Create('Unrecognized parameter : ' + Parameters[1]);
 
- { Mouse is useless, so hide in fullscreen mode }
- if Glw.FullScreen then
-   Glw.MouseVisible := false;
+ { Mouse is useless, so hide }
+ Glw.Cursor := gcNone;
 
  glw.InitLoop;
 end.
