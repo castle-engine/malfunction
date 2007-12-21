@@ -30,7 +30,7 @@ implementation
 uses VectorMath, SysUtils, OpenGLh, GLWindow, GameGeneral, KambiGLUtils,
   KambiUtils, LevelUnit, Boxes3d, GLWinMessages, PlayerShipUnit, Images,
   BackgroundGL, ShipsAndRockets, TimeMessages, Keys, KambiFilesUtils,
-  KambiStringUtils, VRMLFlatSceneGL;
+  KambiStringUtils, VRMLFlatSceneGL, GLImages;
 
 var kokpitbg_list: TGLuint;
     crossh_list: TGLuint;

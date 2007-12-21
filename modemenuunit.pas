@@ -26,7 +26,7 @@ implementation
 
 uses OpenGLh, SysUtils, GLWindow, GameGeneral, OpenGLBmpFonts,
   BFNT_Isuckatgolf_m32_Unit, KambiGLUtils, GLWinMessages, LevelUnit, Images,
-  VectorMath, KambiUtils;
+  VectorMath, KambiUtils, GLImages;
 
 { module consts and vars ---------------------------------------------------- }
 
