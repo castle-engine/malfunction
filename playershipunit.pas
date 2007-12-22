@@ -28,7 +28,7 @@ unit PlayerShipUnit;
 
 interface
 
-uses OpenGLh, Boxes3d, ShipsAndRockets, SysUtils;
+uses GL, GLU, GLExt, Boxes3d, ShipsAndRockets, SysUtils;
 
 const
   playerShipAbsoluteMaxSpeed = 45.0;

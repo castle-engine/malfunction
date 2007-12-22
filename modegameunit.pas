@@ -27,7 +27,7 @@ interface
 
 implementation
 
-uses VectorMath, SysUtils, OpenGLh, GLWindow, GameGeneral, KambiGLUtils,
+uses VectorMath, SysUtils, GL, GLU, GLExt, GLWindow, GameGeneral, KambiGLUtils,
   KambiUtils, LevelUnit, Boxes3d, GLWinMessages, PlayerShipUnit, Images,
   BackgroundGL, ShipsAndRockets, TimeMessages, Keys, KambiFilesUtils,
   KambiStringUtils, VRMLFlatSceneGL, GLImages;

@@ -24,7 +24,7 @@ interface
 
 implementation
 
-uses OpenGLh, SysUtils, GLWindow, GameGeneral, OpenGLBmpFonts,
+uses GL, GLU, GLExt, SysUtils, GLWindow, GameGeneral, OpenGLBmpFonts,
   BFNT_Isuckatgolf_m32_Unit, KambiGLUtils, GLWinMessages, LevelUnit, Images,
   VectorMath, KambiUtils, GLImages;
 

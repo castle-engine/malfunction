@@ -34,7 +34,7 @@ unit ShipsAndRockets;
 
 interface
 
-uses GLWindow, SysUtils, OpenGLh, VectorMath, KambiUtils, KambiClassUtils,
+uses GLWindow, SysUtils, GL, GLU, GLExt, VectorMath, KambiUtils, KambiClassUtils,
   KambiTimeUtils;
 
 {$define read_interface}
