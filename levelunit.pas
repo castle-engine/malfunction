@@ -89,7 +89,8 @@ unit LevelUnit;
 interface
 
 uses SysUtils, GameGeneral, GLWindow, VRMLFlatSceneGL, VRMLFields, VRMLNodes,
-  VRMLTriangleOctree, KambiClassUtils, GL, GLU, GLExt, Boxes3d, VRMLShapeState;
+  VRMLTriangleOctree, KambiClassUtils, GL, GLU, GLExt, Boxes3d, VRMLShapeState,
+  KambiGLUtils;
 
 type
   { levelType wplywa na wiele rzeczy. Ponizej bede dokumentowal sobie

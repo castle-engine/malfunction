@@ -1,5 +1,5 @@
 {
-  Copyright 2003-2006 Michalis Kamburelis.
+  Copyright 2003-2007 Michalis Kamburelis.
 
   This file is part of "malfunction".
 
@@ -28,7 +28,7 @@ unit PlayerShipUnit;
 
 interface
 
-uses GL, GLU, GLExt, Boxes3d, ShipsAndRockets, SysUtils;
+uses GL, GLU, GLExt, Boxes3d, ShipsAndRockets, SysUtils, KambiGLUtils;
 
 const
   playerShipAbsoluteMaxSpeed = 45.0;
@@ -109,7 +109,7 @@ procedure NewPlayerShip;
 
 implementation
 
-uses VectorMath, GameGeneral, GLWindow, KambiGLUtils, KambiUtils, Math,
+uses VectorMath, GameGeneral, GLWindow, KambiUtils, Math,
   LevelUnit, GLWinMessages, TimeMessages, VRMLTriangleOctree;
 
 constructor TPlayerShip.Create;
