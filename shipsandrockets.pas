@@ -34,8 +34,8 @@ unit ShipsAndRockets;
 
 interface
 
-uses GLWindow, SysUtils, GL, GLU, GLExt, VectorMath, KambiUtils, KambiClassUtils,
-  KambiTimeUtils;
+uses GLWindow, SysUtils, GL, GLU, KambiGLUtils, VectorMath, KambiUtils,
+  KambiClassUtils, KambiTimeUtils;
 
 {$define read_interface}
 
@@ -272,7 +272,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 implementation
 
 uses Boxes3d, GameGeneral, VRMLFlatSceneGL, VRMLNodes, LevelUnit, Math,
-  PlayerShipUnit, TimeMessages, KambiGLUtils, VRMLTriangleOctree;
+  PlayerShipUnit, TimeMessages, VRMLTriangleOctree;
 
 {$define read_implementation}
 {$I ObjectsList_1.inc}
@@ -596,7 +596,7 @@ begin
  if not HuntingAttack then
   ShipDir := VectorNegate(ShipDir);
 
- if not TryShipMove( VectorAdd(ShipPos, 
+ if not TryShipMove( VectorAdd(ShipPos,
    VectorScale(ShipDir, glw.FpsCompSpeed)) ) then
  begin
   Randomize;
