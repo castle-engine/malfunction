@@ -38,7 +38,7 @@ uses SysUtils, GLWindow, TimeMessages;
 {$define read_interface}
 
 const
-  Version = '1.2.3';
+  Version = '1.2.4';
   DisplayProgramName = 'malfunction';
 
 type
