@@ -1,5 +1,5 @@
 {
-  Copyright 2003-2005 Michalis Kamburelis.
+  Copyright 2003-2005,2008 Michalis Kamburelis.
 
   This file is part of "malfunction".
 
@@ -137,14 +137,14 @@ uses VectorMath, KambiUtils, PlayerShipUnit, ShipsAndRockets,
 
 constructor TNodeMalfunctionLevelInfo.Create(const ANodeName: string; const AWWWBasePath: string);
 begin
- inherited;
- Fields.Add(TSFString.Create('sky', ''));
- Fields.Add(TSFString.Create('type', 'planet'));
+  inherited;
+  Fields.Add(TSFString.Create('sky', ''));
+  Fields.Add(TSFString.Create('type', 'planet'));
 end;
 
 class function TNodeMalfunctionLevelInfo.ClassNodeTypeName: string;
 begin
- result := 'MalfunctionLevelInfo';
+  result := 'MalfunctionLevelInfo';
 end;
 
 { enemy ship nodes ------------------------------------------------------------ }
@@ -182,64 +182,64 @@ type
 
 constructor TNodeGeneralMalfunctionEnemy.Create(const ANodeName: string; const AWWWBasePath: string);
 begin
- inherited;
- Fields.Add(TSFString.Create('kind', 'hedgehog'));
+  inherited;
+  Fields.Add(TSFString.Create('kind', 'hedgehog'));
 end;
 
 function TNodeGeneralMalfunctionEnemy.Kind: TEnemyShipKind;
 begin
- result := NameShcutToEnemyShipKind(FdKind.Value);
+  result := NameShcutToEnemyShipKind(FdKind.Value);
 end;
 
 constructor TNodeMalfunctionNotMovingEnemy.Create(const ANodeName: string; const AWWWBasePath: string);
 begin
- inherited;
- Fields.Add(TSFVec3f.Create('position', Vector3Single(0, 0, 0)));
+  inherited;
+  Fields.Add(TSFVec3f.Create('position', Vector3Single(0, 0, 0)));
 end;
 
 class function TNodeMalfunctionNotMovingEnemy.ClassNodeTypeName: string;
 begin
- result := 'MalfunctionNotMovingEnemy';
+  result := 'MalfunctionNotMovingEnemy';
 end;
 
 function TNodeMalfunctionNotMovingEnemy.CreateEnemyShip: TEnemyShip;
 begin
- result := TNotMovingEnemyShip.Create(Kind, FdPosition.Value);
+  result := TNotMovingEnemyShip.Create(Kind, FdPosition.Value);
 end;
 
 constructor TNodeMalfunctionCircleMovingEnemy.Create(const ANodeName: string; const AWWWBasePath: string);
 begin
- inherited;
- Fields.Add(TSFVec3f.Create('circleCenter', Vector3Single(0, 0, 0)));
- Fields.Add(TSFFloat.Create('circleRadius', 1.0));
- Fields.Add(TSFFloat.Create('uniqueCircleMovingSpeed', 1.0));
+  inherited;
+  Fields.Add(TSFVec3f.Create('circleCenter', Vector3Single(0, 0, 0)));
+  Fields.Add(TSFFloat.Create('circleRadius', 1.0));
+  Fields.Add(TSFFloat.Create('uniqueCircleMovingSpeed', 1.0));
 end;
 
 class function TNodeMalfunctionCircleMovingEnemy.ClassNodeTypeName: string;
 begin
- result := 'MalfunctionCircleMovingEnemy';
+  result := 'MalfunctionCircleMovingEnemy';
 end;
 
 function TNodeMalfunctionCircleMovingEnemy.CreateEnemyShip: TEnemyShip;
 begin
- result := TCircleMovingEnemyShip.Create(Kind, FdCircleCenter.Value,
-   FdCircleRadius.Value, FdUniqueCircleMovingSpeed.Value);
+  result := TCircleMovingEnemyShip.Create(Kind, FdCircleCenter.Value,
+    FdCircleRadius.Value, FdUniqueCircleMovingSpeed.Value);
 end;
 
 constructor TNodeMalfunctionHuntingEnemy.Create(const ANodeName: string; const AWWWBasePath: string);
 begin
- inherited;
- Fields.Add(TSFVec3f.Create('position', Vector3Single(0, 0, 0)));
+  inherited;
+  Fields.Add(TSFVec3f.Create('position', Vector3Single(0, 0, 0)));
 end;
 
 class function TNodeMalfunctionHuntingEnemy.ClassNodeTypeName: string;
 begin
- result := 'MalfunctionHuntingEnemy';
+  result := 'MalfunctionHuntingEnemy';
 end;
 
 function TNodeMalfunctionHuntingEnemy.CreateEnemyShip: TEnemyShip;
 begin
- result := THuntingEnemyShip.Create(Kind, FdPosition.Value);
+  result := THuntingEnemyShip.Create(Kind, FdPosition.Value);
 end;
 
 { -------------------------------------------------------------------- }
