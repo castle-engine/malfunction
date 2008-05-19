@@ -138,7 +138,9 @@ uses VectorMath, KambiUtils, PlayerShipUnit, ShipsAndRockets,
 constructor TNodeMalfunctionLevelInfo.Create(const ANodeName: string; const AWWWBasePath: string);
 begin
   inherited;
+
   Fields.Add(TSFString.Create('sky', ''));
+
   Fields.Add(TSFString.Create('type', 'planet'));
 end;
 
@@ -183,6 +185,7 @@ type
 constructor TNodeGeneralMalfunctionEnemy.Create(const ANodeName: string; const AWWWBasePath: string);
 begin
   inherited;
+
   Fields.Add(TSFString.Create('kind', 'hedgehog'));
 end;
 
@@ -194,6 +197,7 @@ end;
 constructor TNodeMalfunctionNotMovingEnemy.Create(const ANodeName: string; const AWWWBasePath: string);
 begin
   inherited;
+
   Fields.Add(TSFVec3f.Create('position', Vector3Single(0, 0, 0)));
 end;
 
@@ -210,8 +214,11 @@ end;
 constructor TNodeMalfunctionCircleMovingEnemy.Create(const ANodeName: string; const AWWWBasePath: string);
 begin
   inherited;
+
   Fields.Add(TSFVec3f.Create('circleCenter', Vector3Single(0, 0, 0)));
+
   Fields.Add(TSFFloat.Create('circleRadius', 1.0));
+
   Fields.Add(TSFFloat.Create('uniqueCircleMovingSpeed', 1.0));
 end;
 
@@ -229,6 +236,7 @@ end;
 constructor TNodeMalfunctionHuntingEnemy.Create(const ANodeName: string; const AWWWBasePath: string);
 begin
   inherited;
+
   Fields.Add(TSFVec3f.Create('position', Vector3Single(0, 0, 0)));
 end;
 
