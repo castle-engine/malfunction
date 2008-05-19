@@ -101,8 +101,12 @@ type
   TNodeMalfunctionLevelInfo = class(TVRMLNode)
     constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
     class function ClassNodeTypeName: string; override;
-    property FdSky: TSFString index 0 read GetFieldAsSFString;
-    property FdType: TSFString index 1 read GetFieldAsSFString;
+
+    private FFdSky: TSFString;
+    public property FdSky: TSFString read FFdSky;
+
+    private FFdType: TSFString;
+    public property FdType: TSFString read FFdType;
   end;
 
 var
@@ -139,9 +143,11 @@ constructor TNodeMalfunctionLevelInfo.Create(const ANodeName: string; const AWWW
 begin
   inherited;
 
-  Fields.Add(TSFString.Create('sky', ''));
+  FFdsky := TSFString.Create('sky', '');
+  Fields.Add(FFdsky);
 
-  Fields.Add(TSFString.Create('type', 'planet'));
+  FFdtype := TSFString.Create('type', 'planet');
+  Fields.Add(FFdtype);
 end;
 
 class function TNodeMalfunctionLevelInfo.ClassNodeTypeName: string;
@@ -154,7 +160,10 @@ end;
 type
   TNodeGeneralMalfunctionEnemy = class(TVRMLNode)
     constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
-    property FdKind: TSFString index 0 read GetFieldAsSFString;
+
+    private FFdKind: TSFString;
+    public property FdKind: TSFString read FFdKind;
+
     function Kind: TEnemyShipKind;
     function CreateEnemyShip: TEnemyShip; virtual; abstract;
   end;
@@ -162,23 +171,36 @@ type
   TNodeMalfunctionNotMovingEnemy = class(TNodeGeneralMalfunctionEnemy)
     constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
     class function ClassNodeTypeName: string; override;
-    property FdPosition: TSFVec3f index 1 read GetFieldAsSFVec3f;
+
+    private FFdPosition: TSFVec3f;
+    public property FdPosition: TSFVec3f read FFdPosition;
+
     function CreateEnemyShip: TEnemyShip; override;
   end;
 
   TNodeMalfunctionCircleMovingEnemy = class(TNodeGeneralMalfunctionEnemy)
     constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
     class function ClassNodeTypeName: string; override;
-    property FdCircleCenter: TSFVec3f index 1 read GetFieldAsSFVec3f;
-    property FdCircleRadius: TSFFloat index 2 read GetFieldAsSFFloat;
-    property FdUniqueCircleMovingSpeed: TSFFloat index 3 read GetFieldAsSFFloat;
+
+    private FFdCircleCenter: TSFVec3f;
+    public property FdCircleCenter: TSFVec3f read FFdCircleCenter;
+
+    private FFdCircleRadius: TSFFloat;
+    public property FdCircleRadius: TSFFloat read FFdCircleRadius;
+
+    private FFdUniqueCircleMovingSpeed: TSFFloat;
+    public property FdUniqueCircleMovingSpeed: TSFFloat read FFdUniqueCircleMovingSpeed;
+
     function CreateEnemyShip: TEnemyShip; override;
   end;
 
   TNodeMalfunctionHuntingEnemy = class(TNodeGeneralMalfunctionEnemy)
     constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
     class function ClassNodeTypeName: string; override;
-    property FdPosition: TSFVec3f index 1 read GetFieldAsSFVec3f;
+
+    private FFdPosition: TSFVec3f;
+    public property FdPosition: TSFVec3f read FFdPosition;
+
     function CreateEnemyShip: TEnemyShip; override;
   end;
 
@@ -186,7 +208,8 @@ constructor TNodeGeneralMalfunctionEnemy.Create(const ANodeName: string; const A
 begin
   inherited;
 
-  Fields.Add(TSFString.Create('kind', 'hedgehog'));
+  FFdkind := TSFString.Create('kind', 'hedgehog');
+  Fields.Add(FFdkind);
 end;
 
 function TNodeGeneralMalfunctionEnemy.Kind: TEnemyShipKind;
@@ -198,7 +221,8 @@ constructor TNodeMalfunctionNotMovingEnemy.Create(const ANodeName: string; const
 begin
   inherited;
 
-  Fields.Add(TSFVec3f.Create('position', Vector3Single(0, 0, 0)));
+  FFdposition := TSFVec3f.Create('position', Vector3Single(0, 0, 0));
+  Fields.Add(FFdposition);
 end;
 
 class function TNodeMalfunctionNotMovingEnemy.ClassNodeTypeName: string;
@@ -215,11 +239,14 @@ constructor TNodeMalfunctionCircleMovingEnemy.Create(const ANodeName: string; co
 begin
   inherited;
 
-  Fields.Add(TSFVec3f.Create('circleCenter', Vector3Single(0, 0, 0)));
+  FFdcircleCenter := TSFVec3f.Create('circleCenter', Vector3Single(0, 0, 0));
+  Fields.Add(FFdcircleCenter);
 
-  Fields.Add(TSFFloat.Create('circleRadius', 1.0));
+  FFdcircleRadius := TSFFloat.Create('circleRadius', 1.0);
+  Fields.Add(FFdcircleRadius);
 
-  Fields.Add(TSFFloat.Create('uniqueCircleMovingSpeed', 1.0));
+  FFduniqueCircleMovingSpeed := TSFFloat.Create('uniqueCircleMovingSpeed', 1.0);
+  Fields.Add(FFduniqueCircleMovingSpeed);
 end;
 
 class function TNodeMalfunctionCircleMovingEnemy.ClassNodeTypeName: string;
@@ -237,7 +264,8 @@ constructor TNodeMalfunctionHuntingEnemy.Create(const ANodeName: string; const A
 begin
   inherited;
 
-  Fields.Add(TSFVec3f.Create('position', Vector3Single(0, 0, 0)));
+  FFdposition := TSFVec3f.Create('position', Vector3Single(0, 0, 0));
+  Fields.Add(FFdposition);
 end;
 
 class function TNodeMalfunctionHuntingEnemy.ClassNodeTypeName: string;
