@@ -158,7 +158,7 @@ end;
 { enemy ship nodes ------------------------------------------------------------ }
 
 type
-  TNodeGeneralMalfunctionEnemy = class(TVRMLNode)
+  TVRMLMalfunctionEnemyNode = class(TVRMLNode)
     constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
 
     private FFdKind: TSFString;
@@ -168,7 +168,7 @@ type
     function CreateEnemyShip: TEnemyShip; virtual; abstract;
   end;
 
-  TNodeMalfunctionNotMovingEnemy = class(TNodeGeneralMalfunctionEnemy)
+  TNodeMalfunctionNotMovingEnemy = class(TVRMLMalfunctionEnemyNode)
     constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
     class function ClassNodeTypeName: string; override;
 
@@ -178,7 +178,7 @@ type
     function CreateEnemyShip: TEnemyShip; override;
   end;
 
-  TNodeMalfunctionCircleMovingEnemy = class(TNodeGeneralMalfunctionEnemy)
+  TNodeMalfunctionCircleMovingEnemy = class(TVRMLMalfunctionEnemyNode)
     constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
     class function ClassNodeTypeName: string; override;
 
@@ -194,7 +194,7 @@ type
     function CreateEnemyShip: TEnemyShip; override;
   end;
 
-  TNodeMalfunctionHuntingEnemy = class(TNodeGeneralMalfunctionEnemy)
+  TNodeMalfunctionHuntingEnemy = class(TVRMLMalfunctionEnemyNode)
     constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
     class function ClassNodeTypeName: string; override;
 
@@ -204,7 +204,7 @@ type
     function CreateEnemyShip: TEnemyShip; override;
   end;
 
-constructor TNodeGeneralMalfunctionEnemy.Create(const ANodeName: string; const AWWWBasePath: string);
+constructor TVRMLMalfunctionEnemyNode.Create(const ANodeName: string; const AWWWBasePath: string);
 begin
   inherited;
 
@@ -212,7 +212,7 @@ begin
   Fields.Add(FFdkind);
 end;
 
-function TNodeGeneralMalfunctionEnemy.Kind: TEnemyShipKind;
+function TVRMLMalfunctionEnemyNode.Kind: TEnemyShipKind;
 begin
   result := NameShcutToEnemyShipKind(FdKind.Value);
 end;
@@ -287,7 +287,7 @@ type
 
   class procedure TEnemiesConstructor.ConstructEnemy(node: TVRMLNode);
   begin
-   EnemyShips.Add(TNodeGeneralMalfunctionEnemy(node).CreateEnemyShip);
+   EnemyShips.Add(TVRMLMalfunctionEnemyNode(node).CreateEnemyShip);
   end;
 
 procedure LoadLevel(const vrmlSceneFName: string);
@@ -355,7 +355,7 @@ begin
 
   {read enemy ships from file}
   enemyShips := TEnemyShipsList.Create;
-  levelScene.RootNode.EnumerateNodes(TNodeGeneralMalfunctionEnemy,
+  levelScene.RootNode.EnumerateNodes(TVRMLMalfunctionEnemyNode,
     @EnemiesConstructor.ConstructEnemy, true);
 
   {reset some ship variables}
