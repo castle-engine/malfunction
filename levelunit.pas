@@ -143,10 +143,10 @@ constructor TNodeMalfunctionLevelInfo.Create(const ANodeName: string; const AWWW
 begin
   inherited;
 
-  FFdsky := TSFString.Create('sky', '');
+  FFdsky := TSFString.Create(Self, 'sky', '');
   Fields.Add(FFdsky);
 
-  FFdtype := TSFString.Create('type', 'planet');
+  FFdtype := TSFString.Create(Self, 'type', 'planet');
   Fields.Add(FFdtype);
 end;
 
@@ -208,7 +208,7 @@ constructor TVRMLMalfunctionEnemyNode.Create(const ANodeName: string; const AWWW
 begin
   inherited;
 
-  FFdkind := TSFString.Create('kind', 'hedgehog');
+  FFdkind := TSFString.Create(Self, 'kind', 'hedgehog');
   Fields.Add(FFdkind);
 end;
 
@@ -221,7 +221,7 @@ constructor TNodeMalfunctionNotMovingEnemy.Create(const ANodeName: string; const
 begin
   inherited;
 
-  FFdposition := TSFVec3f.Create('position', Vector3Single(0, 0, 0));
+  FFdposition := TSFVec3f.Create(Self, 'position', Vector3Single(0, 0, 0));
   Fields.Add(FFdposition);
 end;
 
@@ -239,13 +239,13 @@ constructor TNodeMalfunctionCircleMovingEnemy.Create(const ANodeName: string; co
 begin
   inherited;
 
-  FFdcircleCenter := TSFVec3f.Create('circleCenter', Vector3Single(0, 0, 0));
+  FFdcircleCenter := TSFVec3f.Create(Self, 'circleCenter', Vector3Single(0, 0, 0));
   Fields.Add(FFdcircleCenter);
 
-  FFdcircleRadius := TSFFloat.Create('circleRadius', 1.0);
+  FFdcircleRadius := TSFFloat.Create(Self, 'circleRadius', 1.0);
   Fields.Add(FFdcircleRadius);
 
-  FFduniqueCircleMovingSpeed := TSFFloat.Create('uniqueCircleMovingSpeed', 1.0);
+  FFduniqueCircleMovingSpeed := TSFFloat.Create(Self, 'uniqueCircleMovingSpeed', 1.0);
   Fields.Add(FFduniqueCircleMovingSpeed);
 end;
 
@@ -264,7 +264,7 @@ constructor TNodeMalfunctionHuntingEnemy.Create(const ANodeName: string; const A
 begin
   inherited;
 
-  FFdposition := TSFVec3f.Create('position', Vector3Single(0, 0, 0));
+  FFdposition := TSFVec3f.Create(Self, 'position', Vector3Single(0, 0, 0));
   Fields.Add(FFdposition);
 end;
 
