@@ -300,8 +300,7 @@ begin
  FreeLevel;
 
  try
-  levelScene := TVRMLGLScene.Create(ParseVRMLFile(vrmlSceneFName, false),
-    true, roSceneAsAWhole);
+  levelScene := TVRMLGLScene.Create(vrmlSceneFName, roSceneAsAWhole);
   levelScene.Attributes.UseLights := true;
   levelScene.Attributes.FirstGLFreeLight := 1; { swiatla 0 bedziemy uzywac }
   levelScene.GetPerspectiveViewpoint(playerShip.shipPos, playerShip.shipDir,
