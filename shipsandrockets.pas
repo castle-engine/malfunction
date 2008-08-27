@@ -271,7 +271,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 
 implementation
 
-uses Boxes3d, GameGeneral, VRMLFlatSceneGL, VRMLNodes, LevelUnit, Math,
+uses Boxes3d, GameGeneral, VRMLGLScene, VRMLNodes, LevelUnit, Math,
   PlayerShipUnit, TimeMessages, VRMLTriangleOctree;
 
 {$define read_implementation}
@@ -327,8 +327,8 @@ const
 
 var
   { modeliki; ladowane w glw.Init, niszczone w glw.Close  }
-  rocketVRML: TVRMLFlatSceneGL;
-  enemyShipVRMLs: array[TEnemyShipKind]of TVRMLFlatSceneGL;
+  rocketVRML: TVRMLGLScene;
+  enemyShipVRMLs: array[TEnemyShipKind]of TVRMLGLScene;
 
 { TSpaceShip ----------------------------------------------------------------- }
 
@@ -725,10 +725,10 @@ end;
 procedure InitGLWin(glwin: TGLWindow);
 var sk: TEnemyShipKind;
 begin
- rocketVRML := TVRMLFlatSceneGL.Create(
+ rocketVRML := TVRMLGLScene.Create(
    ParseVRMLFile(vrmlsDir +'rocket.wrl', false), true, roSceneAsAWhole);
  for sk := Low(sk) to High(sk) do
-  EnemyShipVRMLs[sk] := TVRMLFlatSceneGL.Create(
+  EnemyShipVRMLs[sk] := TVRMLGLScene.Create(
     ParseVRMLFile(vrmlsDir +EnemyShipKindsInfos[sk].VrmlFname, false), true, roSceneAsAWhole);
 end;
 

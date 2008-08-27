@@ -88,7 +88,7 @@ unit LevelUnit;
 
 interface
 
-uses SysUtils, GameGeneral, GLWindow, VRMLFlatSceneGL, VRMLFields, VRMLNodes,
+uses SysUtils, GameGeneral, GLWindow, VRMLGLScene, VRMLFields, VRMLNodes,
   VRMLTriangleOctree, KambiClassUtils, GL, GLU, GLExt, Boxes3d, VRMLShapeState,
   KambiGLUtils;
 
@@ -110,7 +110,7 @@ type
   end;
 
 var
-  levelScene: TVRMLFlatSceneGL;
+  levelScene: TVRMLGLScene;
   levelType: TLevelType;
   levelInfo: TNodeMalfunctionLevelInfo;
   LevelBox: TBox3d; { poza ten box nie moze NIC wyleciec }
@@ -300,7 +300,7 @@ begin
  FreeLevel;
 
  try
-  levelScene := TVRMLFlatSceneGL.Create(ParseVRMLFile(vrmlSceneFName, false),
+  levelScene := TVRMLGLScene.Create(ParseVRMLFile(vrmlSceneFName, false),
     true, roSceneAsAWhole);
   levelScene.Attributes.UseLights := true;
   levelScene.Attributes.FirstGLFreeLight := 1; { swiatla 0 bedziemy uzywac }
