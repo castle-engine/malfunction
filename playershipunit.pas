@@ -261,7 +261,7 @@ begin
    sCollider.Free;
   end else
   if not levelScene.DefaultTriangleOctree.MoveAllowedSimple(
-    shipPos, newShipPos, shipRadius) then
+    shipPos, newShipPos, shipRadius, false) then
    Crash(Random(40)+40, '') else
    shipPos := newShipPos;
  end;
