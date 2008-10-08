@@ -252,7 +252,7 @@ procedure InitGLwin(glwin: TGLWindow);
 var crossh_img: TImage;
     kokpit_img: TImage;
 begin
- kokpit_img := LoadImage(imagesDir +'kokpit.png', [TAlphaImage], [ilcAlphaAdd]);
+ kokpit_img := LoadImage(imagesDir +'kokpit.png', [TRGBAlphaImage], [ilcAlphaAdd]);
  try
   kokpit_img.Resize(glw.width, kokpit_img.Height * glwin.Height div 480);
   kokpitbg_list := ImageDrawToDisplayList(kokpit_img);
@@ -260,7 +260,7 @@ begin
 
  { przyjmujemy ze crosshair.png bylo przygotowane dla ekranu 640x480.
    Resizujemy odpowiednio do naszego okienka. }
- crossh_img := LoadImage(imagesDir +'crosshair.png', [TAlphaImage], [ilcAlphaAdd]);
+ crossh_img := LoadImage(imagesDir +'crosshair.png', [TRGBAlphaImage], [ilcAlphaAdd]);
  try
   crossh_orig_width := crossh_img.Width;
   crossh_orig_height := crossh_img.Height;
