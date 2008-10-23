@@ -135,7 +135,7 @@ procedure PlayGame(const vrmlSceneFName: string);
 implementation
 
 uses VectorMath, KambiUtils, PlayerShipUnit, ShipsAndRockets,
-  TimeMessages, GLWinMessages;
+  TimeMessages, GLWinMessages, VRMLScene;
 
 { TNodeMalfunctionInfo ----------------------------------------------- }
 
@@ -347,8 +347,8 @@ begin
   end;
 
   {pamietaj ze konstruowanie octree musi byc PO ew. usunieciu node'a LevelBoxXY}
-  levelScene.DefaultTriangleOctree :=
-    levelScene.CreateTriangleOctree('Loading ...');
+  levelScene.TriangleOctreeProgressTitle := 'Loading ...';
+  levelScene.OctreeStrategy := osTriangle;
 
   rockets := TRocketsList.Create;
 
