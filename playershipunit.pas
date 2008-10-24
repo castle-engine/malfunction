@@ -260,7 +260,7 @@ begin
    TimeMsg.Show('"'+sCollider.ShipName+'" was destroyed by the crash.');
    sCollider.Free;
   end else
-  if not levelScene.TriangleOctree.MoveAllowedSimple(
+  if not levelScene.OctreeCollisions.MoveAllowedSimple(
     shipPos, newShipPos, shipRadius, false) then
    Crash(Random(40)+40, '') else
    shipPos := newShipPos;

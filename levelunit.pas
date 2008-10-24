@@ -348,7 +348,7 @@ begin
 
   {pamietaj ze konstruowanie octree musi byc PO ew. usunieciu node'a LevelBoxXY}
   levelScene.TriangleOctreeProgressTitle := 'Loading ...';
-  levelScene.OctreeStrategy := osTriangle;
+  levelScene.Octrees := [okDynamicCollisions];
 
   rockets := TRocketsList.Create;
 
