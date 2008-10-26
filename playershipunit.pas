@@ -237,19 +237,19 @@ begin
  {odczytaj wcisniete klawisze}
  with glw do
  begin
-  if KeysDown[K_Left] then shipRotationSpeed += ROT_SPEED_CHANGE * glw.IdleSpeed * 50;
-  if KeysDown[K_Right] then shipRotationSpeed -= ROT_SPEED_CHANGE * glw.IdleSpeed * 50;
-  if KeysDown[K_Up] then shipVertRotationSpeed -= ROT_VERT_SPEED_CHANGE * glw.IdleSpeed * 50;
-  if KeysDown[K_Down] then shipVertRotationSpeed += ROT_VERT_SPEED_CHANGE * glw.IdleSpeed * 50;
-  if KeysDown[K_A] then shipSpeed := KambiUtils.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * glw.IdleSpeed * 50);
-  if KeysDown[K_Z] then shipSpeed := KambiUtils.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * glw.IdleSpeed * 50);
+  if KeysDown[K_Left] then shipRotationSpeed += ROT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
+  if KeysDown[K_Right] then shipRotationSpeed -= ROT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
+  if KeysDown[K_Up] then shipVertRotationSpeed -= ROT_VERT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
+  if KeysDown[K_Down] then shipVertRotationSpeed += ROT_VERT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
+  if KeysDown[K_A] then shipSpeed := KambiUtils.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
+  if KeysDown[K_Z] then shipSpeed := KambiUtils.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
  end;
 
  {move ship using shipSpeed,
   check for collisions with level using octree,
   check for collisions with enemyShips using simple sphere collision detecion}
  newShipPos := VectorAdd(shipPos, VectorScale(shipDir,
-   shipSpeed * glw.IdleSpeed * 50));
+   shipSpeed * glw.Fps.IdleSpeed * 50));
  if CheatDontCheckCollisions then
   shipPos := newShipPos else
  begin
@@ -271,23 +271,23 @@ begin
  shipUpZSign := Sign(shipUp[2]);
  if shipUpZSign <> 0 then
  begin
-  shipDir := RotatePointAroundAxisDeg(shipRotationSpeed * glw.IdleSpeed * 50, shipDir, Vector3Single(0, 0, shipUpZSign));
-  shipUp := RotatePointAroundAxisDeg(shipRotationSpeed * glw.IdleSpeed * 50, shipUp, Vector3Single(0, 0, shipUpZSign));
+  shipDir := RotatePointAroundAxisDeg(shipRotationSpeed * glw.Fps.IdleSpeed * 50, shipDir, Vector3Single(0, 0, shipUpZSign));
+  shipUp := RotatePointAroundAxisDeg(shipRotationSpeed * glw.Fps.IdleSpeed * 50, shipUp, Vector3Single(0, 0, shipUpZSign));
  end;
  {apply speed vertical - here we will need shipSideAxis}
  shipSideAxis := VectorProduct(shipDir, shipUp);
- shipDir := RotatePointAroundAxisDeg(shipVertRotationSpeed * glw.IdleSpeed * 50, shipDir, shipSideAxis);
- shipUp := RotatePointAroundAxisDeg(shipVertRotationSpeed * glw.IdleSpeed * 50, shipUp, shipSideAxis);
+ shipDir := RotatePointAroundAxisDeg(shipVertRotationSpeed * glw.Fps.IdleSpeed * 50, shipDir, shipSideAxis);
+ shipUp := RotatePointAroundAxisDeg(shipVertRotationSpeed * glw.Fps.IdleSpeed * 50, shipUp, shipSideAxis);
 
  {decrease rotations speeds}
- RotationSpeedBackToZero(shipRotationSpeed, ROT_SPEED_CHANGE * glw.IdleSpeed * 50);
- RotationSpeedBackToZero(shipVertRotationSpeed, ROT_VERT_SPEED_CHANGE * glw.IdleSpeed * 50);
+ RotationSpeedBackToZero(shipRotationSpeed, ROT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
+ RotationSpeedBackToZero(shipVertRotationSpeed, ROT_VERT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
 
  {apply shipPosBox}
  Box3dClamp(shipPos, levelBox);
 
  if BlackOutIntensity > 0 then
-   BlackOutIntensity -= 0.02 * Glw.IdleSpeed * 50;
+   BlackOutIntensity -= 0.02 * Glw.Fps.IdleSpeed * 50;
 end;
 
 procedure TPlayerShip.PlayerShipDraw2d;

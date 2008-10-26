@@ -531,7 +531,7 @@ var newAngleRad: Double;
 begin
  inherited;
 
- newAngleRad := AngleRad + AngleRadChange * glw.IdleSpeed * 50;
+ newAngleRad := AngleRad + AngleRadChange * glw.Fps.IdleSpeed * 50;
  newShipPos[0] := cos(newAngleRad)*CircleRadius + CircleCenter[0];
  newShipPos[1] := sin(newAngleRad)*CircleRadius + CircleCenter[1];
  newShipPos[2] := CircleCenter[2];
@@ -597,7 +597,7 @@ begin
   ShipDir := VectorNegate(ShipDir);
 
  if not TryShipMove( VectorAdd(ShipPos,
-   VectorScale(ShipDir, glw.IdleSpeed * 50)) ) then
+   VectorScale(ShipDir, glw.Fps.IdleSpeed * 50)) ) then
  begin
   Randomize;
   HuntingAttack := not HuntingAttack
@@ -644,7 +644,7 @@ var newRocPos: TVector3Single;
 
 var i: integer;
 begin
- newRocPos := VectorAdd(rocPos, VectorScale(rocDir, glw.IdleSpeed * 50));
+ newRocPos := VectorAdd(rocPos, VectorScale(rocDir, glw.Fps.IdleSpeed * 50));
  if (levelScene.OctreeCollisions.SegmentCollision(rocPos,
        newRocPos, false, nil, false, nil) <> nil) or
     (not Box3dPointInside(rocPos, levelBox)) then
