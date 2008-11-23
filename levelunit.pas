@@ -89,7 +89,7 @@ unit LevelUnit;
 interface
 
 uses SysUtils, GameGeneral, GLWindow, VRMLGLScene, VRMLFields, VRMLNodes,
-  VRMLTriangleOctree, KambiClassUtils, GL, GLU, GLExt, Boxes3d, VRMLShapeState,
+  VRMLTriangleOctree, KambiClassUtils, GL, GLU, GLExt, Boxes3d, VRMLShape,
   KambiGLUtils;
 
 type
@@ -312,15 +312,15 @@ begin
   levelType := TLevelType(ArrayPosText(levelInfo.FdType.Value, ['planet', 'space'] ));
 
   { Calculate LevelBox }
-  LevelBoxIndex := levelScene.ShapeStates.IndexOfBlenderMesh('LevelBox');
+  LevelBoxIndex := levelScene.Shapes.IndexOfBlenderMesh('LevelBox');
   if LevelBoxIndex <> -1 then
   begin
    { When node with name 'LevelBox' is found, then we calculate our
      LevelBox from this node (and we delete 'LevelBox' from the scene,
      as it should not be visible).
      This way we can comfortably set LevelBox from Blender. }
-   LevelBox := levelScene.ShapeStates[LevelBoxIndex].BoundingBox;
-   levelScene.ShapeStates[LevelBoxIndex].GeometryNode.FreeRemovingFromAllParents;
+   LevelBox := levelScene.Shapes[LevelBoxIndex].BoundingBox;
+   levelScene.Shapes[LevelBoxIndex].GeometryNode.FreeRemovingFromAllParents;
    levelScene.ChangedAll;
   end else
   begin
