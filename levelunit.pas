@@ -293,7 +293,7 @@ type
 procedure LoadLevel(const vrmlSceneFName: string);
 var vMiddle, vSizes: TVector3Single;
     halfMaxSize: Single;
-    LevelBoxIndex: integer;
+    LevelBoxShape: TVRMLShape;
     EnemiesConstructor: TEnemiesConstructor;
     DummyGravityUp: TVector3Single;
 begin
@@ -312,15 +312,15 @@ begin
   levelType := TLevelType(ArrayPosText(levelInfo.FdType.Value, ['planet', 'space'] ));
 
   { Calculate LevelBox }
-  LevelBoxIndex := levelScene.Shapes.IndexOfBlenderMesh('LevelBox');
-  if LevelBoxIndex <> -1 then
+  LevelBoxShape := levelScene.Shapes.FindBlenderMesh('LevelBox');
+  if LevelBoxShape <> nil then
   begin
    { When node with name 'LevelBox' is found, then we calculate our
      LevelBox from this node (and we delete 'LevelBox' from the scene,
      as it should not be visible).
      This way we can comfortably set LevelBox from Blender. }
-   LevelBox := levelScene.Shapes[LevelBoxIndex].BoundingBox;
-   levelScene.Shapes[LevelBoxIndex].GeometryNode.FreeRemovingFromAllParents;
+   LevelBox := LevelBoxShape.BoundingBox;
+   LevelBoxShape.GeometryNode.FreeRemovingFromAllParents;
    levelScene.ChangedAll;
   end else
   begin
