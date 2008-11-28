@@ -450,8 +450,8 @@ begin
   Wszystko to dla prostoty i szybkosci.}
 
  result :=
-   (levelScene.OctreeCollisions.SegmentCollision(ShipPos, newShipPos,
-     false, nil, false, nil) = nil) and
+   (not levelScene.OctreeCollisions.IsSegmentCollision(ShipPos, newShipPos,
+     nil, false, nil)) and
    (CollisionWithOtherEnemyShip(newShipPos) = nil) and
    Box3dPointInside(newShipPos, levelBox);
  if result then ShipPos := newShipPos;
@@ -645,8 +645,8 @@ var newRocPos: TVector3Single;
 var i: integer;
 begin
  newRocPos := VectorAdd(rocPos, VectorScale(rocDir, glw.Fps.IdleSpeed * 50));
- if (levelScene.OctreeCollisions.SegmentCollision(rocPos,
-       newRocPos, false, nil, false, nil) <> nil) or
+ if (levelScene.OctreeCollisions.IsSegmentCollision(rocPos,
+       newRocPos, nil, false, nil)) or
     (not Box3dPointInside(rocPos, levelBox)) then
   {rakieta zderzyla sie z czescia levelu lub wyleciala poza levelBox}
   Self.Destroy else
