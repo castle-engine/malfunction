@@ -49,7 +49,7 @@ type
     FCheatDontCheckCollisions, FCheatImmuneToRockets: boolean;
     procedure SetCheatDontCheckCollisions(value: boolean);
     procedure SetCheatImmuneToRockets(value: boolean);
-
+  private
     BlackOutIntensity: TGLfloat;
     BlackOutColor: TVector3f;
   public

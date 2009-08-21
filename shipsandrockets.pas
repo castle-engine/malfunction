@@ -198,7 +198,7 @@ type
     RandomVector: TVector3Single;
     RandomAngleDeg: Single;
     procedure Randomize;
-
+  private
     FHuntingAttack: boolean;
     procedure SetHuntingAttack(value: boolean);
     property HuntingAttack: boolean read FHuntingAttack write SetHuntingAttack;
