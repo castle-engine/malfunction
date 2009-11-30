@@ -29,7 +29,7 @@ implementation
 
 uses VectorMath, SysUtils, GL, GLU, GLExt, GLWindow, GameGeneral, KambiGLUtils,
   KambiUtils, LevelUnit, Boxes3d, GLWinMessages, PlayerShipUnit, Images,
-  BackgroundGL, ShipsAndRockets, TimeMessages, Keys, KambiFilesUtils,
+  BackgroundGL, ShipsAndRockets, TimeMessages, KeysMouse, KambiFilesUtils,
   KambiStringUtils, VRMLGLScene, GLImages;
 
 var kokpitbg_list: TGLuint;
