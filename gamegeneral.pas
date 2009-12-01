@@ -157,7 +157,7 @@ begin
 end;
 
 initialization
- glw := TGLWindow_malfunc.Create;
+ glw := TGLWindow_malfunc.Create(nil);
  glw.SetDemoOptions(K_None, #0, true);
  glw.OnCloseQuery := @CloseQuery;
  glw.OnInit := @Init;
