@@ -739,6 +739,6 @@ begin
 end;
 
 initialization
- glw.OnInitList.AppendItem(@InitGLwin);
- glw.OnCloseList.AppendItem(@CloseGLwin);
+ glw.OnInitList.Add(@InitGLwin);
+ glw.OnCloseList.Add(@CloseGLwin);
 end.

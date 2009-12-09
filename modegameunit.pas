@@ -282,8 +282,8 @@ end;
 initialization
  gameModeEnter[modeGame] := @modeEnter;
  gameModeExit[modeGame] := @modeExit;
- Glw.OnInitList.AppendItem(@InitGLwin);
- Glw.OnCloseList.AppendItem(@CloseGLwin);
+ Glw.OnInitList.Add(@InitGLwin);
+ Glw.OnCloseList.Add(@CloseGLwin);
 end.
 
 (* --------------------------------------------------------------------------------

@@ -24,7 +24,7 @@ unit GameGeneral;
 
   Ten modul NIE MOZE zalezec od jakiegokolwiek modulu ktory odwoluje
   sie do obiektu glw w swoim initialization (np. aby zrobic
-  glw.OnInitList.AppendItem()). To dlatego ze glw jest tworzony w
+  glw.OnInitList.Add()). To dlatego ze glw jest tworzony w
   initialization niniejszego modulu i jezeli tamten modul bedzie zalezal
   od GameGeneral a GameGeneral od niego to nie jest pewne ktore
   initialization zostanie wykonane jako pierwsze - a przeciez

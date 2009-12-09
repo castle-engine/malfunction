@@ -394,7 +394,7 @@ begin
 end;
 
 initialization
- glw.OnCloseList.AppendItem(@CloseGLWin);
+ glw.OnCloseList.Add(@CloseGLWin);
  NodesManager.RegisterNodeClasses([ TNodeMalfunctionLevelInfo,
    TNodeMalfunctionNotMovingEnemy,
    TNodeMalfunctionCircleMovingEnemy,
