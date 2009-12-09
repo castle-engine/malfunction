@@ -617,7 +617,7 @@ end;
 
 destructor TRocket.Destroy;
 begin
- if MotherShip <> nil then MotherShip.firedRockets.Delete(Self);
+ if MotherShip <> nil then MotherShip.firedRockets.Remove(Self);
  rockets.ReplaceAll(Self, nil);
  inherited;
 end;
@@ -707,8 +707,8 @@ begin
  for i := 0 to enemyShips.Count-1 do
   if enemyShips[i] <> nil then enemyShips[i].Idle;
 
- rockets.DeleteAll(nil);
- if (enemyShips.DeleteAll(nil) > 0) and (enemyShips.Count = 0) then
+ rockets.RemoveAll(nil);
+ if (enemyShips.RemoveAll(nil) > 0) and (enemyShips.Count = 0) then
   TimeMsg.Show('ALL ENEMY SHIPS DESTROYED.');
 end;
 
