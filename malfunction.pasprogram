@@ -83,12 +83,12 @@ begin
    for making these relative paths valid. }
  ChangeDir(ProgramDataPath + 'data');
 
- { This must be done before initial Glwn.ScreenWidth, since Glwm.ScreenWidth
+ { This must be done before initial Glwn.ScreenWidth, since Application.ScreenWidth
    already initializes display. }
  Glw.ParseParameters([poDisplay]);
 
  { set initial size/fullscreen mode }
- if (glwm.ScreenWidth = 640) and (glwm.ScreenHeight = 480) then
+ if (Application.ScreenWidth = 640) and (Application.ScreenHeight = 480) then
   glw.FullScreen := true else
  begin
   glw.Width := 640;
@@ -104,7 +104,7 @@ begin
  { Mouse is useless, so hide }
  Glw.Cursor := gcNone;
 
- glw.InitLoop;
+ glw.InitAndRun;
 end.
 
 {
