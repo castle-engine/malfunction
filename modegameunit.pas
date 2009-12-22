@@ -220,12 +220,12 @@ begin
     if MessageYesNo(glwin, 'End this game and return to menu ?') then
      SetGameMode(modeMenu);
   K_C:
-    if glwin.ModifiersDown=[mkShift, mkCtrl] then
+    if glwin.Pressed.Modifiers=[mkShift, mkCtrl] then
      with playerShip do CheatDontCheckCollisions := not CheatDontCheckCollisions else
-    if glwin.ModifiersDown=[] then
+    if glwin.Pressed.Modifiers=[] then
      with playerShip do drawCrosshair := not drawCrosshair;
   K_I:
-    if glwin.KeysDown[K_Shift] and glwin.KeysDown[K_Ctrl] then
+    if glwin.Pressed[K_Shift] and glwin.Pressed[K_Ctrl] then
      with playerShip do CheatImmuneToRockets := not CheatImmuneToRockets;
   K_R:
     with playerShip do drawRadar := not drawRadar;

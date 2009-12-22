@@ -237,12 +237,12 @@ begin
  {odczytaj wcisniete klawisze}
  with glw do
  begin
-  if KeysDown[K_Left] then shipRotationSpeed += ROT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
-  if KeysDown[K_Right] then shipRotationSpeed -= ROT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
-  if KeysDown[K_Up] then shipVertRotationSpeed -= ROT_VERT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
-  if KeysDown[K_Down] then shipVertRotationSpeed += ROT_VERT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
-  if KeysDown[K_A] then shipSpeed := KambiUtils.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
-  if KeysDown[K_Z] then shipSpeed := KambiUtils.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
+  if Pressed[K_Left] then shipRotationSpeed += ROT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
+  if Pressed[K_Right] then shipRotationSpeed -= ROT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
+  if Pressed[K_Up] then shipVertRotationSpeed -= ROT_VERT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
+  if Pressed[K_Down] then shipVertRotationSpeed += ROT_VERT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
+  if Pressed[K_A] then shipSpeed := KambiUtils.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
+  if Pressed[K_Z] then shipSpeed := KambiUtils.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
  end;
 
  {move ship using shipSpeed,
