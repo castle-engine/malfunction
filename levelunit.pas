@@ -300,7 +300,8 @@ begin
  FreeLevel;
 
  try
-  levelScene := TVRMLGLScene.Create(vrmlSceneFName);
+  levelScene := TVRMLGLScene.Create(nil);
+  levelScene.Load(vrmlSceneFName);
   levelScene.Optimization := roSceneAsAWhole;
   levelScene.Attributes.UseLights := true;
   levelScene.Attributes.FirstGLFreeLight := 1; { swiatla 0 bedziemy uzywac }

@@ -725,11 +725,14 @@ end;
 procedure InitGLWin(glwin: TGLWindow);
 var sk: TEnemyShipKind;
 begin
- rocketVRML := TVRMLGLScene.Create(vrmlsDir +'rocket.wrl');
+ rocketVRML := TVRMLGLScene.Create(nil);
+ rocketVRML.Load(vrmlsDir +'rocket.wrl');
  rocketVRML.Optimization := roSceneAsAWhole;
+
  for sk := Low(sk) to High(sk) do
  begin
-  EnemyShipVRMLs[sk] := TVRMLGLScene.Create(vrmlsDir +EnemyShipKindsInfos[sk].VrmlFname);
+  EnemyShipVRMLs[sk] := TVRMLGLScene.Create(nil);
+  EnemyShipVRMLs[sk].Load(vrmlsDir +EnemyShipKindsInfos[sk].VrmlFname);
   EnemyShipVRMLs[sk].Optimization := roSceneAsAWhole;
  end;
 end;
