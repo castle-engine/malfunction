@@ -38,9 +38,8 @@ program malfunction;
 
 {$apptype GUI}
 
-uses
-  GLWindow, GameGeneral, SysUtils, KambiUtils, ModeMenuUnit, ModeGameUnit,
-  ParseParametersUnit, KambiClassUtils, KambiFilesUtils;
+uses GLWindow, GameGeneral, SysUtils, KambiUtils, ModeMenuUnit, ModeGameUnit,
+  ParseParametersUnit, KambiClassUtils, KambiFilesUtils, KeysMouse;
 
 { params ------------------------------------------------------------ }
 
