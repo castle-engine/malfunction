@@ -728,6 +728,7 @@ begin
  rocketVRML := TVRMLGLScene.Create(nil);
  rocketVRML.Load(vrmlsDir +'rocket.wrl');
  rocketVRML.Optimization := roSceneAsAWhole;
+ rocketVRML.Attributes.Lighting := false;
 
  for sk := Low(sk) to High(sk) do
  begin
