@@ -102,7 +102,7 @@ begin
   raise EInvalidParams.Create('Unrecognized parameter : ' + Parameters[1]);
 
  { Mouse is useless, so hide }
- Glw.Cursor := gcNone;
+ Glw.Cursor := mcNone;
 
  glw.InitAndRun;
 end.
