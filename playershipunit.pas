@@ -28,7 +28,7 @@ unit PlayerShipUnit;
 
 interface
 
-uses GL, GLU, GLExt, Boxes3d, ShipsAndRockets, SysUtils, KambiGLUtils;
+uses GL, GLU, GLExt, Boxes3D, ShipsAndRockets, SysUtils, KambiGLUtils;
 
 const
   playerShipAbsoluteMaxSpeed = 45.0;
@@ -284,7 +284,7 @@ begin
  RotationSpeedBackToZero(shipVertRotationSpeed, ROT_VERT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
 
  {apply shipPosBox}
- Box3dClamp(shipPos, levelBox);
+ Box3DClamp(shipPos, levelBox);
 
  if BlackOutIntensity > 0 then
    BlackOutIntensity -= 0.02 * Glw.Fps.IdleSpeed * 50;

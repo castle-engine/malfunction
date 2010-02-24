@@ -28,7 +28,7 @@ interface
 implementation
 
 uses VectorMath, SysUtils, GL, GLU, GLExt, GLWindow, GameGeneral, KambiGLUtils,
-  KambiUtils, LevelUnit, Boxes3d, GLWinMessages, PlayerShipUnit, Images,
+  KambiUtils, LevelUnit, Boxes3D, GLWinMessages, PlayerShipUnit, Images,
   BackgroundGL, ShipsAndRockets, TimeMessages, KeysMouse, KambiFilesUtils,
   KambiStringUtils, VRMLGLScene, GLImages;
 
@@ -47,7 +47,7 @@ procedure idle(glwin: TGLWindow); forward;
 
 procedure modeEnter;
 var projNear, projFar: TGLfloat;
-    wholeLevelBox: TBox3d;
+    wholeLevelBox: TBox3D;
 begin
  Assert(levelScene <> nil,
    'Error - setting game mode to modeGame but level uninitialized');
@@ -57,11 +57,11 @@ begin
 
   Player jest zawsze w obrebie levelBox i widzi rzeczy w obrebie
   levelScene.BoundingBox. Wiec far = dlugosc przekatnej
-  Box3dSum(levelBox, levelScene.BoundingBox) bedzie na pewno wystarczajace.
+  Box3DSum(levelBox, levelScene.BoundingBox) bedzie na pewno wystarczajace.
 
   Near wybieramy arbitralnie jako PLAYER_SHIP_CAMERA_RADIUS. }
  projNear := PLAYER_SHIP_CAMERA_RADIUS;
- wholeLevelBox := Box3dSum(levelScene.BoundingBox, levelBox);
+ wholeLevelBox := Box3DSum(levelScene.BoundingBox, levelBox);
  projFar := PointsDistance(wholeLevelBox[0], wholeLevelBox[1]);
  ProjectionGLPerspective(30, glw.width/glw.height, projNear, projFar);
 

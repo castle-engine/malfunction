@@ -271,7 +271,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 
 implementation
 
-uses Boxes3d, GameGeneral, VRMLGLScene, VRMLNodes, LevelUnit, Math,
+uses Boxes3D, GameGeneral, VRMLGLScene, VRMLNodes, LevelUnit, Math,
   PlayerShipUnit, TimeMessages, VRMLTriangleOctree;
 
 {$define read_implementation}
@@ -418,7 +418,7 @@ end;
 
 function TEnemyShip.ShipRadius: Single;
 begin
- result := Box3dAvgSize(EnemyShipVRMLs[Kind].BoundingBox)*Sqrt2/2;
+ result := Box3DAvgSize(EnemyShipVRMLs[Kind].BoundingBox)*Sqrt2/2;
 end;
 
 procedure TEnemyShip.Render;
@@ -453,7 +453,7 @@ begin
    (not levelScene.OctreeCollisions.IsSegmentCollision(ShipPos, newShipPos,
      nil, false, nil)) and
    (CollisionWithOtherEnemyShip(newShipPos) = nil) and
-   Box3dPointInside(newShipPos, levelBox);
+   Box3DPointInside(newShipPos, levelBox);
  if result then ShipPos := newShipPos;
 end;
 
@@ -647,7 +647,7 @@ begin
  newRocPos := VectorAdd(rocPos, VectorScale(rocDir, glw.Fps.IdleSpeed * 50));
  if (levelScene.OctreeCollisions.IsSegmentCollision(rocPos,
        newRocPos, nil, false, nil)) or
-    (not Box3dPointInside(rocPos, levelBox)) then
+    (not Box3DPointInside(rocPos, levelBox)) then
   {rakieta zderzyla sie z czescia levelu lub wyleciala poza levelBox}
   Self.Destroy else
  begin
@@ -680,7 +680,7 @@ end;
 
 class function TRocket.rocRadius: Single;
 begin
- result := Box3dAvgSize(rocketVRML.BoundingBox)/2;
+ result := Box3DAvgSize(rocketVRML.BoundingBox)/2;
 end;
 
 { global funcs ----------------------------------------------------------- }

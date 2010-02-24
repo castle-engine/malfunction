@@ -89,7 +89,7 @@ unit LevelUnit;
 interface
 
 uses SysUtils, GameGeneral, GLWindow, VRMLGLScene, VRMLFields, VRMLNodes,
-  VRMLTriangleOctree, KambiClassUtils, GL, GLU, GLExt, Boxes3d, VRMLShape,
+  VRMLTriangleOctree, KambiClassUtils, GL, GLU, GLExt, Boxes3D, VRMLShape,
   KambiGLUtils;
 
 type
@@ -113,7 +113,7 @@ var
   levelScene: TVRMLGLScene;
   levelType: TLevelType;
   levelInfo: TNodeMalfunctionLevelInfo;
-  LevelBox: TBox3d; { poza ten box nie moze NIC wyleciec }
+  LevelBox: TBox3D; { poza ten box nie moze NIC wyleciec }
 
 { Loading and free'ing level NEEDS active gl context.
   Zwalnianie nie zainicjowanego levelu nie powoduje bledu,
@@ -330,10 +330,10 @@ begin
     {ustalamy shipPosBox na box o srodku tam gdzie levelScene.BoundingBox
      i rozmiarach piec razy wiekszych niz najwiekszy rozmiar
      levelScene.BounxingBox.}
-    vSizes := Box3dSizes(levelScene.BoundingBox);
+    vSizes := Box3DSizes(levelScene.BoundingBox);
     halfMaxSize := max(vSizes[0], vSizes[1], vSizes[2])* 2.5;
     vSizes := Vector3f(halfMaxSize, halfMaxSize, halfMaxSize);
-    vMiddle := Box3dMiddle(levelScene.BoundingBox);
+    vMiddle := Box3DMiddle(levelScene.BoundingBox);
     LevelBox[0] := VectorSubtract(vMiddle, vSizes);
     LevelBox[1] := VectorAdd(vMiddle, vSizes);
    end else
