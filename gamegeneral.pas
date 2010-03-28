@@ -40,7 +40,7 @@ uses SysUtils, GLWindow, TimeMessages;
 {$define read_interface}
 
 const
-  Version = '1.2.4';
+  Version = '1.2.5';
   DisplayProgramName = 'malfunction';
 
 type
