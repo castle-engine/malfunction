@@ -233,7 +233,7 @@ begin
     with playerShip do drawRadar := not drawRadar;
   K_F5:
     begin
-     fname := FNameAutoInc(SUnformattable(UserConfigPath)+
+     fname := FileNameAutoInc(SUnformattable(UserConfigPath)+
        'malfunction_screen_%d.png');
      glwin.SaveScreen(fname);
      TimeMsg.Show('Screen saved to '+fname);
