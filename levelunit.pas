@@ -322,7 +322,7 @@ begin
      as it should not be visible).
      This way we can comfortably set LevelBox from Blender. }
    LevelBox := LevelBoxShape.BoundingBox;
-   levelScene.NodeFreeRemovingFromAllParents(LevelBoxShape.Geometry);
+   levelScene.NodeFreeRemovingFromAllParents(LevelBoxShape.OriginalGeometry);
   end else
   begin
    {ustal domyslnego LevelBoxa na podstawie levelScene.BoundingBox}
