@@ -28,7 +28,7 @@ program malfunction;
       Shift+Ctrl+I wlacz/wylacz tryb "Immune to rockets"
 }
 { TODO:
-  - Use roSeparateShapes optimization for levelScene
+  - Use DefaultOptimization optimization for levelScene
   - Simplify all the mess with so-called "modes" in this unit:
     thanks to GLWinModes unit I can now code this in much more
     clear way (using normal sequential code, like in kambi_lines
