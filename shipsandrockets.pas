@@ -37,7 +37,7 @@ unit ShipsAndRockets;
 interface
 
 uses GLWindow, SysUtils, GL, GLU, KambiGLUtils, VectorMath, KambiUtils,
-  KambiClassUtils, KambiTimeUtils;
+  KambiClassUtils, Classes, KambiTimeUtils;
 
 {$define read_interface}
 
