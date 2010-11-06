@@ -110,7 +110,7 @@ end;
 
 procedure draw2d(draw2dData: Pointer);
 
-  procedure radarDraw2d;
+  procedure radarDraw2D;
   const
     { na ekranie jest kwadrat radaru wielkosci Size oddalony od gornej
       i prawej krawedzi ekranu o ScreenMargin. We wnetrzu tego kwadratu
@@ -180,12 +180,12 @@ begin
  begin
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
-  radarDraw2d;
+  radarDraw2D;
   glDisable(GL_BLEND);
  end;
 
- playerShip.PlayerShipDraw2d;
- TimeMsg.Draw2d(640, 480, glw.width, glw.height);
+ playerShip.PlayerShipDraw2D;
+ TimeMsg.Draw2D(640, 480, glw.width, glw.height);
 end;
 
 procedure draw(glwin: TGLWindow);
@@ -209,7 +209,7 @@ begin
    RocketsRender;
 
    glDisable(GL_DEPTH_TEST);
-   glProjectionPushPopOrtho2D(@Draw2d, nil, 0, 640, 0, 480);
+   glProjectionPushPopOrtho2D(@Draw2D, nil, 0, 640, 0, 480);
  glPopAttrib;
 end;
 
