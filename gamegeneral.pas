@@ -35,7 +35,7 @@ unit GameGeneral;
 
 interface
 
-uses SysUtils, GLWindow, TimeMessages;
+uses SysUtils, GLWindow, GLNotifications;
 
 {$define read_interface}
 
@@ -96,7 +96,8 @@ const
   zainicjowane w niszczone w tym module. Wyswietlane i Idle'owane w ModeGameUnit.
   Moze byc uzywane z kazdego miejsca. }
 
-var TimeMsg: TTimeMessagesManager;
+var
+  Notifications: TGLNotifications;
 
 implementation
 
@@ -140,7 +141,7 @@ procedure Init(glwin: TGLWindow);
 begin
  GLWinMessagesTheme.Font := TGLBitmapFont.Create(@BFNT_BitstreamVeraSansMono_m18);
 
- TimeMsg := TTimeMessagesManager.Create(glwin, hpMiddle, vpUp, glwin.width);
+ Notifications := TGLNotifications.Create(glwin, hpMiddle, vpUp, glwin.width);
  GLProgressInterface.Window := glwin;
  Progress.UserInterface := GLProgressInterface;
 
@@ -155,7 +156,7 @@ begin
 
  FreeAndNil(GLWinMessagesTheme.Font);
 
- FreeAndNil(TimeMsg);
+ FreeAndNil(Notifications);
 end;
 
 initialization

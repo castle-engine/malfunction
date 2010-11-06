@@ -31,7 +31,7 @@ implementation
 
 uses VectorMath, SysUtils, GL, GLU, GLExt, GLWindow, GameGeneral, KambiGLUtils,
   KambiUtils, LevelUnit, Boxes3D, GLWinMessages, PlayerShipUnit, Images,
-  BackgroundGL, ShipsAndRockets, TimeMessages, KeysMouse, KambiFilesUtils,
+  BackgroundGL, ShipsAndRockets, GLNotifications, KeysMouse, KambiFilesUtils,
   KambiStringUtils, VRMLGLScene, GLImages;
 
 var kokpitbg_list: TGLuint;
@@ -185,7 +185,7 @@ begin
  end;
 
  playerShip.PlayerShipDraw2D;
- TimeMsg.Draw2D(640, 480, glw.width, glw.height);
+ Notifications.Draw2D(640, 480, glw.width, glw.height);
 end;
 
 procedure draw(glwin: TGLWindow);
@@ -236,7 +236,7 @@ begin
      fname := FileNameAutoInc(SUnformattable(UserConfigPath)+
        'malfunction_screen_%d.png');
      glwin.SaveScreen(fname);
-     TimeMsg.Show('Screen saved to '+fname);
+     Notifications.Show('Screen saved to '+fname);
     end;
  end;
 end;
@@ -245,7 +245,7 @@ procedure idle(glwin: TGLWindow);
 begin
  playerShip.PlayerShipIdle;
  ShipsAndRocketsIdle;
- TimeMsg.Idle;
+ Notifications.Idle;
 end;
 
 { Init/Close glwin -------------------------------------------------------- }

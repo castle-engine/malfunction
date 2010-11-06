@@ -101,7 +101,7 @@ type
     {w tej klasie HitByRocket powoduje tylko ze shipLife spada.
      NIE wywoluje Destroy. Mozesz pokryc ta metode w podklasach
      (tylko pamietaj wywolac na poczatku inherited) wlasnie aby dodac destroy
-     i/lub wyswietlic jakies TimeMessage lub zrobic blackout graczowi.}
+     i/lub wyswietlic jakies Notification lub zrobic blackout graczowi.}
     procedure HitByRocket; virtual;
 
     {sprawdza czy gdybysmy stali na pozycji pos to kolidowalibysmy z jakims
@@ -274,7 +274,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 implementation
 
 uses Boxes3D, GameGeneral, VRMLGLScene, VRMLNodes, LevelUnit, Math,
-  PlayerShipUnit, TimeMessages, VRMLTriangleOctree;
+  PlayerShipUnit, GLNotifications, VRMLTriangleOctree;
 
 {$define read_implementation}
 {$I ObjectsList_1.inc}
@@ -410,10 +410,10 @@ end;
 procedure TEnemyShip.HitByRocket;
 begin
  inherited;
- TimeMsg.Show('"'+ShipName+'" was hit by the rocket.');
+ Notifications.Show('"'+ShipName+'" was hit by the rocket.');
  if ShipLife <= 0 then
  begin
-  TimeMsg.Show('"'+ShipName+'" was destroyed.');
+  Notifications.Show('"'+ShipName+'" was destroyed.');
   Self.Destroy;
  end;
 end;
@@ -711,7 +711,7 @@ begin
 
  rockets.RemoveAll(nil);
  if (enemyShips.RemoveAll(nil) > 0) and (enemyShips.Count = 0) then
-  TimeMsg.Show('ALL ENEMY SHIPS DESTROYED.');
+  Notifications.Show('ALL ENEMY SHIPS DESTROYED.');
 end;
 
 function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;

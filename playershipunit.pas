@@ -112,7 +112,7 @@ procedure NewPlayerShip;
 implementation
 
 uses VectorMath, GameGeneral, GLWindow, KambiUtils, Math,
-  LevelUnit, GLWinMessages, TimeMessages, VRMLTriangleOctree;
+  LevelUnit, GLWinMessages, GLNotifications, VRMLTriangleOctree;
 
 constructor TPlayerShip.Create;
 begin
@@ -132,8 +132,8 @@ begin
  if FCheatDontCheckCollisions <> value then
  begin
   if value then
-   TimeMsg.Show('CHEATER ! Collision checking off.') else
-   TimeMsg.Show('Collision checking on.');
+   Notifications.Show('CHEATER ! Collision checking off.') else
+   Notifications.Show('Collision checking on.');
   FCheatDontCheckCollisions := value;
  end;
 end;
@@ -143,8 +143,8 @@ begin
  if FCheatImmuneToRockets <> value then
  begin
   if value then
-   TimeMsg.Show('CHEATER ! You''re immune to rockets.') else
-   TimeMsg.Show('You''re no longer immune to rockets.');
+   Notifications.Show('CHEATER ! You''re immune to rockets.') else
+   Notifications.Show('You''re no longer immune to rockets.');
   FCheatImmuneToRockets := value;
  end;
 end;
@@ -168,7 +168,7 @@ end;
 
 procedure TPlayerShip.WoundedPlayerShip(const Messg: string);
 begin
- TimeMsg.Show(Messg+' Ship damaged in '+IntToStr(Round(100-ShipLife))+'%.');
+ Notifications.Show(Messg+' Ship damaged in '+IntToStr(Round(100-ShipLife))+'%.');
  BlackOut(Red3Single);
 end;
 
@@ -259,7 +259,7 @@ begin
   if sCollider <> nil then
   begin
    Crash(Random(20)+20, '"'+sCollider.ShipName+'"');
-   TimeMsg.Show('"'+sCollider.ShipName+'" was destroyed by the crash.');
+   Notifications.Show('"'+sCollider.ShipName+'" was destroyed by the crash.');
    sCollider.Free;
   end else
   if not levelScene.OctreeCollisions.MoveAllowedSimple(

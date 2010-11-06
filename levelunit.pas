@@ -137,7 +137,7 @@ procedure PlayGame(const vrmlSceneFName: string);
 implementation
 
 uses VectorMath, KambiUtils, PlayerShipUnit, ShipsAndRockets,
-  TimeMessages, GLWinMessages, VRMLScene;
+  GLNotifications, GLWinMessages, VRMLScene;
 
 { TNodeMalfunctionInfo ----------------------------------------------- }
 
@@ -368,8 +368,8 @@ begin
     levelu. }
   levelScene.PrepareResources([tgAll], [prRender, prBackground, prBoundingBox], false);
 
-  TimeMsg.Clear;
-  TimeMsg.Show('Level '+vrmlSceneFName+' loaded.');
+  Notifications.Clear;
+  Notifications.Show('Level '+vrmlSceneFName+' loaded.');
  except FreeLevel; raise end;
 end;
 
