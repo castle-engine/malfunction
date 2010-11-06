@@ -103,7 +103,7 @@ implementation
 {$define read_implementation}
 
 uses KambiGLUtils, KambiUtils, GLWinMessages, GL, GLU, GLExt, ProgressUnit,
-  ProgressGL, OpenGLBmpFonts, BFNT_BitstreamVeraSansMono_m18_Unit;
+  GLProgress, OpenGLBmpFonts, BFNT_BitstreamVeraSansMono_m18_Unit;
 
 var fGameMode: TGameMode = modeNone;
 
@@ -141,8 +141,8 @@ begin
  GLWinMessagesTheme.Font := TGLBitmapFont.Create(@BFNT_BitstreamVeraSansMono_m18);
 
  TimeMsg := TTimeMessagesManager.Create(glwin, hpMiddle, vpUp, glwin.width);
- ProgressGLInterface.Window := glwin;
- Progress.UserInterface := ProgressGLInterface;
+ GLProgressInterface.Window := glwin;
+ Progress.UserInterface := GLProgressInterface;
 
  SetGameMode(modeMenu);
 end;
