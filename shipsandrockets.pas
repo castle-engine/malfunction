@@ -729,14 +729,14 @@ var sk: TEnemyShipKind;
 begin
  rocketVRML := TVRMLGLScene.Create(nil);
  rocketVRML.Load(vrmlsDir +'rocket.wrl');
- rocketVRML.Optimization := roSceneAsAWhole;
+ rocketVRML.Optimization := roSceneDisplayList;
  rocketVRML.Attributes.Lighting := false;
 
  for sk := Low(sk) to High(sk) do
  begin
   EnemyShipVRMLs[sk] := TVRMLGLScene.Create(nil);
   EnemyShipVRMLs[sk].Load(vrmlsDir +EnemyShipKindsInfos[sk].VrmlFname);
-  EnemyShipVRMLs[sk].Optimization := roSceneAsAWhole;
+  EnemyShipVRMLs[sk].Optimization := roSceneDisplayList;
  end;
 end;
 
