@@ -248,9 +248,9 @@ begin
  Notifications.Idle;
 end;
 
-{ Init/Close glwin -------------------------------------------------------- }
+{ Open/Close glwin -------------------------------------------------------- }
 
-procedure InitGLwin(glwin: TGLWindow);
+procedure OpenGLwin(glwin: TGLWindow);
 var crossh_img: TImage;
     kokpit_img: TImage;
 begin
@@ -284,7 +284,7 @@ end;
 initialization
  gameModeEnter[modeGame] := @modeEnter;
  gameModeExit[modeGame] := @modeExit;
- Glw.OnInitList.Add(@InitGLwin);
+ Glw.OnOpenList.Add(@OpenGLwin);
  Glw.OnCloseList.Add(@CloseGLwin);
 end.
 

@@ -152,7 +152,7 @@ begin
  end;
 end;
 
-procedure InitGLwin(glwin: TGLWindow);
+procedure OpenGLwin(glwin: TGLWindow);
 begin
  listBgDraw := LoadImageToDisplayList(imagesDir +'menubg.png', [TRGBImage], [], glw.width, glw.height);
  menuFont := TGLBitmapFont.Create(@BFNT_Isuckatgolf_m32);
@@ -166,6 +166,6 @@ end;
 initialization
  gameModeEnter[modeMenu] := @modeEnter;
  gameModeExit[modeMenu] := @modeExit;
- glw.OnInitList.Add(@InitGLwin);
+ glw.OnOpenList.Add(@OpenGLwin);
  glw.OnCloseList.Add(@CloseGLwin);
 end.

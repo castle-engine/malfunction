@@ -343,7 +343,7 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure InitGLWin(glwin: TGLWindow);
+procedure OpenGLWin(glwin: TGLWindow);
 begin
 end;
 
@@ -353,6 +353,6 @@ begin
 end;
 
 initialization
- glw.OnInitList.Add(@InitGLWin);
+ glw.OnOpenList.Add(@OpenGLWin);
  glw.OnCloseList.Add(@CloseGLWin);
 end.

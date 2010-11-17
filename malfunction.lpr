@@ -103,7 +103,7 @@ begin
  { Mouse is useless, so hide }
  Glw.Cursor := mcNone;
 
- glw.InitAndRun;
+ glw.OpenAndRun;
 end.
 
 {

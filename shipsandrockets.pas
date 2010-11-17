@@ -328,7 +328,7 @@ const
   modelUp3d: TVector3Single = (1, 0, 0);
 
 var
-  { modeliki; ladowane w glw.Init, niszczone w glw.Close  }
+  { modeliki; ladowane w glw.Open, niszczone w glw.Close  }
   rocketVRML: TVRMLGLScene;
   enemyShipVRMLs: array[TEnemyShipKind]of TVRMLGLScene;
 
@@ -724,7 +724,7 @@ end;
 
 { glw callbacks ------------------------------------------------------------- }
 
-procedure InitGLWin(glwin: TGLWindow);
+procedure OpenGLWin(glwin: TGLWindow);
 var sk: TEnemyShipKind;
 begin
  rocketVRML := TVRMLGLScene.Create(nil);
@@ -748,6 +748,6 @@ begin
 end;
 
 initialization
- glw.OnInitList.Add(@InitGLwin);
+ glw.OnOpenList.Add(@OpenGLwin);
  glw.OnCloseList.Add(@CloseGLwin);
 end.

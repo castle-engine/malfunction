@@ -48,7 +48,7 @@ type
 
 var
   { Whole program uses glw window of class TGLWindow_malfunc.
-    Every unit may add some callbacks to glw.OnInitList and glw.OnCloseList.
+    Every unit may add some callbacks to glw.OnOpenList and glw.OnCloseList.
     This is created and destroyed in init/fini of this module. }
   glw: TGLWindow_malfunc;
 
@@ -58,13 +58,13 @@ var
   Each mode has a specific callbacks to control GLWindow_malfunc
   window, each mode can also init some OpenGL state for itself.
 
-  Events OnInit, OnClose, OnCloseQuery are defined in this unit
+  Events OnOpen, OnClose, OnCloseQuery are defined in this unit
   and cannot be redefined by modes. Other events are initialized to nil
   before calling GameModeEnter (so you don't have to set them to nil
   in every gameModeExit), and every gameModeEnter[] can set them
   to some mode-specific callbacks.
 
-  As for OnResize : RasizeAllowed = raOnlyAtInit. So we don't have to do
+  As for OnResize : RasizeAllowed = raOnlyAtOpen. So we don't have to do
   anything in OnResize. So we register no OnResize callback.
   @bold(Every mode must) define some projection inside modeEnter.
 
@@ -137,7 +137,7 @@ begin
  if MessageYesNo(glwin, 'Are you sure you want to quit ?') then glwin.Close;
 end;
 
-procedure Init(glwin: TGLWindow);
+procedure Open(glwin: TGLWindow);
 begin
  GLWinMessagesTheme.Font := TGLBitmapFont.Create(@BFNT_BitstreamVeraSansMono_m18);
 
@@ -163,14 +163,14 @@ initialization
  glw := TGLWindow_malfunc.Create(nil);
  glw.SetDemoOptions(K_None, #0, true);
  glw.OnCloseQuery := @CloseQuery;
- glw.OnInit := @Init;
+ glw.OnOpen := @Open;
  glw.OnClose := @Close;
 
  {leave OnResize to nil - dont set default projection matrix
   (we will set it in modeEnter, and because we can't be resized -
   we will never have to set it in OnResize)}
 
- glw.ResizeAllowed := raOnlyAtInit;
+ glw.ResizeAllowed := raOnlyAtOpen;
 finalization
  FreeAndNil(glw);
 end.
