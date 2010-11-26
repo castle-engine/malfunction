@@ -74,7 +74,7 @@ begin
  glLightv(GL_LIGHT0, GL_AMBIENT, Black4Single);
  glLightv(GL_LIGHT0, GL_DIFFUSE, White4Single);
  glLightv(GL_LIGHT0, GL_SPECULAR, White4Single);
- glLightv(GL_LIGHT0, GL_POSITION, Vector4f(0, 0, 1, 0));
+ glLightv(GL_LIGHT0, GL_POSITION, Vector4Single(0, 0, 1, 0));
  glLighti(GL_LIGHT0, GL_SPOT_CUTOFF, 180);
  glEnable(GL_LIGHT0);
 

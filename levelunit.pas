@@ -333,7 +333,7 @@ begin
      levelScene.BounxingBox.}
     vSizes := Box3DSizes(levelScene.BoundingBox);
     halfMaxSize := max(vSizes[0], vSizes[1], vSizes[2])* 2.5;
-    vSizes := Vector3f(halfMaxSize, halfMaxSize, halfMaxSize);
+    vSizes := Vector3Single(halfMaxSize, halfMaxSize, halfMaxSize);
     vMiddle := Box3DMiddle(levelScene.BoundingBox);
     LevelBox[0] := VectorSubtract(vMiddle, vSizes);
     LevelBox[1] := VectorAdd(vMiddle, vSizes);
