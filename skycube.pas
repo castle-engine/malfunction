@@ -18,7 +18,7 @@ unit SkyCube;
 
 interface
 
-uses BackgroundBase, BackgroundGL;
+uses VRMLNodes, BackgroundGL;
 
 type
   { Draw background as a cube usign 6 textures.
@@ -88,7 +88,7 @@ begin
  SkyImgs := BackgroundImagesLoadFromOldNamePattern(SkyNamePattern);
  try
   Create(SkyImgs, zNear, zFar);
- finally BackgroundImagesFreeAll(SkyImgs, nil) end;
+ finally SkyImgs.FreeAll(nil) end;
 end;
 
 constructor TSkyCube.Create(const Imgs: TBackgroundImages; zNear, zFar: Single);
@@ -114,7 +114,7 @@ begin
     TryFindExistingImageExt(SkyNamePattern +'_' +names_suffix[bs], true);
   if ImgFileName = '' then
    ImgFileName := FindExistingImageExt(SkyNamePattern +'_any', true);
-  result[bs] := LoadTextureImage(ImgFileName);
+  result.Images[bs] := LoadTextureImage(ImgFileName);
  end;
 end;
 
