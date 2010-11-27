@@ -32,7 +32,7 @@ implementation
 uses VectorMath, SysUtils, GL, GLU, GLExt, GLWindow, GameGeneral, KambiGLUtils,
   KambiUtils, LevelUnit, Boxes3D, GLWinMessages, PlayerShipUnit, Images,
   BackgroundGL, ShipsAndRockets, GLNotifications, KeysMouse, KambiFilesUtils,
-  KambiStringUtils, VRMLGLScene, GLImages;
+  KambiStringUtils, VRMLGLScene, GLImages, SkyCube;
 
 var kokpitbg_list: TGLuint;
     crossh_list: TGLuint;
