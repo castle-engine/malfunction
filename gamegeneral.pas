@@ -71,7 +71,7 @@ var
   modeNone is a very specific mode : this is the initial mode
   when program starts. Never do SetGameMode(modeNone).
 
-  SetGameMode raises @link(BreakGLWinEvent) at the end. }
+  You should terminate any TGLWindow event handling after SetGameMode call. }
 
 type
   TGameMode = (modeNone, modeMenu, modeGame);
@@ -126,8 +126,6 @@ begin
  fGameMode := value;
 
  glw.PostRedisplay;
-
- raise BreakGLWinEvent.Create;
 end;
 
 { glw general events handling ----------------------------------------------- }

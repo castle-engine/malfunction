@@ -131,7 +131,9 @@ procedure LoadLevel(const vrmlSceneFName: string);
 procedure FreeLevel;
 
 { LoadGame loads NewPlayer and then loads LoadLevel and then
-  SetGameMode(modeGame) (so it raises EExitFromGLWinEvent) }
+  SetGameMode(modeGame).
+  
+  You should terminate any TGLWindow event handling after PlayGame call. }
 procedure PlayGame(const vrmlSceneFName: string);
 
 implementation

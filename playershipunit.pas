@@ -230,12 +230,6 @@ var newShipPos, shipSideAxis: TVector3Single;
     sCollider: TEnemyShip;
     shipUpZSign: Single;
 begin
- if ShipLife <= 0 then
- begin
-  MessageOK(glw,['Your ship has been destroyed !','Game over.']);
-  SetGameMode(modeMenu);
- end;
-
  {odczytaj wcisniete klawisze}
  with glw do
  begin

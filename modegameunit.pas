@@ -220,7 +220,7 @@ begin
   K_Space: playerShip.FireRocket(playerShip.shipDir, 1);
   K_Escape:
     if MessageYesNo(glwin, 'End this game and return to menu ?') then
-     SetGameMode(modeMenu);
+      SetGameMode(modeMenu);
   K_C:
     if glwin.Pressed.Modifiers=[mkShift, mkCtrl] then
      with playerShip do CheatDontCheckCollisions := not CheatDontCheckCollisions else
@@ -243,6 +243,13 @@ end;
 
 procedure idle(glwin: TGLWindow);
 begin
+ if playerShip.ShipLife <= 0 then
+ begin
+  MessageOK(glw,['Your ship has been destroyed !','Game over.']);
+  SetGameMode(modeMenu);
+  Exit;
+ end;
+
  playerShip.PlayerShipIdle;
  ShipsAndRocketsIdle;
  Notifications.Idle;
