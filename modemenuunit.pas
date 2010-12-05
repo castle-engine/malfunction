@@ -50,14 +50,14 @@ var currentMenu: TMenuItem = Low(TMenuItem);
 
 { mode enter/exit ----------------------------------------------------------- }
 
-procedure draw(glwin: TGLWindow); forward;
-procedure KeyDown(glwin: TGLWindow; key: TKey; c: char); forward;
+procedure draw(Window: TGLWindow); forward;
+procedure KeyDown(Window: TGLWindow; key: TKey; c: char); forward;
 
 procedure modeEnter;
 begin
- ProjectionGLOrtho(0, glw.width, 0, glw.height);
- glw.OnDraw := @draw;
- glw.OnKeyDown := @KeyDown;
+ ProjectionGLOrtho(0, Window.width, 0, Window.height);
+ Window.OnDraw := @draw;
+ Window.OnKeyDown := @KeyDown;
 end;
 
 procedure modeExit;
@@ -66,7 +66,7 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure draw(glwin: TGLWindow);
+procedure draw(Window: TGLWindow);
 var mi: TMenuItem;
 {const SLower = 'by Michalis Kamburelis';}
 begin
@@ -74,7 +74,7 @@ begin
  glRasterPos2i(0, 0);
  glCallList(listBgDraw);
 
- glTranslatef(glw.width*50 div 640, glw.height*350 div 480, 0);
+ glTranslatef(Window.width*50 div 640, Window.height*350 div 480, 0);
  for mi := Low(mi) to High(mi) do
  begin
   glPushMatrix;
@@ -95,12 +95,12 @@ begin
 
 { glLoadIdentity;
  glColorv(Yellow3f);
- glRasterPos2i((glw.width-courierFont.TextWidth(SLower))div 2,
+ glRasterPos2i((Window.width-courierFont.TextWidth(SLower))div 2,
 	       courierFont.Descend+5);
  courierFont.print(SLower);}
 end;
 
-procedure KeyDown(glwin: TGLWindow; key: TKey; c: char);
+procedure KeyDown(Window: TGLWindow; key: TKey; c: char);
 begin
  case key of
   K_Up:
@@ -108,19 +108,19 @@ begin
      if currentMenu = Low(currentMenu) then
       currentMenu := High(currentMenu) else
       currentMenu := Pred(currentMenu);
-     glw.PostRedisplay;
+     Window.PostRedisplay;
     end;
   K_Down:
     begin
      if currentMenu = High(currentMenu) then
       currentMenu := Low(currentMenu) else
       currentMenu := Succ(currentMenu);
-     glw.PostRedisplay;
+     Window.PostRedisplay;
     end;
   K_Enter:
     case currentMenu of
      miGameManual:
-       MessageOK(glwin,
+       MessageOK(Window,
          'If you want, you can dream that you''re a saviour of galaxy or' +
          ' something like that. The truth is:' +nl+
          '1. You sit inside the most junky and malfunctioning space ship in the whole universe.' +nl+
@@ -147,18 +147,18 @@ begin
      miPlayDeepSpace: PlayGame(vrmlsDir +'mobius.wrl');
      miPlayRainMountains: PlayGame(vrmlsDir +'wawoz.wrl');
      miQuit:
-       if MessageYesNo(glwin, 'Are you sure you want to quit ?') then glwin.close;
+       if MessageYesNo(Window, 'Are you sure you want to quit ?') then Window.close;
     end;
  end;
 end;
 
-procedure OpenGLwin(glwin: TGLWindow);
+procedure OpenGLwin(Window: TGLWindow);
 begin
- listBgDraw := LoadImageToDisplayList(imagesDir +'menubg.png', [TRGBImage], [], glw.width, glw.height);
+ listBgDraw := LoadImageToDisplayList(imagesDir +'menubg.png', [TRGBImage], [], Window.width, Window.height);
  menuFont := TGLBitmapFont.Create(@BFNT_Isuckatgolf_m32);
 end;
 
-procedure CloseGLwin(glwin: TGLWindow);
+procedure CloseGLwin(Window: TGLWindow);
 begin
  FreeAndNil(menuFont);
 end;
@@ -166,6 +166,6 @@ end;
 initialization
  gameModeEnter[modeMenu] := @modeEnter;
  gameModeExit[modeMenu] := @modeExit;
- glw.OnOpenList.Add(@OpenGLwin);
- glw.OnCloseList.Add(@CloseGLwin);
+ Window.OnOpenList.Add(@OpenGLwin);
+ Window.OnCloseList.Add(@CloseGLwin);
 end.

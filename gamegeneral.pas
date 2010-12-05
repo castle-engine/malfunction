@@ -26,7 +26,7 @@ unit GameGeneral;
 
   Ten modul NIE MOZE zalezec od jakiegokolwiek modulu ktory odwoluje
   sie do obiektu glw w swoim initialization (np. aby zrobic
-  glw.OnInitList.Add()). To dlatego ze glw jest tworzony w
+  Window.OnInitList.Add()). To dlatego ze glw jest tworzony w
   initialization niniejszego modulu i jezeli tamten modul bedzie zalezal
   od GameGeneral a GameGeneral od niego to nie jest pewne ktore
   initialization zostanie wykonane jako pierwsze - a przeciez
@@ -48,9 +48,9 @@ type
 
 var
   { Whole program uses glw window of class TGLWindow_malfunc.
-    Every unit may add some callbacks to glw.OnOpenList and glw.OnCloseList.
+    Every unit may add some callbacks to Window.OnOpenList and Window.OnCloseList.
     This is created and destroyed in init/fini of this module. }
-  glw: TGLWindow_malfunc;
+  Window: TGLWindow_malfunc;
 
 { Game modes.
 
@@ -117,36 +117,36 @@ begin
 
  if gameModeExit[fGameMode] <> nil then gameModeExit[fGameMode];
 
- glw.OnDraw := nil;
- glw.OnKeyDown := nil;
- glw.OnKeyUp := nil;
- glw.OnIdle := nil;
+ Window.OnDraw := nil;
+ Window.OnKeyDown := nil;
+ Window.OnKeyUp := nil;
+ Window.OnIdle := nil;
 
  if gameModeEnter[value] <> nil then gameModeEnter[value];
  fGameMode := value;
 
- glw.PostRedisplay;
+ Window.PostRedisplay;
 end;
 
 { glw general events handling ----------------------------------------------- }
 
-procedure CloseQuery(glwin: TGLWindow);
+procedure CloseQuery(Window: TGLWindow);
 begin
- if MessageYesNo(glwin, 'Are you sure you want to quit ?') then glwin.Close;
+ if MessageYesNo(Window, 'Are you sure you want to quit ?') then Window.Close;
 end;
 
-procedure Open(glwin: TGLWindow);
+procedure Open(Window: TGLWindow);
 begin
  GLWinMessagesTheme.Font := TGLBitmapFont.Create(@BFNT_BitstreamVeraSansMono_m18);
 
- Notifications := TGLNotifications.Create(glwin, hpMiddle, vpUp, glwin.width);
- GLProgressInterface.Window := glwin;
+ Notifications := TGLNotifications.Create(Window, hpMiddle, vpUp, Window.width);
+ GLProgressInterface.Window := Window;
  Progress.UserInterface := GLProgressInterface;
 
  SetGameMode(modeMenu);
 end;
 
-procedure Close(glwin: TGLWindow);
+procedure Close(Window: TGLWindow);
 begin
  if (fGameMode <> modeNone) and
     (gameModeExit[fGameMode] <> nil) then gameModeExit[fGameMode];
@@ -158,17 +158,17 @@ begin
 end;
 
 initialization
- glw := TGLWindow_malfunc.Create(nil);
- glw.SetDemoOptions(K_None, #0, true);
- glw.OnCloseQuery := @CloseQuery;
- glw.OnOpen := @Open;
- glw.OnClose := @Close;
+ Window := TGLWindow_malfunc.Create(nil);
+ Window.SetDemoOptions(K_None, #0, true);
+ Window.OnCloseQuery := @CloseQuery;
+ Window.OnOpen := @Open;
+ Window.OnClose := @Close;
 
  {leave OnResize to nil - dont set default projection matrix
   (we will set it in modeEnter, and because we can't be resized -
   we will never have to set it in OnResize)}
 
- glw.ResizeAllowed := raOnlyAtOpen;
+ Window.ResizeAllowed := raOnlyAtOpen;
 finalization
- FreeAndNil(glw);
+ FreeAndNil(Window);
 end.

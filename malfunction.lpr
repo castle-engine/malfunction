@@ -84,26 +84,26 @@ begin
 
  { This must be done before initial Glwn.ScreenWidth, since Application.ScreenWidth
    already initializes display. }
- Glw.ParseParameters([poDisplay]);
+ Window.ParseParameters([poDisplay]);
 
  { set initial size/fullscreen mode }
  if (Application.ScreenWidth = 640) and (Application.ScreenHeight = 480) then
-  glw.FullScreen := true else
+  Window.FullScreen := true else
  begin
-  glw.Width := 640;
-  glw.Height := 480;
+  Window.Width := 640;
+  Window.Height := 480;
  end;
 
  { parse params }
- glw.ParseParameters(StandardParseOptions);
+ Window.ParseParameters(StandardParseOptions);
  ParseParameters(Options, @OptionProc, nil);
  if Parameters.High > 0 then
   raise EInvalidParams.Create('Unrecognized parameter : ' + Parameters[1]);
 
  { Mouse is useless, so hide }
- Glw.Cursor := mcNone;
+ Window.Cursor := mcNone;
 
- glw.OpenAndRun;
+ Window.OpenAndRun;
 end.
 
 {

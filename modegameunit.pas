@@ -43,9 +43,9 @@ var kokpitbg_list: TGLuint;
 
 { mode enter/exit ----------------------------------------------------------- }
 
-procedure draw(glwin: TGLWindow); forward;
-procedure KeyDown(glwin: TGLWindow; key: TKey; c: char); forward;
-procedure idle(glwin: TGLWindow); forward;
+procedure draw(Window: TGLWindow); forward;
+procedure KeyDown(Window: TGLWindow; key: TKey; c: char); forward;
+procedure idle(Window: TGLWindow); forward;
 
 procedure modeEnter;
 var projNear, projFar: TGLfloat;
@@ -65,7 +65,7 @@ begin
  projNear := PLAYER_SHIP_CAMERA_RADIUS;
  wholeLevelBox := Box3DSum(levelScene.BoundingBox, levelBox);
  projFar := PointsDistance(wholeLevelBox[0], wholeLevelBox[1]);
- ProjectionGLPerspective(30, glw.width/glw.height, projNear, projFar);
+ ProjectionGLPerspective(30, Window.width/Window.height, projNear, projFar);
 
  glEnable(GL_DEPTH_TEST);
  glEnable(GL_LIGHTING);
@@ -81,16 +81,16 @@ begin
  if (LevelScene.FogNode <> nil) and
     (LevelScene.FogNode.FdVolumetric.Value) and
     (not GL_EXT_fog_coord) then
-   MessageOK(glw,
+   MessageOK(Window,
      'Your OpenGL implementation doesn''t support GL_EXT_fog_coord. '+
      'Everything will work correctly but the results will not be as beatiful '+
      'as they could be.');
 
- glw.OnDraw := @draw;
- glw.OnKeyDown := @KeyDown;
- glw.OnIdle := @idle;
+ Window.OnDraw := @draw;
+ Window.OnKeyDown := @KeyDown;
+ Window.OnIdle := @idle;
 
- glw.AutoRedisplay := true;
+ Window.AutoRedisplay := true;
 
  sky := TSkyCube.Create(skiesDir +levelInfo.FdSky.Value, projNear, projFar);
 end;
@@ -101,7 +101,7 @@ begin
  glDisable(GL_LIGHTING);
  glDisable(GL_LIGHT0);
 
- glw.AutoRedisplay := false;
+ Window.AutoRedisplay := false;
 
  FreeAndNil(sky);
 end;
@@ -185,10 +185,10 @@ begin
  end;
 
  playerShip.PlayerShipDraw2D;
- Notifications.Draw2D(640, 480, glw.width, glw.height);
+ Notifications.Draw2D(640, 480, Window.width, Window.height);
 end;
 
-procedure draw(glwin: TGLWindow);
+procedure draw(Window: TGLWindow);
 begin
  {no need to clear COLOR_BUFFER - sky will cover everything}
  glClear(GL_DEPTH_BUFFER_BIT);
@@ -213,21 +213,21 @@ begin
  glPopAttrib;
 end;
 
-procedure KeyDown(glwin: TGLWindow; key: TKey; c: char);
+procedure KeyDown(Window: TGLWindow; key: TKey; c: char);
 var fname: string;
 begin
  case key of
   K_Space: playerShip.FireRocket(playerShip.shipDir, 1);
   K_Escape:
-    if MessageYesNo(glwin, 'End this game and return to menu ?') then
+    if MessageYesNo(Window, 'End this game and return to menu ?') then
       SetGameMode(modeMenu);
   K_C:
-    if glwin.Pressed.Modifiers=[mkShift, mkCtrl] then
+    if Window.Pressed.Modifiers=[mkShift, mkCtrl] then
      with playerShip do CheatDontCheckCollisions := not CheatDontCheckCollisions else
-    if glwin.Pressed.Modifiers=[] then
+    if Window.Pressed.Modifiers=[] then
      with playerShip do drawCrosshair := not drawCrosshair;
   K_I:
-    if glwin.Pressed[K_Shift] and glwin.Pressed[K_Ctrl] then
+    if Window.Pressed[K_Shift] and Window.Pressed[K_Ctrl] then
      with playerShip do CheatImmuneToRockets := not CheatImmuneToRockets;
   K_R:
     with playerShip do drawRadar := not drawRadar;
@@ -235,17 +235,17 @@ begin
     begin
      fname := FileNameAutoInc(SUnformattable(UserConfigPath)+
        'malfunction_screen_%d.png');
-     glwin.SaveScreen(fname);
+     Window.SaveScreen(fname);
      Notifications.Show('Screen saved to '+fname);
     end;
  end;
 end;
 
-procedure idle(glwin: TGLWindow);
+procedure idle(Window: TGLWindow);
 begin
  if playerShip.ShipLife <= 0 then
  begin
-  MessageOK(glw,['Your ship has been destroyed !','Game over.']);
+  MessageOK(Window,['Your ship has been destroyed !','Game over.']);
   SetGameMode(modeMenu);
   Exit;
  end;
@@ -257,14 +257,14 @@ end;
 
 { Open/Close glwin -------------------------------------------------------- }
 
-procedure OpenGLwin(glwin: TGLWindow);
+procedure OpenGLwin(Window: TGLWindow);
 var crossh_img: TImage;
     kokpit_img: TImage;
 begin
  kokpit_img := LoadImage(imagesDir +'kokpit.png',
    [TRGBAlphaImage, TGrayscaleAlphaImage], [ilcAlphaAdd]);
  try
-  kokpit_img.Resize(glw.width, kokpit_img.Height * glwin.Height div 480);
+  kokpit_img.Resize(Window.width, kokpit_img.Height * Window.Height div 480);
   kokpitbg_list := ImageDrawToDisplayList(kokpit_img);
  finally kokpit_img.Free end;
 
@@ -275,15 +275,15 @@ begin
  try
   crossh_orig_width := crossh_img.Width;
   crossh_orig_height := crossh_img.Height;
-  crossh_img.Resize(crossh_img.Width * glw.width div 640,
-                    crossh_img.Height * glw.height div 480);
+  crossh_img.Resize(crossh_img.Width * Window.width div 640,
+                    crossh_img.Height * Window.height div 480);
   crossh_list := ImageDrawToDisplayList(crossh_img);
  finally crossh_img.Free end;
 
  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 end;
 
-procedure CloseGLwin(glwin: TGLWindow);
+procedure CloseGLwin(Window: TGLWindow);
 begin
 
 end;
@@ -291,8 +291,8 @@ end;
 initialization
  gameModeEnter[modeGame] := @modeEnter;
  gameModeExit[modeGame] := @modeExit;
- Glw.OnOpenList.Add(@OpenGLwin);
- Glw.OnCloseList.Add(@CloseGLwin);
+ Window.OnOpenList.Add(@OpenGLwin);
+ Window.OnCloseList.Add(@CloseGLwin);
 end.
 
 (* --------------------------------------------------------------------------------

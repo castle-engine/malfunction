@@ -106,7 +106,7 @@ var
 
 { uzywaj tego aby stworzyc nowy player ship. Automatyczne zajmie sie
   zwolnieniem playerShip jesli juz istanial. Acha, i nie martw sie o
-  zwolnienie ostatniego playerShip : zostanie zwolnione w glw.Close. }
+  zwolnienie ostatniego playerShip : zostanie zwolnione w Window.Close. }
 procedure NewPlayerShip;
 
 implementation
@@ -202,10 +202,10 @@ procedure TPlayerShip.PlayerShipIdle;
     Jezeli sa one bardzo blisko zera to juz nie wracamy ich do zera
     tylko ustawiamy je na zero - zeby nie bylo tak ze ich wartosci "skacza
     nad zerem" to na dodatnia to na ujemna strone. Granica wynosi
-    (rotSpeedBack*2/3)*glw.IdleSpeed * 50 bo musi byc wieksza niz
-    rotSpeedBack *glw.IdleSpeed * 50/2 (zeby zawsze przesuwajac sie o
-    rotSpeedBack *glw.IdleSpeed * 50 trafic do tej granicy; chociaz tak naprawde
-    glw.IdleSpeed zmienia sie w czasie wiec nic nie jest pewne). }
+    (rotSpeedBack*2/3)*Window.IdleSpeed * 50 bo musi byc wieksza niz
+    rotSpeedBack *Window.IdleSpeed * 50/2 (zeby zawsze przesuwajac sie o
+    rotSpeedBack *Window.IdleSpeed * 50 trafic do tej granicy; chociaz tak naprawde
+    Window.IdleSpeed zmienia sie w czasie wiec nic nie jest pewne). }
   var rotSpeedBack: Single;
   begin
    rotSpeedBack := rotSpeedChange * 2/5;
@@ -231,21 +231,21 @@ var newShipPos, shipSideAxis: TVector3Single;
     shipUpZSign: Single;
 begin
  {odczytaj wcisniete klawisze}
- with glw do
+ with Window do
  begin
-  if Pressed[K_Left] then shipRotationSpeed += ROT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
-  if Pressed[K_Right] then shipRotationSpeed -= ROT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
-  if Pressed[K_Up] then shipVertRotationSpeed -= ROT_VERT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
-  if Pressed[K_Down] then shipVertRotationSpeed += ROT_VERT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50;
-  if Pressed[K_A] then shipSpeed := KambiUtils.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
-  if Pressed[K_Z] then shipSpeed := KambiUtils.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
+  if Pressed[K_Left] then shipRotationSpeed += ROT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50;
+  if Pressed[K_Right] then shipRotationSpeed -= ROT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50;
+  if Pressed[K_Up] then shipVertRotationSpeed -= ROT_VERT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50;
+  if Pressed[K_Down] then shipVertRotationSpeed += ROT_VERT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50;
+  if Pressed[K_A] then shipSpeed := KambiUtils.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
+  if Pressed[K_Z] then shipSpeed := KambiUtils.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
  end;
 
  {move ship using shipSpeed,
   check for collisions with level using octree,
   check for collisions with enemyShips using simple sphere collision detecion}
  newShipPos := VectorAdd(shipPos, VectorScale(shipDir,
-   shipSpeed * glw.Fps.IdleSpeed * 50));
+   shipSpeed * Window.Fps.IdleSpeed * 50));
  if CheatDontCheckCollisions then
   shipPos := newShipPos else
  begin
@@ -267,23 +267,23 @@ begin
  shipUpZSign := Sign(shipUp[2]);
  if shipUpZSign <> 0 then
  begin
-  shipDir := RotatePointAroundAxisDeg(shipRotationSpeed * glw.Fps.IdleSpeed * 50, shipDir, Vector3Single(0, 0, shipUpZSign));
-  shipUp := RotatePointAroundAxisDeg(shipRotationSpeed * glw.Fps.IdleSpeed * 50, shipUp, Vector3Single(0, 0, shipUpZSign));
+  shipDir := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.IdleSpeed * 50, shipDir, Vector3Single(0, 0, shipUpZSign));
+  shipUp := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.IdleSpeed * 50, shipUp, Vector3Single(0, 0, shipUpZSign));
  end;
  {apply speed vertical - here we will need shipSideAxis}
  shipSideAxis := VectorProduct(shipDir, shipUp);
- shipDir := RotatePointAroundAxisDeg(shipVertRotationSpeed * glw.Fps.IdleSpeed * 50, shipDir, shipSideAxis);
- shipUp := RotatePointAroundAxisDeg(shipVertRotationSpeed * glw.Fps.IdleSpeed * 50, shipUp, shipSideAxis);
+ shipDir := RotatePointAroundAxisDeg(shipVertRotationSpeed * Window.Fps.IdleSpeed * 50, shipDir, shipSideAxis);
+ shipUp := RotatePointAroundAxisDeg(shipVertRotationSpeed * Window.Fps.IdleSpeed * 50, shipUp, shipSideAxis);
 
  {decrease rotations speeds}
- RotationSpeedBackToZero(shipRotationSpeed, ROT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
- RotationSpeedBackToZero(shipVertRotationSpeed, ROT_VERT_SPEED_CHANGE * glw.Fps.IdleSpeed * 50);
+ RotationSpeedBackToZero(shipRotationSpeed, ROT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
+ RotationSpeedBackToZero(shipVertRotationSpeed, ROT_VERT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
 
  {apply shipPosBox}
  Box3DClamp(shipPos, levelBox);
 
  if BlackOutIntensity > 0 then
-   BlackOutIntensity -= 0.02 * Glw.Fps.IdleSpeed * 50;
+   BlackOutIntensity -= 0.02 * Window.Fps.IdleSpeed * 50;
 end;
 
 procedure TPlayerShip.PlayerShipDraw2d;
@@ -337,16 +337,16 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure OpenGLWin(glwin: TGLWindow);
+procedure OpenGLWin(Window: TGLWindow);
 begin
 end;
 
-procedure CloseGLWin(glwin: TGLWindow);
+procedure CloseGLWin(Window: TGLWindow);
 begin
  FreeAndNil(PlayerShip);
 end;
 
 initialization
- glw.OnOpenList.Add(@OpenGLWin);
- glw.OnCloseList.Add(@CloseGLWin);
+ Window.OnOpenList.Add(@OpenGLWin);
+ Window.OnCloseList.Add(@CloseGLWin);
 end.

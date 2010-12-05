@@ -328,7 +328,7 @@ const
   modelUp3d: TVector3Single = (1, 0, 0);
 
 var
-  { modeliki; ladowane w glw.Open, niszczone w glw.Close  }
+  { modeliki; ladowane w Window.Open, niszczone w Window.Close  }
   rocketVRML: TVRMLGLScene;
   enemyShipVRMLs: array[TEnemyShipKind]of TVRMLGLScene;
 
@@ -533,7 +533,7 @@ var newAngleRad: Double;
 begin
  inherited;
 
- newAngleRad := AngleRad + AngleRadChange * glw.Fps.IdleSpeed * 50;
+ newAngleRad := AngleRad + AngleRadChange * Window.Fps.IdleSpeed * 50;
  newShipPos[0] := cos(newAngleRad)*CircleRadius + CircleCenter[0];
  newShipPos[1] := sin(newAngleRad)*CircleRadius + CircleCenter[1];
  newShipPos[2] := CircleCenter[2];
@@ -599,7 +599,7 @@ begin
   ShipDir := VectorNegate(ShipDir);
 
  if not TryShipMove( VectorAdd(ShipPos,
-   VectorScale(ShipDir, glw.Fps.IdleSpeed * 50)) ) then
+   VectorScale(ShipDir, Window.Fps.IdleSpeed * 50)) ) then
  begin
   Randomize;
   HuntingAttack := not HuntingAttack
@@ -646,7 +646,7 @@ var newRocPos: TVector3Single;
 
 var i: integer;
 begin
- newRocPos := VectorAdd(rocPos, VectorScale(rocDir, glw.Fps.IdleSpeed * 50));
+ newRocPos := VectorAdd(rocPos, VectorScale(rocDir, Window.Fps.IdleSpeed * 50));
  if (levelScene.OctreeCollisions.IsSegmentCollision(rocPos,
        newRocPos, nil, false, nil)) or
     (not Box3DPointInside(rocPos, levelBox)) then
@@ -724,7 +724,7 @@ end;
 
 { glw callbacks ------------------------------------------------------------- }
 
-procedure OpenGLWin(glwin: TGLWindow);
+procedure OpenGLWin(Window: TGLWindow);
 var sk: TEnemyShipKind;
 begin
  rocketVRML := TVRMLGLScene.Create(nil);
@@ -740,7 +740,7 @@ begin
  end;
 end;
 
-procedure CloseGLWin(glwin: TGLWindow);
+procedure CloseGLWin(Window: TGLWindow);
 var sk: TEnemyShipKind;
 begin
  FreeAndNil(rocketVRML);
@@ -748,6 +748,6 @@ begin
 end;
 
 initialization
- glw.OnOpenList.Add(@OpenGLwin);
- glw.OnCloseList.Add(@CloseGLwin);
+ Window.OnOpenList.Add(@OpenGLwin);
+ Window.OnCloseList.Add(@CloseGLwin);
 end.

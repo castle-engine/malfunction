@@ -124,7 +124,7 @@ var
     (w rezultacie czego zmienne w rodzaju levelScene moga byc
     zwyczajne, globalne, a nie opakowane w jakas klase "TLevel")
     level jest zawsze automatycznie zwalniany przed kazdym LoadLevel
-    i w czasie glw.EventClose. W rezultacie wlasciwie mozesz nigdy nie
+    i w czasie Window.EventClose. W rezultacie wlasciwie mozesz nigdy nie
     wywolywac FreeLevel z zewnatrz tego modulu.
   LoadLevel jest odpowiedzialne za czesciowa inicjalizacje PlayerShip.  }
 procedure LoadLevel(const vrmlSceneFName: string);
@@ -391,13 +391,13 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure CloseGLWin(glwin: TGLWindow);
+procedure CloseGLWin(Window: TGLWindow);
 begin
  FreeLevel;
 end;
 
 initialization
- glw.OnCloseList.Add(@CloseGLWin);
+ Window.OnCloseList.Add(@CloseGLWin);
  NodesManager.RegisterNodeClasses([ TNodeMalfunctionLevelInfo,
    TNodeMalfunctionNotMovingEnemy,
    TNodeMalfunctionCircleMovingEnemy,
