@@ -306,7 +306,6 @@ begin
  try
   levelScene := TVRMLGLScene.Create(nil);
   levelScene.Load(vrmlSceneFName);
-  levelScene.Optimization := roSceneDisplayList;
   levelScene.GetPerspectiveViewpoint(playerShip.shipPos, playerShip.shipDir,
     playerShip.shipUp,
     { We don't need GravityUp, we know it should be +Z in malfunction
