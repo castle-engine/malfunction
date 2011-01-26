@@ -101,7 +101,10 @@ begin
  glDisable(GL_LIGHTING);
  glDisable(GL_LIGHT0);
 
- Window.AutoRedisplay := false;
+ { Check Window <> nil, as it may be already nil (during destruction)
+   now in case of some errors }
+ if Window <> nil then
+   Window.AutoRedisplay := false;
 
  FreeAndNil(sky);
 end;
