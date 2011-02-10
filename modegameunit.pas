@@ -204,7 +204,7 @@ begin
 
  playerShip.PlayerShipApplyMatrix;
 
- levelScene.Render(nil, tgAll);
+ levelScene.Render(nil, 1, tgAll);
  ShipsRender;
 
  glPushAttrib(GL_ENABLE_BIT);
