@@ -93,9 +93,10 @@ end;
 
 constructor TSkyCube.Create(const Imgs: TBackgroundImages; zNear, zFar: Single);
 begin
- inherited Create(RotationMatrixRad(Pi/2, Vector3Single(1, 0, 0)),
-   nil, 0, nil, 0, Imgs, nil, 0, @Black3Single, 1,
-   NearFarToSkySphereRadius(zNear, zFar));
+  inherited Create(
+    nil, 0, nil, 0, Imgs, nil, 0, @Black3Single, 1,
+    NearFarToSkySphereRadius(zNear, zFar));
+  Transform := RotationMatrixRad(Pi/2, Vector3Single(1, 0, 0));
 end;
 
 { global --------------------------------------------------------------------- }
