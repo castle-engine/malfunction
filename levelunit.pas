@@ -101,7 +101,7 @@ type
   TLevelType = (ltPlanet, ltSpace);
 
   TNodeMalfunctionLevelInfo = class(TVRMLNode)
-    constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
+    procedure CreateNode; override;
     class function ClassNodeTypeName: string; override;
 
     private FFdSky: TSFString;
@@ -143,7 +143,7 @@ uses VectorMath, KambiUtils, PlayerShipUnit, ShipsAndRockets,
 
 { TNodeMalfunctionInfo ----------------------------------------------- }
 
-constructor TNodeMalfunctionLevelInfo.Create(const ANodeName: string; const AWWWBasePath: string);
+procedure TNodeMalfunctionLevelInfo.CreateNode;
 begin
   inherited;
 
@@ -163,7 +163,7 @@ end;
 
 type
   TVRMLMalfunctionEnemyNode = class(TVRMLNode)
-    constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
+    procedure CreateNode; override;
 
     private FFdKind: TSFString;
     public property FdKind: TSFString read FFdKind;
@@ -173,7 +173,7 @@ type
   end;
 
   TNodeMalfunctionNotMovingEnemy = class(TVRMLMalfunctionEnemyNode)
-    constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
+    procedure CreateNode; override;
     class function ClassNodeTypeName: string; override;
 
     private FFdPosition: TSFVec3f;
@@ -183,7 +183,7 @@ type
   end;
 
   TNodeMalfunctionCircleMovingEnemy = class(TVRMLMalfunctionEnemyNode)
-    constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
+    procedure CreateNode; override;
     class function ClassNodeTypeName: string; override;
 
     private FFdCircleCenter: TSFVec3f;
@@ -199,7 +199,7 @@ type
   end;
 
   TNodeMalfunctionHuntingEnemy = class(TVRMLMalfunctionEnemyNode)
-    constructor Create(const ANodeName: string; const AWWWBasePath: string); override;
+    procedure CreateNode; override;
     class function ClassNodeTypeName: string; override;
 
     private FFdPosition: TSFVec3f;
@@ -208,7 +208,7 @@ type
     function CreateEnemyShip: TEnemyShip; override;
   end;
 
-constructor TVRMLMalfunctionEnemyNode.Create(const ANodeName: string; const AWWWBasePath: string);
+procedure TVRMLMalfunctionEnemyNode.CreateNode;
 begin
   inherited;
 
@@ -221,7 +221,7 @@ begin
   result := NameShcutToEnemyShipKind(FdKind.Value);
 end;
 
-constructor TNodeMalfunctionNotMovingEnemy.Create(const ANodeName: string; const AWWWBasePath: string);
+procedure TNodeMalfunctionNotMovingEnemy.CreateNode;
 begin
   inherited;
 
@@ -239,7 +239,7 @@ begin
   result := TNotMovingEnemyShip.Create(Kind, FdPosition.Value);
 end;
 
-constructor TNodeMalfunctionCircleMovingEnemy.Create(const ANodeName: string; const AWWWBasePath: string);
+procedure TNodeMalfunctionCircleMovingEnemy.CreateNode;
 begin
   inherited;
 
@@ -264,7 +264,7 @@ begin
     FdCircleRadius.Value, FdUniqueCircleMovingSpeed.Value);
 end;
 
-constructor TNodeMalfunctionHuntingEnemy.Create(const ANodeName: string; const AWWWBasePath: string);
+procedure TNodeMalfunctionHuntingEnemy.CreateNode;
 begin
   inherited;
 
