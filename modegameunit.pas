@@ -204,6 +204,8 @@ constructor TSimpleRenderParams.Create;
 begin
   inherited;
   FBaseLights := TDynLightInstanceArray.Create;
+  InShadow := false;
+  TransparentGroup := tgAll;
 end;
 
 destructor TSimpleRenderParams.Destroy;
@@ -235,9 +237,6 @@ begin
 
  Params := TSimpleRenderParams.Create;
  try
-   Params.InShadow := false;
-   Params.TransparentGroup := tgAll;
-   
    H := levelScene.Headlight(playerShip.shipPos, Normalized(playerShip.shipDir));
    if H <> nil then
      Params.FBaseLights.Add(H^);
