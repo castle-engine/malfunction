@@ -37,7 +37,7 @@ unit ShipsAndRockets;
 interface
 
 uses GLWindow, SysUtils, GL, GLU, KambiGLUtils, VectorMath, KambiUtils,
-  KambiClassUtils, Classes, KambiTimeUtils;
+  KambiClassUtils, Classes, KambiTimeUtils, VRMLGLScene;
 
 {$define read_interface}
 
@@ -126,7 +126,7 @@ type
     {render yourself to OpenGL at the right position and direction.
      You should use glPush/PopMatrix mechanism to save current matrix.
      Zawsze wywoluj inherited w podklasach. }
-    procedure Render; virtual;
+    procedure Render(const Params: TVRMLRenderParams); virtual;
     procedure Idle; virtual;
 
     procedure HitByRocket; override;
@@ -232,7 +232,7 @@ type
 
     {render yourself to OpenGL at the right position and direction.
      You should use glPush/PopMatrix mechanism to save current matrix.}
-    procedure Render;
+    procedure Render(const Params: TVRMLRenderParams);
     procedure Idle;
   end;
 
@@ -261,8 +261,8 @@ var
 
 { funcs below should be called from ModeGameUnit at appropriate times.
   They don't modify current matrix. }
-procedure ShipsRender;
-procedure RocketsRender;
+procedure ShipsRender(const Params: TVRMLRenderParams);
+procedure RocketsRender(const Params: TVRMLRenderParams);
 procedure ShipsAndRocketsIdle;
 
 { inne funkcje }
@@ -273,7 +273,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 
 implementation
 
-uses Boxes3D, GameGeneral, VRMLGLScene, VRMLNodes, LevelUnit, Math,
+uses Boxes3D, GameGeneral, VRMLNodes, LevelUnit, Math,
   PlayerShipUnit, GLNotifications, VRMLTriangleOctree;
 
 {$define read_implementation}
@@ -423,7 +423,7 @@ begin
  result := Box3DAvgSize(EnemyShipVRMLs[Kind].BoundingBox)*Sqrt2/2;
 end;
 
-procedure TEnemyShip.Render;
+procedure TEnemyShip.Render(const Params: TVRMLRenderParams);
 var GoodShipUp: TVector3Single;
 begin
  glPushMatrix;
@@ -433,7 +433,7 @@ begin
    glMultMatrix(TransformToCoordsNoScaleMatrix(
      ShipPos, GoodShipUp, VectorProduct(ShipDir, GoodShipUp), ShipDir));
 
-   EnemyShipVRMLs[Kind].Render(nil, 1, tgAll);
+   EnemyShipVRMLs[Kind].Render(nil, Params);
  glPopMatrix;
 end;
 
@@ -624,14 +624,14 @@ begin
  inherited;
 end;
 
-procedure TRocket.Render;
+procedure TRocket.Render(const Params: TVRMLRenderParams);
 var axis: TVector3Single;
 begin
  glPushMatrix;
    glTranslated(rocPos[0], rocPos[1], rocPos[2]);
    axis := VectorProduct(modelDir3d, rocDir);
    glRotated(RadToDeg(AngleRadBetweenVectors(modelDir3d, rocDir)), axis[0], axis[1], axis[2]);
-   rocketVRML.Render(nil, 1, tgAll);
+   rocketVRML.Render(nil, Params);
  glPopMatrix;
 end;
 
@@ -687,18 +687,18 @@ end;
 
 { global funcs ----------------------------------------------------------- }
 
-procedure ShipsRender;
+procedure ShipsRender(const Params: TVRMLRenderParams);
 var i: integer;
 begin
  for i := 0 to enemyShips.Count-1 do
-  if enemyShips[i] <> nil then enemyShips[i].Render;
+  if enemyShips[i] <> nil then enemyShips[i].Render(Params);
 end;
 
-procedure RocketsRender;
+procedure RocketsRender(const Params: TVRMLRenderParams);
 var i: integer;
 begin
  for i := 0 to rockets.Count-1 do
-  if rockets[i] <> nil then rockets[i].Render;
+  if rockets[i] <> nil then rockets[i].Render(Params);
 end;
 
 procedure ShipsAndRocketsIdle;

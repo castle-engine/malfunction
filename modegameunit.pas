@@ -32,7 +32,7 @@ implementation
 uses VectorMath, SysUtils, GL, GLU, GLExt, GLWindow, GameGeneral, KambiGLUtils,
   KambiUtils, LevelUnit, Boxes3D, GLWinMessages, PlayerShipUnit, Images,
   ShipsAndRockets, GLNotifications, KeysMouse, KambiFilesUtils,
-  KambiStringUtils, VRMLGLScene, GLImages, SkyCube;
+  KambiStringUtils, VRMLGLScene, GLImages, SkyCube, VRMLNodes, Base3D;
 
 var kokpitbg_list: TGLuint;
     crossh_list: TGLuint;
@@ -191,7 +191,36 @@ begin
  Notifications.Draw2D(640, 480, Window.width, Window.height);
 end;
 
+type
+  TSimpleRenderParams = class(TVRMLRenderParams)
+  public
+    FBaseLights: TDynLightInstanceArray;
+    constructor Create;
+    destructor Destroy; override;
+    function BaseLights(Scene: T3D): TDynLightInstanceArray; override;
+  end;
+
+constructor TSimpleRenderParams.Create;
+begin
+  inherited;
+  FBaseLights := TDynLightInstanceArray.Create;
+end;
+
+destructor TSimpleRenderParams.Destroy;
+begin
+  FreeAndNil(FBaseLights);
+  inherited;
+end;
+
+function TSimpleRenderParams.BaseLights(Scene: T3D): TDynLightInstanceArray;
+begin
+  Result := FBaseLights;
+end;
+
 procedure draw(Window: TGLWindow);
+var
+  Params: TSimpleRenderParams;
+  H: PLightInstance;
 begin
  {no need to clear COLOR_BUFFER - sky will cover everything}
  glClear(GL_DEPTH_BUFFER_BIT);
@@ -204,16 +233,26 @@ begin
 
  playerShip.PlayerShipApplyMatrix;
 
- levelScene.Render(nil, 1, tgAll);
- ShipsRender;
+ Params := TSimpleRenderParams.Create;
+ try
+   Params.InShadow := false;
+   Params.TransparentGroup := tgAll;
+   
+   H := levelScene.Headlight(playerShip.shipPos, Normalized(playerShip.shipDir));
+   if H <> nil then
+     Params.FBaseLights.Add(H^);
 
- glPushAttrib(GL_ENABLE_BIT);
-   glDisable(GL_LIGHTING);
-   RocketsRender;
+   levelScene.Render(nil, Params);
+   ShipsRender(Params);
 
-   glDisable(GL_DEPTH_TEST);
-   glProjectionPushPopOrtho2D(@Draw2D, nil, 0, 640, 0, 480);
- glPopAttrib;
+   glPushAttrib(GL_ENABLE_BIT);
+     glDisable(GL_LIGHTING);
+     RocketsRender(Params);
+
+     glDisable(GL_DEPTH_TEST);
+     glProjectionPushPopOrtho2D(@Draw2D, nil, 0, 640, 0, 480);
+   glPopAttrib;
+ finally FreeAndNil(Params) end;
 end;
 
 procedure KeyDown(Window: TGLWindow; key: TKey; c: char);
