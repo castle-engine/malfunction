@@ -191,37 +191,9 @@ begin
  Notifications.Draw2D(640, 480, Window.width, Window.height);
 end;
 
-type
-  TSimpleRenderParams = class(TVRMLRenderParams)
-  public
-    FBaseLights: TDynLightInstanceArray;
-    constructor Create;
-    destructor Destroy; override;
-    function BaseLights(Scene: T3D): TDynLightInstanceArray; override;
-  end;
-
-constructor TSimpleRenderParams.Create;
-begin
-  inherited;
-  FBaseLights := TDynLightInstanceArray.Create;
-  InShadow := false;
-  TransparentGroup := tgAll;
-end;
-
-destructor TSimpleRenderParams.Destroy;
-begin
-  FreeAndNil(FBaseLights);
-  inherited;
-end;
-
-function TSimpleRenderParams.BaseLights(Scene: T3D): TDynLightInstanceArray;
-begin
-  Result := FBaseLights;
-end;
-
 procedure draw(Window: TGLWindow);
 var
-  Params: TSimpleRenderParams;
+  Params: TBasicRenderParams;
   H: PLightInstance;
 begin
  {no need to clear COLOR_BUFFER - sky will cover everything}
@@ -235,7 +207,7 @@ begin
 
  playerShip.PlayerShipApplyMatrix;
 
- Params := TSimpleRenderParams.Create;
+ Params := TBasicRenderParams.Create;
  try
    H := levelScene.Headlight(playerShip.shipPos, Normalized(playerShip.shipDir));
    if H <> nil then
