@@ -44,7 +44,7 @@ const
   DisplayProgramName = 'malfunction';
 
 type
-  TGLWindow_malfunc = TGLWindowDemo;
+  TGLWindow_malfunc = TGLUIWindow;
 
 var
   { Whole program uses glw window of class TGLWindow_malfunc.

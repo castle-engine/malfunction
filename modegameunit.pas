@@ -32,86 +32,95 @@ implementation
 uses VectorMath, SysUtils, GL, GLU, GLExt, GLWindow, GameGeneral, KambiGLUtils,
   KambiUtils, LevelUnit, Boxes3D, GLWinMessages, PlayerShipUnit, Images,
   ShipsAndRockets, GLNotifications, KeysMouse, KambiFilesUtils,
-  KambiStringUtils, VRMLGLScene, GLImages, SkyCube, VRMLNodes, Base3D;
+  KambiStringUtils, VRMLGLScene, GLImages, SkyCube, VRMLNodes, Base3D,
+  KambiSceneManager, UIControls, Cameras;
 
-var kokpitbg_list: TGLuint;
-    crossh_list: TGLuint;
-    sky: TSkyCube;
-    {crossh_orig_* to oryginalne (tzn. wzgledem ekranu 640x480) rozmiary
-     crosshair image (upakowanego w crossh_list) }
-    crossh_orig_width, crossh_orig_height: integer;
+var
+  kokpitbg_list: TGLuint;
+  crossh_list: TGLuint;
+  sky: TSkyCube;
+  {crossh_orig_* to oryginalne (tzn. wzgledem ekranu 640x480) rozmiary
+   crosshair image (upakowanego w crossh_list) }
+  crossh_orig_width, crossh_orig_height: integer;
 
-{ mode enter/exit ----------------------------------------------------------- }
+{ TMalfunctionSceneManager --------------------------------------------------- }
 
-procedure draw(Window: TGLWindow); forward;
-procedure KeyDown(Window: TGLWindow; key: TKey; c: char); forward;
-procedure idle(Window: TGLWindow); forward;
+type
+  TMalfunctionSceneManager = class(TKamSceneManager)
+    procedure ApplyProjection; override;
+    procedure RenderFromViewEverything; override;
+    function Headlight(out CustomHeadlight: TNodeX3DLightNode): boolean; override;
+  end;
 
-procedure modeEnter;
-var projNear, projFar: TGLfloat;
-    wholeLevelBox: TBox3D;
+procedure TMalfunctionSceneManager.ApplyProjection;
+var
+  projNear, projFar: TGLfloat;
+  wholeLevelBox: TBox3D;
 begin
- Assert(levelScene <> nil,
-   'Error - setting game mode to modeGame but level uninitialized');
+  { Player jest zawsze w obrebie levelBox i widzi rzeczy w obrebie
+    levelScene.BoundingBox. Wiec far = dlugosc przekatnej
+    Box3DSum(levelBox, levelScene.BoundingBox) bedzie na pewno wystarczajace.
 
- {teraz rzecz ktorej nie mozemy spieprzyc bo bedziemy mieli niedokladny Zbufor:
-  near i far projection.
+    Near wybieramy arbitralnie jako PLAYER_SHIP_CAMERA_RADIUS. }
+  projNear := PLAYER_SHIP_CAMERA_RADIUS;
+  wholeLevelBox := Box3DSum(levelScene.BoundingBox, levelBox);
+  projFar := PointsDistance(wholeLevelBox[0], wholeLevelBox[1]);
+  ProjectionGLPerspective(30, Window.width/Window.height, projNear, projFar);
 
-  Player jest zawsze w obrebie levelBox i widzi rzeczy w obrebie
-  levelScene.BoundingBox. Wiec far = dlugosc przekatnej
-  Box3DSum(levelBox, levelScene.BoundingBox) bedzie na pewno wystarczajace.
-
-  Near wybieramy arbitralnie jako PLAYER_SHIP_CAMERA_RADIUS. }
- projNear := PLAYER_SHIP_CAMERA_RADIUS;
- wholeLevelBox := Box3DSum(levelScene.BoundingBox, levelBox);
- projFar := PointsDistance(wholeLevelBox[0], wholeLevelBox[1]);
- ProjectionGLPerspective(30, Window.width/Window.height, projNear, projFar);
-
- glEnable(GL_DEPTH_TEST);
- glEnable(GL_LIGHTING);
-
- {default OpenGL light 0 properties :}
- glLightv(GL_LIGHT0, GL_AMBIENT, Black4Single);
- glLightv(GL_LIGHT0, GL_DIFFUSE, White4Single);
- glLightv(GL_LIGHT0, GL_SPECULAR, White4Single);
- glLightv(GL_LIGHT0, GL_POSITION, Vector4Single(0, 0, 1, 0));
- glLighti(GL_LIGHT0, GL_SPOT_CUTOFF, 180);
- glEnable(GL_LIGHT0);
-
- if (LevelScene.FogNode <> nil) and
-    (LevelScene.FogNode.FdVolumetric.Value) and
-    (not GL_EXT_fog_coord) then
-   MessageOK(Window,
-     'Your OpenGL implementation doesn''t support GL_EXT_fog_coord. '+
-     'Everything will work correctly but the results will not be as beatiful '+
-     'as they could be.');
-
- Window.OnDraw := @draw;
- Window.OnKeyDown := @KeyDown;
- Window.OnIdle := @idle;
-
- Window.AutoRedisplay := true;
-
- sky := TSkyCube.Create(skiesDir +levelInfo.FdSky.Value, projNear, projFar);
+  if Sky = nil then
+    sky := TSkyCube.Create(skiesDir +levelInfo.FdSky.Value, projNear, projFar);
 end;
 
-procedure modeExit;
+procedure TMalfunctionSceneManager.RenderFromViewEverything;
+var
+  Params: TBasicRenderParams;
 begin
- glDisable(GL_DEPTH_TEST);
- glDisable(GL_LIGHTING);
- glDisable(GL_LIGHT0);
+ {no need to clear COLOR_BUFFER - sky will cover everything}
+ glClear(GL_DEPTH_BUFFER_BIT);
+ glLoadIdentity;
 
- { Check Window <> nil, as it may be already nil (during destruction)
-   now in case of some errors }
- if Window <> nil then
-   Window.AutoRedisplay := false;
+ glPushMatrix;
+   playerShip.PlayerShipApplyMatrixNoTranslate;
+   sky.Render;
+ glPopMatrix;
 
- FreeAndNil(sky);
+ playerShip.PlayerShipApplyMatrix;
+
+ Params := TBasicRenderParams.Create;
+ try
+   { Synchronize Camera with playerShip right before using BaseLights,
+     as BaseLights initializes headlight based on Camera. }
+   Camera.SetView(playerShip.shipPos,
+     Normalized(playerShip.shipDir), playerShip.shipUp);
+   Params.FBaseLights.Assign(BaseLights);
+
+   levelScene.Render(nil, Params);
+   ShipsRender(Params);
+   RocketsRender(Params);
+ finally FreeAndNil(Params) end;
 end;
 
-{ glw callbacks ----------------------------------------------------------- }
+function TMalfunctionSceneManager.Headlight(out CustomHeadlight: TNodeX3DLightNode): boolean;
+begin
+  Result := true;
+  CustomHeadlight := nil;
+end;
 
-procedure draw2d(draw2dData: Pointer);
+{ TGame2DControls ------------------------------------------------------------ }
+
+type
+  TGame2DControls = class(TUIControl)
+  public
+    procedure Draw; override;
+    function DrawStyle: TUIControlDrawStyle; override;
+  end;
+
+function TGame2DControls.DrawStyle: TUIControlDrawStyle;
+begin
+  Result := ds2D;
+end;
+
+procedure TGame2DControls.Draw;
 
   procedure radarDraw2D;
   const
@@ -161,6 +170,10 @@ procedure draw2d(draw2dData: Pointer);
   end;
 
 begin
+ { TODO: this was assuming projection is like
+   glProjectionPushPopOrtho2D(@Draw2D, nil, 0, 640, 0, 480);
+   previously. Check does it work still with different screen sizes Ok. }
+
  { TODO: uzyj kokpitu przez stencil bufor raczej }
  glLoadIdentity;
  glRasterPos2i(0, 0);
@@ -191,40 +204,56 @@ begin
  Notifications.Draw2D(640, 480, Window.width, Window.height);
 end;
 
-procedure draw(Window: TGLWindow);
+{ mode enter/exit ----------------------------------------------------------- }
+
 var
-  Params: TBasicRenderParams;
-  H: PLightInstance;
+  SceneManager: TMalfunctionSceneManager;
+  Controls: TGame2DControls;
+  Camera: TWalkCamera;
+
+procedure KeyDown(Window: TGLWindow; key: TKey; c: char); forward;
+procedure idle(Window: TGLWindow); forward;
+
+procedure modeEnter;
 begin
- {no need to clear COLOR_BUFFER - sky will cover everything}
- glClear(GL_DEPTH_BUFFER_BIT);
- glLoadIdentity;
+ Assert(levelScene <> nil,
+   'Error - setting game mode to modeGame but level uninitialized');
 
- glPushMatrix;
-   playerShip.PlayerShipApplyMatrixNoTranslate;
-   sky.Render;
- glPopMatrix;
+ if (LevelScene.FogNode <> nil) and
+    (LevelScene.FogNode.FdVolumetric.Value) and
+    (not GL_EXT_fog_coord) then
+   MessageOK(Window,
+     'Your OpenGL implementation doesn''t support GL_EXT_fog_coord. '+
+     'Everything will work correctly but the results will not be as beautiful '+
+     'as they could be.');
 
- playerShip.PlayerShipApplyMatrix;
+ Window.Controls.Add(Controls);
+ Window.Controls.Add(SceneManager);
 
- Params := TBasicRenderParams.Create;
- try
-   H := levelScene.Headlight(playerShip.shipPos, Normalized(playerShip.shipDir));
-   if H <> nil then
-     Params.FBaseLights.Add(H^);
+ Window.OnKeyDown := @KeyDown;
+ Window.OnIdle := @idle;
 
-   levelScene.Render(nil, Params);
-   ShipsRender(Params);
-
-   glPushAttrib(GL_ENABLE_BIT);
-     glDisable(GL_LIGHTING);
-     RocketsRender(Params);
-
-     glDisable(GL_DEPTH_TEST);
-     glProjectionPushPopOrtho2D(@Draw2D, nil, 0, 640, 0, 480);
-   glPopAttrib;
- finally FreeAndNil(Params) end;
+ Window.AutoRedisplay := true;
 end;
+
+procedure modeExit;
+begin
+ glDisable(GL_DEPTH_TEST);
+ glDisable(GL_LIGHTING);
+ glDisable(GL_LIGHT0);
+
+ { Check Window <> nil, as it may be already nil (during destruction)
+   now in case of some errors }
+ if Window <> nil then
+   Window.AutoRedisplay := false;
+
+ Window.Controls.Remove(Controls);
+ Window.Controls.Remove(SceneManager);
+
+ FreeAndNil(sky);
+end;
+
+{ glw callbacks ----------------------------------------------------------- }
 
 procedure KeyDown(Window: TGLWindow; key: TKey; c: char);
 var fname: string;
@@ -292,8 +321,6 @@ begin
                     crossh_img.Height * Window.height div 480);
   crossh_list := ImageDrawToDisplayList(crossh_img);
  finally crossh_img.Free end;
-
- glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 end;
 
 procedure CloseGLwin(Window: TGLWindow);
@@ -306,38 +333,13 @@ initialization
  gameModeExit[modeGame] := @modeExit;
  Window.OnOpenList.Add(@OpenGLwin);
  Window.OnCloseList.Add(@CloseGLwin);
+
+ Controls := TGame2DControls.Create(nil);
+ SceneManager := TMalfunctionSceneManager.Create(nil);
+ Camera := TWalkCamera.Create(SceneManager);
+ Camera.IgnoreAllInputs := true;
+ SceneManager.Camera := Camera;
+finalization
+ FreeAndNil(Controls);
+ FreeAndNil(SceneManager);
 end.
-
-(* --------------------------------------------------------------------------------
-
-starocie : crosshair rysowany jakby XORem
-
-  {czego my chcemy od tej blending function ?
-   Nasz crosshair wyglada tak : ma czarny kolor i alpha = 0 tam gdzie
-     nie chcemy zeby sie pojawil (tzn. tam ma zostac ten kolor co juz jest
-     w buforze);
-   ma jasny (niekoniecznie bialy) kolor i alpha = 1 tam gdzie chcemy zeby sie
-     pojawil odwracajac kolor jaki jest w buforze (wiec z jasnego zrobi ciemny a
-     z ciemnego jasny).
-   Factor GL_ONE_MINUS_DST_COLOR to wlasnie odwrocony kolor w buforze;
-     tam gdzie nasz crosshair jest czarny to i tak wyjdzie source = black;
-     tam gdzie nasz crosshair jest jasny wyjdzie ten odwrocony kolor bufora
-     (moze troche sciemniony jezeli nasz kolor nie bedzie w pelni white tylko
-     troche mniejszy od white);
-   Pozostaje nam aby zachowywac kolor dest gdy nasze alpha = 0
-     i kasowac go gdy nasze alpha = 1. Osiagamy to
-     faktorem GL_ONE_MINUS_SRC_ALPHA. }
-  glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
-
-------------------------------------------------------------
-stary sposob ladowania kokpit.png
-
-  function LoadAlphaImgToDisplayList(const imgFName: string; w, h: integer): TGLuint;
-  var img: TImage;
-  begin
-   img := LoadImage(imagesDir +imgFName, frWithAlpha, false, w, h);
-   try
-    result := ImageDrawToDisplayList(img);
-   finally ImageFree(img) end;
-  end;
-*)

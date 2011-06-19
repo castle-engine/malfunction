@@ -132,7 +132,7 @@ procedure FreeLevel;
 
 { LoadGame loads NewPlayer and then loads LoadLevel and then
   SetGameMode(modeGame).
-  
+
   You should terminate any TGLWindow event handling after PlayGame call. }
 procedure PlayGame(const vrmlSceneFName: string);
 
@@ -295,11 +295,13 @@ type
   end;
 
 procedure LoadLevel(const vrmlSceneFName: string);
-var vMiddle, vSizes: TVector3Single;
-    halfMaxSize: Single;
-    LevelBoxShape: TVRMLShape;
-    EnemiesConstructor: TEnemiesConstructor;
-    DummyGravityUp: TVector3Single;
+var
+  vMiddle, vSizes: TVector3Single;
+  halfMaxSize: Single;
+  LevelBoxShape: TVRMLShape;
+  EnemiesConstructor: TEnemiesConstructor;
+  DummyGravityUp: TVector3Single;
+  BaseLights: TLightInstancesList;
 begin
  FreeLevel;
 
@@ -367,7 +369,12 @@ begin
   { zeby pierwsze OnDraw gry nie zajmowalo zbyt duzo czasu zeby enemyShips
     nie strzelaly od razu kilkoma rakietami na starcie po zaladowaniu
     levelu. }
-  levelScene.PrepareResources([prRender, prBackground, prBoundingBox], false);
+  { TODO: it's not clean to create BaseLights here,
+    we should use SceneManager.BaseLights }
+  BaseLights := TLightInstancesList.Create;
+  try
+    levelScene.PrepareResources([prRender, prBackground, prBoundingBox], false, BaseLights);
+  finally FreeAndNil(BaseLights) end;
 
   Notifications.Clear;
   Notifications.Show('Level '+vrmlSceneFName+' loaded.');
