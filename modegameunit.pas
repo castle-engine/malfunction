@@ -174,7 +174,6 @@ begin
    glProjectionPushPopOrtho2D(@Draw2D, nil, 0, 640, 0, 480);
    previously. Check does it work still with different screen sizes Ok. }
 
- { TODO: uzyj kokpitu przez stencil bufor raczej }
  glLoadIdentity;
  glRasterPos2i(0, 0);
 
