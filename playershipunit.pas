@@ -299,7 +299,6 @@ const
   procedure DrawIndicator(const r: TRect2d; const BorderColor, BGColor,
     InsideCol: TVector4f; const Height, MinHeight, MaxHeight: Single);
   begin
-   glLoadIdentity;
    drawGLBorderedRectangle(r[0, 0], r[0, 1], r[1, 0], r[1, 1], BGColor, BorderColor);
    glColorv(InsideCol);
    glRectf(r[0, 0]+RectMargin, r[0, 1]+RectMargin, r[1, 0]-RectMargin,
@@ -308,23 +307,29 @@ const
   end;
 
 begin
- {draw speed and live indicators}
- DrawIndicator(speedRect, Yellow4Single, Black4Single, LightBlue4Single,
-   shipSpeed, playerShipAbsoluteMinSpeed, playerShipAbsoluteMaxSpeed);
- DrawIndicator(liveRect, Yellow4Single, Black4Single, Red4Single,
-   KambiUtils.max(shipLife, 0.0) , 0, MaxShipLife);
+  glLoadIdentity;
 
- {draw kompas arrow}
- glTranslatef(kompasMiddle[0], kompasMiddle[1], 0);
- glRotatef(RadToDeg(AngleRadPointToPoint(0, 0, shipDir[0], shipDir[1]))-90, 0, 0, 1);
- glScalef(10, kompasSrednica/2, 1);
- glTranslatef(0, -1, 0);
- glColorv(Yellow3Single);
- drawArrow(0.3, 0.8);
+  { Sizes below are adjusted to 640x480, it's easiest to just scale
+    to make them work for all window sizes }
+  glScalef(Window.Width / 640, Window.Height / 480, 1);
 
- {draw blackout}
- glLoadIdentity;
- DrawGLBlackOutRect(BlackOutColor, BlackOutIntensity, 0, 0, 640, 480);
+  {draw speed and live indicators}
+  DrawIndicator(speedRect, Yellow4Single, Black4Single, LightBlue4Single,
+    shipSpeed, playerShipAbsoluteMinSpeed, playerShipAbsoluteMaxSpeed);
+  DrawIndicator(liveRect, Yellow4Single, Black4Single, Red4Single,
+    KambiUtils.max(shipLife, 0.0) , 0, MaxShipLife);
+
+  {draw kompas arrow}
+  glTranslatef(kompasMiddle[0], kompasMiddle[1], 0);
+  glRotatef(RadToDeg(AngleRadPointToPoint(0, 0, shipDir[0], shipDir[1]))-90, 0, 0, 1);
+  glScalef(10, kompasSrednica/2, 1);
+  glTranslatef(0, -1, 0);
+  glColorv(Yellow3Single);
+  drawArrow(0.3, 0.8);
+
+  {draw blackout}
+  glLoadIdentity;
+  DrawGLBlackOutRect(BlackOutColor, BlackOutIntensity, 0, 0, Window.Width, Window.Height);
 end;
 
 { globa procs ------------------------------------------------------------ }

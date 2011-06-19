@@ -131,10 +131,8 @@ procedure TGame2DControls.Draw;
     ScreenMargin = 10;
     Size = 100;
     InsideMargin = 5;
-    MinInsideX = 640-ScreenMargin-Size+InsideMargin;
-    MaxInsideX = 640-ScreenMargin-InsideMargin;
-    MinInsideY = 480-ScreenMargin-Size+InsideMargin;
-    MaxInsideY = 480-ScreenMargin-InsideMargin;
+  var
+    MinInsideX, MaxInsideX, MinInsideY, MaxInsideY: Integer;  
 
     procedure LevelBoxPosToPixel(const pos: TVector3Single; var x, y: TGLint);
     begin
@@ -142,12 +140,18 @@ procedure TGame2DControls.Draw;
      y := Round(MapRange(pos[1], levelBox[0, 1], levelBox[1, 1], MinInsideY, MaxInsideY));
     end;
 
-  var i: integer;
-      x, y: TGLint;
+  var
+    i: integer;
+    x, y: TGLint;
   begin
+    MinInsideX := Window.Width - ScreenMargin - Size + InsideMargin;
+    MaxInsideX := Window.Width - ScreenMargin - InsideMargin;
+    MinInsideY := Window.Height - ScreenMargin - Size + InsideMargin;
+    MaxInsideY := Window.Height - ScreenMargin - InsideMargin;
+
    glColor4f(0, 0, 0, 0.5);
-   glRectf(640-ScreenMargin-Size, 480-ScreenMargin-Size,
-           640-ScreenMargin, 480-ScreenMargin);
+   glRectf(Window.Width-ScreenMargin-Size, Window.Height-ScreenMargin-Size,
+           Window.Width-ScreenMargin, Window.Height-ScreenMargin);
 
    LevelBoxPosToPixel(playerShip.shipPos, x, y);
    glColor4f(1, 1, 1, 0.8);
@@ -170,10 +174,6 @@ procedure TGame2DControls.Draw;
   end;
 
 begin
- { TODO: this was assuming projection is like
-   glProjectionPushPopOrtho2D(@Draw2D, nil, 0, 640, 0, 480);
-   previously. Check does it work still with different screen sizes Ok. }
-
  glLoadIdentity;
  glRasterPos2i(0, 0);
 
@@ -186,7 +186,9 @@ begin
  begin
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glEnable(GL_BLEND);
-  glRasterPos2i((640 - crossh_orig_width) div 2, (480 - crossh_orig_height) div 2);
+  glRasterPos2i(
+    (Window.Width - crossh_orig_width) div 2,
+    (Window.Height - crossh_orig_height) div 2);
   glCallList(crossh_list);
   glDisable(GL_BLEND);
  end;
@@ -200,7 +202,7 @@ begin
  end;
 
  playerShip.PlayerShipDraw2D;
- Notifications.Draw2D(640, 480, Window.width, Window.height);
+ Notifications.Draw2D(Window.Width, Window.Height, Window.width, Window.height);
 end;
 
 { mode enter/exit ----------------------------------------------------------- }
