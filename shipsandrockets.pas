@@ -37,7 +37,7 @@ unit ShipsAndRockets;
 interface
 
 uses GLWindow, SysUtils, GL, GLU, KambiGLUtils, VectorMath, KambiUtils,
-  KambiClassUtils, Classes, KambiTimeUtils, VRMLGLScene;
+  KambiClassUtils, Classes, KambiTimeUtils, VRMLGLScene, Base3D;
 
 {$define read_interface}
 
@@ -126,7 +126,7 @@ type
     {render yourself to OpenGL at the right position and direction.
      You should use glPush/PopMatrix mechanism to save current matrix.
      Zawsze wywoluj inherited w podklasach. }
-    procedure Render(const Params: TVRMLRenderParams); virtual;
+    procedure Render(const Params: TRenderParams); virtual;
     procedure Idle; virtual;
 
     procedure HitByRocket; override;
@@ -232,7 +232,7 @@ type
 
     {render yourself to OpenGL at the right position and direction.
      You should use glPush/PopMatrix mechanism to save current matrix.}
-    procedure Render(const Params: TVRMLRenderParams);
+    procedure Render(const Params: TRenderParams);
     procedure Idle;
   end;
 
@@ -261,8 +261,8 @@ var
 
 { funcs below should be called from ModeGameUnit at appropriate times.
   They don't modify current matrix. }
-procedure ShipsRender(const Params: TVRMLRenderParams);
-procedure RocketsRender(const Params: TVRMLRenderParams);
+procedure ShipsRender(const Params: TRenderParams);
+procedure RocketsRender(const Params: TRenderParams);
 procedure ShipsAndRocketsIdle;
 
 { inne funkcje }
@@ -423,7 +423,7 @@ begin
  result := Box3DAvgSize(EnemyShipVRMLs[Kind].BoundingBox)*Sqrt2/2;
 end;
 
-procedure TEnemyShip.Render(const Params: TVRMLRenderParams);
+procedure TEnemyShip.Render(const Params: TRenderParams);
 var GoodShipUp: TVector3Single;
 begin
  glPushMatrix;
@@ -624,7 +624,7 @@ begin
  inherited;
 end;
 
-procedure TRocket.Render(const Params: TVRMLRenderParams);
+procedure TRocket.Render(const Params: TRenderParams);
 var axis: TVector3Single;
 begin
  glPushMatrix;
@@ -687,14 +687,14 @@ end;
 
 { global funcs ----------------------------------------------------------- }
 
-procedure ShipsRender(const Params: TVRMLRenderParams);
+procedure ShipsRender(const Params: TRenderParams);
 var i: integer;
 begin
  for i := 0 to enemyShips.Count-1 do
   if enemyShips[i] <> nil then enemyShips[i].Render(Params);
 end;
 
-procedure RocketsRender(const Params: TVRMLRenderParams);
+procedure RocketsRender(const Params: TRenderParams);
 var i: integer;
 begin
  for i := 0 to rockets.Count-1 do
