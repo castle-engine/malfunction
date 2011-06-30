@@ -29,10 +29,10 @@ interface
 
 implementation
 
-uses VectorMath, SysUtils, GL, GLU, GLExt, GLWindow, GameGeneral, KambiGLUtils,
+uses VectorMath, SysUtils, GL, GLWindow, GameGeneral, KambiGLUtils,
   KambiUtils, LevelUnit, Boxes3D, GLWinMessages, PlayerShipUnit, Images,
-  ShipsAndRockets, GLNotifications, KeysMouse, KambiFilesUtils,
-  KambiStringUtils, VRMLGLScene, GLImages, SkyCube, VRMLNodes, Base3D,
+  ShipsAndRockets, KeysMouse, KambiFilesUtils,
+  KambiStringUtils, VRMLGLScene, GLImages, SkyCube, VRMLNodes,
   KambiSceneManager, UIControls, Cameras;
 
 var

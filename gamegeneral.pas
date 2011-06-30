@@ -103,7 +103,7 @@ implementation
 
 {$define read_implementation}
 
-uses KambiGLUtils, KambiUtils, GLWinMessages, GL, GLU, GLExt, ProgressUnit,
+uses KambiGLUtils, KambiUtils, GLWinMessages, ProgressUnit,
   GLProgress, OpenGLBmpFonts, BFNT_BitstreamVeraSansMono_m18_Unit;
 
 var fGameMode: TGameMode = modeNone;

@@ -91,8 +91,7 @@ unit LevelUnit;
 interface
 
 uses SysUtils, GameGeneral, GLWindow, VRMLGLScene, VRMLFields, VRMLNodes,
-  VRMLTriangleOctree, KambiClassUtils, GL, GLU, GLExt, Boxes3D, VRMLShape,
-  KambiGLUtils;
+  KambiClassUtils, Boxes3D, VRMLShape, KambiGLUtils;
 
 type
   { levelType wplywa na wiele rzeczy. Ponizej bede dokumentowal sobie
@@ -139,7 +138,7 @@ procedure PlayGame(const vrmlSceneFName: string);
 implementation
 
 uses VectorMath, KambiUtils, PlayerShipUnit, ShipsAndRockets,
-  GLNotifications, GLWinMessages, VRMLScene;
+  GLWinMessages, VRMLScene;
 
 { TNodeMalfunctionInfo ----------------------------------------------- }
 

@@ -30,7 +30,7 @@ unit PlayerShipUnit;
 
 interface
 
-uses GL, GLU, GLExt, Boxes3D, ShipsAndRockets, SysUtils, KambiGLUtils;
+uses GL, Boxes3D, ShipsAndRockets, SysUtils, KambiGLUtils;
 
 const
   playerShipAbsoluteMaxSpeed = 45.0;
@@ -111,8 +111,8 @@ procedure NewPlayerShip;
 
 implementation
 
-uses VectorMath, GameGeneral, GLWindow, KambiUtils, Math,
-  LevelUnit, GLWinMessages, GLNotifications, VRMLTriangleOctree;
+uses GLU, VectorMath, GameGeneral, GLWindow, KambiUtils, Math,
+  LevelUnit, GLWinMessages;
 
 constructor TPlayerShip.Create;
 begin
