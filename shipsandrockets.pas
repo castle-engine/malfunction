@@ -273,8 +273,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 
 implementation
 
-uses Boxes3D, GameGeneral, VRMLNodes, LevelUnit, Math,
-  PlayerShipUnit, GLNotifications, VRMLTriangleOctree;
+uses Boxes3D, GameGeneral, VRMLNodes, LevelUnit, Math, PlayerShipUnit;
 
 {$define read_implementation}
 {$I ObjectsList_1.inc}
@@ -323,9 +322,7 @@ const
   );
 
 const
-  { changing these requires changes in TEnemyShip.Render too }
   modelDir3d: TVector3Single = (0, 0, 1);
-  modelUp3d: TVector3Single = (1, 0, 0);
 
 var
   { modeliki; ladowane w Window.Open, niszczone w Window.Close  }
