@@ -37,7 +37,8 @@ unit ShipsAndRockets;
 interface
 
 uses GLWindow, SysUtils, GL, GLU, KambiGLUtils, VectorMath, KambiUtils,
-  KambiClassUtils, Classes, KambiTimeUtils, VRMLGLScene, Base3D;
+  KambiClassUtils, Classes, KambiTimeUtils, VRMLGLScene, Base3D,
+  FGL {$ifdef VER2_2}, FGLObjectList22 {$endif};
 
 {$define read_interface}
 
@@ -46,9 +47,7 @@ type
   TRocket = class;
   TEnemyShip = class;
 
-  TObjectsListItem_1 = TRocket;
-  {$I ObjectsList_1.inc}
-  TRocketsList = TObjectsList_1;
+  TRocketsList = specialize TFPGObjectList<TRocket>;
 
   TSpaceShip = class
   private
@@ -139,9 +138,7 @@ type
     function TryShipMove(const newShipPos: TVector3Single): boolean;
   end;
 
-  TObjectsListItem_2 = TEnemyShip;
-  {$I ObjectsList_2.inc}
-  TEnemyShipsList = TObjectsList_2;
+  TEnemyShipsList = specialize TFPGObjectList<TEnemyShip>;
 
   {statki tej klasy wywoluja w Idle FireRocket co jakis czas, zalezny od
    FireDelay dla tego shipKind. Pamietaj wywolac inherited w Idle; }
@@ -269,15 +266,9 @@ procedure ShipsAndRocketsIdle;
 
 function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 
-{$undef read_interface}
-
 implementation
 
 uses Boxes3D, GameGeneral, VRMLNodes, LevelUnit, Math, PlayerShipUnit;
-
-{$define read_implementation}
-{$I ObjectsList_1.inc}
-{$I ObjectsList_2.inc}
 
 type
   TEnemyShipKindInfo = record
@@ -337,7 +328,7 @@ begin
  MaxFiredRocketsCount := 10;
  FMaxShipLife := AMaxShipLife;
  FShipLife := MaxShipLife;
- firedRockets := TRocketsList.Create;
+ firedRockets := TRocketsList.Create(false);
 end;
 
 destructor TSpaceShip.Destroy;
@@ -395,7 +386,7 @@ end;
 
 destructor TEnemyShip.Destroy;
 begin
- if enemyShips <> nil then enemyShips.ReplaceAll(Self, nil);
+ if enemyShips <> nil then FPGObjectList_ReplaceAll(enemyShips, Self, nil);
  inherited;
 end;
 
@@ -617,7 +608,7 @@ end;
 destructor TRocket.Destroy;
 begin
  if MotherShip <> nil then MotherShip.firedRockets.Remove(Self);
- rockets.ReplaceAll(Self, nil);
+ FPGObjectList_ReplaceAll(rockets, Self, nil);
  inherited;
 end;
 
@@ -706,8 +697,8 @@ begin
  for i := 0 to enemyShips.Count-1 do
   if enemyShips[i] <> nil then enemyShips[i].Idle;
 
- rockets.RemoveAll(nil);
- if (enemyShips.RemoveAll(nil) > 0) and (enemyShips.Count = 0) then
+ FPGObjectList_RemoveNils(rockets);
+ if (FPGObjectList_RemoveNils(enemyShips) > 0) and (enemyShips.Count = 0) then
   Notifications.Show('ALL ENEMY SHIPS DESTROYED.');
 end;
 

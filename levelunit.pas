@@ -353,10 +353,10 @@ begin
   levelScene.TriangleOctreeProgressTitle := 'Loading ...';
   levelScene.Spatial := [ssDynamicCollisions];
 
-  rockets := TRocketsList.Create;
+  rockets := TRocketsList.Create(false);
 
   {read enemy ships from file}
-  enemyShips := TEnemyShipsList.Create;
+  enemyShips := TEnemyShipsList.Create(false);
   levelScene.RootNode.EnumerateNodes(TVRMLMalfunctionEnemyNode,
     @EnemiesConstructor.ConstructEnemy, true);
 
@@ -383,8 +383,16 @@ end;
 procedure FreeLevel;
 begin
  FreeAndNil(levelScene);
- FreeWithContentsAndNil(rockets);
- FreeWithContentsAndNil(enemyShips);
+ if rockets <> nil then
+ begin
+   rockets.FreeObjects := true;
+   FreeAndNil(rockets);
+ end;
+ if enemyShips <> nil then
+ begin
+   enemyShips.FreeObjects := true;
+   FreeAndNil(enemyShips);
+ end;
 end;
 
 procedure PlayGame(const vrmlSceneFName: string);
