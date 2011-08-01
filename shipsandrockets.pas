@@ -608,7 +608,7 @@ end;
 destructor TRocket.Destroy;
 begin
  if MotherShip <> nil then MotherShip.firedRockets.Remove(Self);
- FPGObjectList_ReplaceAll(rockets, Self, nil);
+ if rockets <> nil then FPGObjectList_ReplaceAll(rockets, Self, nil);
  inherited;
 end;
 
