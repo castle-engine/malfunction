@@ -353,10 +353,10 @@ begin
   levelScene.TriangleOctreeProgressTitle := 'Loading ...';
   levelScene.Spatial := [ssDynamicCollisions];
 
-  rockets := TRocketsList.Create(false);
+  rockets := TRocketList.Create(false);
 
   {read enemy ships from file}
-  enemyShips := TEnemyShipsList.Create(false);
+  enemyShips := TEnemyShipList.Create(false);
   levelScene.RootNode.EnumerateNodes(TVRMLMalfunctionEnemyNode,
     @EnemiesConstructor.ConstructEnemy, true);
 

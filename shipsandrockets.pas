@@ -47,7 +47,7 @@ type
   TRocket = class;
   TEnemyShip = class;
 
-  TRocketsList = specialize TFPGObjectList<TRocket>;
+  TRocketList = specialize TFPGObjectList<TRocket>;
 
   TSpaceShip = class
   private
@@ -59,7 +59,7 @@ type
       zostanie zniszczony to ustawic im wskazniki motherShip na nil
       (zeby torpedy wiedzialy ze kiedy one zostane zniszczone to nie musza
       o tym powiadamiac zadnego statku). }
-    firedRockets: TRocketsList;
+    firedRockets: TRocketList;
     FMaxShipLife, FShipLife: TGLfloat;
   protected
     { mozesz zwiekszyc wartosc tego pola dla jakiejs bardzo istotnej podklasy
@@ -138,7 +138,7 @@ type
     function TryShipMove(const newShipPos: TVector3Single): boolean;
   end;
 
-  TEnemyShipsList = specialize TFPGObjectList<TEnemyShip>;
+  TEnemyShipList = specialize TFPGObjectList<TEnemyShip>;
 
   {statki tej klasy wywoluja w Idle FireRocket co jakis czas, zalezny od
    FireDelay dla tego shipKind. Pamietaj wywolac inherited w Idle; }
@@ -253,8 +253,8 @@ var
      bezpieczne (wiadomo ze nic nie iteruje wtedy po listach) i nie powinny
      byc czyszczone z nil'i nigdzie indziej (uzywamy wyniku DeleteAll(nil)
      aby ew. wypisac komunikat "All enemy ships destroyed") }
-  rockets: TRocketsList;
-  enemyShips: TEnemyShipsList;
+  rockets: TRocketList;
+  enemyShips: TEnemyShipList;
 
 { funcs below should be called from ModeGameUnit at appropriate times.
   They don't modify current matrix. }
@@ -328,7 +328,7 @@ begin
  MaxFiredRocketsCount := 10;
  FMaxShipLife := AMaxShipLife;
  FShipLife := MaxShipLife;
- firedRockets := TRocketsList.Create(false);
+ firedRockets := TRocketList.Create(false);
 end;
 
 destructor TSpaceShip.Destroy;
