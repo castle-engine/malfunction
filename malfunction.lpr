@@ -39,7 +39,7 @@ program malfunction;
 {$apptype GUI}
 
 uses GLWindow, GameGeneral, SysUtils, KambiUtils, ModeMenuUnit, ModeGameUnit,
-  ParseParametersUnit, KambiClassUtils, KambiFilesUtils, KeysMouse;
+  KambiParameters, KambiClassUtils, KambiFilesUtils, KeysMouse;
 
 { params ------------------------------------------------------------ }
 
@@ -96,7 +96,7 @@ begin
 
  { parse params }
  Window.ParseParameters(StandardParseOptions);
- ParseParameters(Options, @OptionProc, nil);
+ Parameters.Parse(Options, @OptionProc, nil);
  if Parameters.High > 0 then
   raise EInvalidParams.Create('Unrecognized parameter : ' + Parameters[1]);
 
