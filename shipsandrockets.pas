@@ -408,7 +408,7 @@ end;
 
 function TEnemyShip.ShipRadius: Single;
 begin
- result := Box3DAvgSize(EnemyShipVRMLs[Kind].BoundingBox)*Sqrt2/2;
+ result := EnemyShipVRMLs[Kind].BoundingBox.AverageSize * Sqrt2/2;
 end;
 
 procedure TEnemyShip.Render(const Params: TRenderParams);
@@ -443,7 +443,7 @@ begin
    (not levelScene.OctreeCollisions.IsSegmentCollision(ShipPos, newShipPos,
      nil, false, nil)) and
    (CollisionWithOtherEnemyShip(newShipPos) = nil) and
-   Box3DPointInside(newShipPos, levelBox);
+   levelBox.PointInside(newShipPos);
  if result then ShipPos := newShipPos;
 end;
 
@@ -637,7 +637,7 @@ begin
  newRocPos := VectorAdd(rocPos, VectorScale(rocDir, Window.Fps.IdleSpeed * 50));
  if (levelScene.OctreeCollisions.IsSegmentCollision(rocPos,
        newRocPos, nil, false, nil)) or
-    (not Box3DPointInside(rocPos, levelBox)) then
+    (not levelBox.PointInside(rocPos)) then
   {rakieta zderzyla sie z czescia levelu lub wyleciala poza levelBox}
   Self.Destroy else
  begin
@@ -670,7 +670,7 @@ end;
 
 class function TRocket.rocRadius: Single;
 begin
- result := Box3DAvgSize(rocketVRML.BoundingBox)/2;
+ result := rocketVRML.BoundingBox.AverageSize / 2;
 end;
 
 { global funcs ----------------------------------------------------------- }

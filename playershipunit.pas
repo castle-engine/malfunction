@@ -280,7 +280,7 @@ begin
  RotationSpeedBackToZero(shipVertRotationSpeed, ROT_VERT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
 
  {apply shipPosBox}
- Box3DClamp(shipPos, levelBox);
+ levelBox.Clamp(shipPos);
 
  if BlackOutIntensity > 0 then
    BlackOutIntensity -= 0.02 * Window.Fps.IdleSpeed * 50;

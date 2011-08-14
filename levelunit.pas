@@ -333,19 +333,19 @@ begin
     {ustalamy shipPosBox na box o srodku tam gdzie levelScene.BoundingBox
      i rozmiarach piec razy wiekszych niz najwiekszy rozmiar
      levelScene.BounxingBox.}
-    vSizes := Box3DSizes(levelScene.BoundingBox);
+    vSizes := levelScene.BoundingBox.Sizes;
     halfMaxSize := max(vSizes[0], vSizes[1], vSizes[2])* 2.5;
     vSizes := Vector3Single(halfMaxSize, halfMaxSize, halfMaxSize);
-    vMiddle := Box3DMiddle(levelScene.BoundingBox);
-    LevelBox[0] := VectorSubtract(vMiddle, vSizes);
-    LevelBox[1] := VectorAdd(vMiddle, vSizes);
+    vMiddle := levelScene.BoundingBox.Middle;
+    LevelBox.Data[0] := VectorSubtract(vMiddle, vSizes);
+    LevelBox.Data[1] := VectorAdd(vMiddle, vSizes);
    end else
    begin
     {Ustalamy shipPosBox na box levelu, za wyjatkiem z-ta ktorego przedluzamy
        5 razy. Czyli nie pozwalamy statkowi wyleciec poza x, y-levelu ani ponizej
        z-ow, ale moze wzleciec dosc wysoko ponad z-ty.}
     LevelBox := levelScene.BoundingBox;
-    LevelBox[1, 2] := LevelBox[1, 2]+4*(LevelBox[1, 2]-LevelBox[0, 2]);
+    LevelBox.Data[1, 2] := LevelBox.Data[1, 2]+4*(LevelBox.Data[1, 2]-LevelBox.Data[0, 2]);
    end;
   end;
 

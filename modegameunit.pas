@@ -63,8 +63,8 @@ begin
 
     Near wybieramy arbitralnie jako PLAYER_SHIP_CAMERA_RADIUS. }
   projNear := PLAYER_SHIP_CAMERA_RADIUS;
-  wholeLevelBox := Box3DSum(levelScene.BoundingBox, levelBox);
-  projFar := PointsDistance(wholeLevelBox[0], wholeLevelBox[1]);
+  wholeLevelBox := levelScene.BoundingBox + levelBox;
+  projFar := PointsDistance(wholeLevelBox.Data[0], wholeLevelBox.Data[1]);
   ProjectionGLPerspective(30, Window.width/Window.height, projNear, projFar);
 
   if Sky = nil then
@@ -136,8 +136,8 @@ procedure TGame2DControls.Draw;
 
     procedure LevelBoxPosToPixel(const pos: TVector3Single; var x, y: TGLint);
     begin
-     x := Round(MapRange(pos[0], levelBox[0, 0], levelBox[1, 0], MinInsideX, MaxInsideX));
-     y := Round(MapRange(pos[1], levelBox[0, 1], levelBox[1, 1], MinInsideY, MaxInsideY));
+     x := Round(MapRange(pos[0], levelBox.Data[0, 0], levelBox.Data[1, 0], MinInsideX, MaxInsideX));
+     y := Round(MapRange(pos[1], levelBox.Data[0, 1], levelBox.Data[1, 1], MinInsideY, MaxInsideY));
     end;
 
   var
