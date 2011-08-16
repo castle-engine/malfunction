@@ -97,6 +97,11 @@ begin
    levelScene.Render(nil, Params);
    ShipsRender(Params);
    RocketsRender(Params);
+
+   Params.Transparent := true;
+   levelScene.Render(nil, Params);
+   ShipsRender(Params);
+   RocketsRender(Params);
  finally FreeAndNil(Params) end;
 end;
 
@@ -132,7 +137,7 @@ procedure TGame2DControls.Draw;
     Size = 100;
     InsideMargin = 5;
   var
-    MinInsideX, MaxInsideX, MinInsideY, MaxInsideY: Integer;  
+    MinInsideX, MaxInsideX, MinInsideY, MaxInsideY: Integer;
 
     procedure LevelBoxPosToPixel(const pos: TVector3Single; var x, y: TGLint);
     begin
