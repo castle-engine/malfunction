@@ -139,7 +139,8 @@ procedure Open(Window: TGLWindow);
 begin
  GLWinMessagesTheme.Font := TGLBitmapFont.Create(@BFNT_BitstreamVeraSansMono_m18);
 
- Notifications := TGLNotifications.Create(Window, hpMiddle, vpUp, Window.width);
+ Notifications := TGLNotifications.Create(Window);
+ Notifications.VerticalPosition := vpUp;
  GLProgressInterface.Window := Window;
  Progress.UserInterface := GLProgressInterface;
 
@@ -153,8 +154,6 @@ begin
  fGameMode := modeNone;
 
  FreeAndNil(GLWinMessagesTheme.Font);
-
- FreeAndNil(Notifications);
 end;
 
 initialization

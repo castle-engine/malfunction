@@ -207,7 +207,6 @@ begin
  end;
 
  playerShip.PlayerShipDraw2D;
- Notifications.Draw2D(Window.Width, Window.Height, Window.width, Window.height);
 end;
 
 { mode enter/exit ----------------------------------------------------------- }
@@ -234,6 +233,7 @@ begin
      'as they could be.');
 
  Window.Controls.Add(Controls);
+ Window.Controls.Add(Notifications);
  Window.Controls.Add(SceneManager);
 
  Window.OnKeyDown := @KeyDown;
@@ -254,6 +254,8 @@ begin
    Window.AutoRedisplay := false;
 
  Window.Controls.Remove(Controls);
+ Window.Controls.Remove(Notifications);
+ 
  Window.Controls.Remove(SceneManager);
 
  FreeAndNil(sky);
@@ -300,7 +302,6 @@ begin
 
  playerShip.PlayerShipIdle;
  ShipsAndRocketsIdle;
- Notifications.Idle;
 end;
 
 { Open/Close glwin -------------------------------------------------------- }
