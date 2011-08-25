@@ -99,7 +99,7 @@ type
     - rozny levelType to roznie ustalany domyslny LevelBox w LoadLevel }
   TLevelType = (ltPlanet, ltSpace);
 
-  TNodeMalfunctionLevelInfo = class(TVRMLNode)
+  TMalfunctionLevelInfoNode = class(TX3DNode)
     procedure CreateNode; override;
     class function ClassNodeTypeName: string; override;
 
@@ -113,7 +113,7 @@ type
 var
   levelScene: TVRMLGLScene;
   levelType: TLevelType;
-  levelInfo: TNodeMalfunctionLevelInfo;
+  levelInfo: TMalfunctionLevelInfoNode;
   LevelBox: TBox3D; { poza ten box nie moze NIC wyleciec }
 
 { Loading and free'ing level NEEDS active gl context.
@@ -140,9 +140,9 @@ implementation
 uses VectorMath, KambiUtils, PlayerShipUnit, ShipsAndRockets,
   GLWinMessages, VRMLScene;
 
-{ TNodeMalfunctionInfo ----------------------------------------------- }
+{ TMalfunctionInfoNode ----------------------------------------------- }
 
-procedure TNodeMalfunctionLevelInfo.CreateNode;
+procedure TMalfunctionLevelInfoNode.CreateNode;
 begin
   inherited;
 
@@ -153,7 +153,7 @@ begin
   Fields.Add(FFdtype);
 end;
 
-class function TNodeMalfunctionLevelInfo.ClassNodeTypeName: string;
+class function TMalfunctionLevelInfoNode.ClassNodeTypeName: string;
 begin
   result := 'MalfunctionLevelInfo';
 end;
@@ -161,7 +161,7 @@ end;
 { enemy ship nodes ------------------------------------------------------------ }
 
 type
-  TVRMLMalfunctionEnemyNode = class(TVRMLNode)
+  TVRMLMalfunctionEnemyNode = class(TX3DNode)
     procedure CreateNode; override;
 
     private FFdKind: TSFString;
@@ -171,7 +171,7 @@ type
     function CreateEnemyShip: TEnemyShip; virtual; abstract;
   end;
 
-  TNodeMalfunctionNotMovingEnemy = class(TVRMLMalfunctionEnemyNode)
+  TMalfunctionNotMovingEnemyNode = class(TVRMLMalfunctionEnemyNode)
     procedure CreateNode; override;
     class function ClassNodeTypeName: string; override;
 
@@ -181,7 +181,7 @@ type
     function CreateEnemyShip: TEnemyShip; override;
   end;
 
-  TNodeMalfunctionCircleMovingEnemy = class(TVRMLMalfunctionEnemyNode)
+  TMalfunctionCircleMovingEnemyNode = class(TVRMLMalfunctionEnemyNode)
     procedure CreateNode; override;
     class function ClassNodeTypeName: string; override;
 
@@ -197,7 +197,7 @@ type
     function CreateEnemyShip: TEnemyShip; override;
   end;
 
-  TNodeMalfunctionHuntingEnemy = class(TVRMLMalfunctionEnemyNode)
+  TMalfunctionHuntingEnemyNode = class(TVRMLMalfunctionEnemyNode)
     procedure CreateNode; override;
     class function ClassNodeTypeName: string; override;
 
@@ -220,7 +220,7 @@ begin
   result := NameShcutToEnemyShipKind(FdKind.Value);
 end;
 
-procedure TNodeMalfunctionNotMovingEnemy.CreateNode;
+procedure TMalfunctionNotMovingEnemyNode.CreateNode;
 begin
   inherited;
 
@@ -228,17 +228,17 @@ begin
   Fields.Add(FFdposition);
 end;
 
-class function TNodeMalfunctionNotMovingEnemy.ClassNodeTypeName: string;
+class function TMalfunctionNotMovingEnemyNode.ClassNodeTypeName: string;
 begin
   result := 'MalfunctionNotMovingEnemy';
 end;
 
-function TNodeMalfunctionNotMovingEnemy.CreateEnemyShip: TEnemyShip;
+function TMalfunctionNotMovingEnemyNode.CreateEnemyShip: TEnemyShip;
 begin
   result := TNotMovingEnemyShip.Create(Kind, FdPosition.Value);
 end;
 
-procedure TNodeMalfunctionCircleMovingEnemy.CreateNode;
+procedure TMalfunctionCircleMovingEnemyNode.CreateNode;
 begin
   inherited;
 
@@ -252,18 +252,18 @@ begin
   Fields.Add(FFduniqueCircleMovingSpeed);
 end;
 
-class function TNodeMalfunctionCircleMovingEnemy.ClassNodeTypeName: string;
+class function TMalfunctionCircleMovingEnemyNode.ClassNodeTypeName: string;
 begin
   result := 'MalfunctionCircleMovingEnemy';
 end;
 
-function TNodeMalfunctionCircleMovingEnemy.CreateEnemyShip: TEnemyShip;
+function TMalfunctionCircleMovingEnemyNode.CreateEnemyShip: TEnemyShip;
 begin
   result := TCircleMovingEnemyShip.Create(Kind, FdCircleCenter.Value,
     FdCircleRadius.Value, FdUniqueCircleMovingSpeed.Value);
 end;
 
-procedure TNodeMalfunctionHuntingEnemy.CreateNode;
+procedure TMalfunctionHuntingEnemyNode.CreateNode;
 begin
   inherited;
 
@@ -271,12 +271,12 @@ begin
   Fields.Add(FFdposition);
 end;
 
-class function TNodeMalfunctionHuntingEnemy.ClassNodeTypeName: string;
+class function TMalfunctionHuntingEnemyNode.ClassNodeTypeName: string;
 begin
   result := 'MalfunctionHuntingEnemy';
 end;
 
-function TNodeMalfunctionHuntingEnemy.CreateEnemyShip: TEnemyShip;
+function TMalfunctionHuntingEnemyNode.CreateEnemyShip: TEnemyShip;
 begin
   result := THuntingEnemyShip.Create(Kind, FdPosition.Value);
 end;
@@ -285,10 +285,10 @@ end;
 
 type
   TEnemiesConstructor = class
-    class procedure ConstructEnemy(node: TVRMLNode);
+    class procedure ConstructEnemy(node: TX3DNode);
   end;
 
-  class procedure TEnemiesConstructor.ConstructEnemy(node: TVRMLNode);
+  class procedure TEnemiesConstructor.ConstructEnemy(node: TX3DNode);
   begin
    EnemyShips.Add(TVRMLMalfunctionEnemyNode(node).CreateEnemyShip);
   end;
@@ -312,7 +312,7 @@ begin
     { We don't need GravityUp, we know it should be +Z in malfunction
       levels. }
     DummyGravityUp);
-  levelInfo := TNodeMalfunctionLevelInfo(levelScene.RootNode.FindNode(TNodeMalfunctionLevelInfo, true));
+  levelInfo := TMalfunctionLevelInfoNode(levelScene.RootNode.FindNode(TMalfunctionLevelInfoNode, true));
   levelType := TLevelType(ArrayPosText(levelInfo.FdType.Value, ['planet', 'space'] ));
 
   { Calculate LevelBox }
@@ -411,19 +411,8 @@ end;
 
 initialization
  Window.OnCloseList.Add(@CloseGLWin);
- NodesManager.RegisterNodeClasses([ TNodeMalfunctionLevelInfo,
-   TNodeMalfunctionNotMovingEnemy,
-   TNodeMalfunctionCircleMovingEnemy,
-   TNodeMalfunctionHuntingEnemy ]);
+ NodesManager.RegisterNodeClasses([ TMalfunctionLevelInfoNode,
+   TMalfunctionNotMovingEnemyNode,
+   TMalfunctionCircleMovingEnemyNode,
+   TMalfunctionHuntingEnemyNode ]);
 end.
-
-{ ---------------------------------------
-  OLD UNUSED (but possibly not outdated) CODE:
-
-  function SceneInfoNodeToVector3Single(const nodeName: string): TVector3Single;
-  begin
-   result := Vector3SingleFromStr(
-    (levelScene.RootNode.FindNodeByName(nodeName, false) as TNodeInfo).FdString.Value);
-  end;
-}
-
