@@ -158,7 +158,7 @@ end;
 
 initialization
  Window := TGLWindow_malfunc.Create(nil);
- Window.SetDemoOptions(K_None, #0, true);
+ Window.FpsShowOnCaption := true;
  Window.OnCloseQuery := @CloseQuery;
  Window.OnOpen := @Open;
  Window.OnClose := @Close;
