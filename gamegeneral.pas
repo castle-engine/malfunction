@@ -44,13 +44,13 @@ const
   DisplayProgramName = 'malfunction';
 
 type
-  TGLWindow_malfunc = TGLUIWindow;
+  TMalfunctionWindow = TCastleWindowCustom;
 
 var
-  { Whole program uses glw window of class TGLWindow_malfunc.
+  { Whole program uses glw window of class TMalfunctionWindow.
     Every unit may add some callbacks to Window.OnOpenList and Window.OnCloseList.
     This is created and destroyed in init/fini of this module. }
-  Window: TGLWindow_malfunc;
+  Window: TMalfunctionWindow;
 
 { Game modes.
 
@@ -71,7 +71,7 @@ var
   modeNone is a very specific mode : this is the initial mode
   when program starts. Never do SetGameMode(modeNone).
 
-  You should terminate any TGLWindow event handling after SetGameMode call. }
+  You should terminate any TCastleWindowBase event handling after SetGameMode call. }
 
 type
   TGameMode = (modeNone, modeMenu, modeGame);
@@ -97,7 +97,7 @@ const
   Moze byc uzywane z kazdego miejsca. }
 
 var
-  Notifications: TGLNotifications;
+  Notifications: TCastleNotifications;
 
 implementation
 
@@ -130,16 +130,16 @@ end;
 
 { glw general events handling ----------------------------------------------- }
 
-procedure CloseQuery(Window: TGLWindow);
+procedure CloseQuery(Window: TCastleWindowBase);
 begin
  if MessageYesNo(Window, 'Are you sure you want to quit ?') then Window.Close;
 end;
 
-procedure Open(Window: TGLWindow);
+procedure Open(Window: TCastleWindowBase);
 begin
  GLWinMessagesTheme.Font := TGLBitmapFont.Create(@BFNT_BitstreamVeraSansMono_m18);
 
- Notifications := TGLNotifications.Create(Window);
+ Notifications := TCastleNotifications.Create(Window);
  Notifications.VerticalPosition := vpUp;
  GLProgressInterface.Window := Window;
  Progress.UserInterface := GLProgressInterface;
@@ -147,7 +147,7 @@ begin
  SetGameMode(modeMenu);
 end;
 
-procedure Close(Window: TGLWindow);
+procedure Close(Window: TCastleWindowBase);
 begin
  if (fGameMode <> modeNone) and
     (gameModeExit[fGameMode] <> nil) then gameModeExit[fGameMode];
@@ -157,7 +157,7 @@ begin
 end;
 
 initialization
- Window := TGLWindow_malfunc.Create(nil);
+ Window := TMalfunctionWindow.Create(nil);
  Window.FpsShowOnCaption := true;
  Window.OnCloseQuery := @CloseQuery;
  Window.OnOpen := @Open;

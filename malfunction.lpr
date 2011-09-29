@@ -58,7 +58,7 @@ begin
         'Accepted command-line options:' +nl+
         HelpOptionHelp+ nl+
         VersionOptionHelp +nl+
-        TGLWindow.ParseParametersHelp(StandardParseOptions, true) +nl+
+        TCastleWindowBase.ParseParametersHelp(StandardParseOptions, true) +nl+
         'By default, window size will be 640x480 (if your screen has size'+nl+
         '  640x480 then we will run in --fullscreen).'+nl+
         nl+

@@ -50,8 +50,8 @@ var currentMenu: TMenuItem = Low(TMenuItem);
 
 { mode enter/exit ----------------------------------------------------------- }
 
-procedure draw(Window: TGLWindow); forward;
-procedure KeyDown(Window: TGLWindow; key: TKey; c: char); forward;
+procedure draw(Window: TCastleWindowBase); forward;
+procedure KeyDown(Window: TCastleWindowBase; key: TKey; c: char); forward;
 
 procedure modeEnter;
 begin
@@ -66,7 +66,7 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure draw(Window: TGLWindow);
+procedure draw(Window: TCastleWindowBase);
 var mi: TMenuItem;
 {const SLower = 'by Michalis Kamburelis';}
 begin
@@ -101,7 +101,7 @@ begin
  courierFont.print(SLower);}
 end;
 
-procedure KeyDown(Window: TGLWindow; key: TKey; c: char);
+procedure KeyDown(Window: TCastleWindowBase; key: TKey; c: char);
 begin
  case key of
   K_Up:
@@ -153,13 +153,13 @@ begin
  end;
 end;
 
-procedure OpenGLwin(Window: TGLWindow);
+procedure OpenGLwin(Window: TCastleWindowBase);
 begin
  listBgDraw := LoadImageToDisplayList(imagesDir +'menubg.png', [TRGBImage], [], Window.width, Window.height);
  menuFont := TGLBitmapFont.Create(@BFNT_Isuckatgolf_m32);
 end;
 
-procedure CloseGLwin(Window: TGLWindow);
+procedure CloseGLwin(Window: TCastleWindowBase);
 begin
  FreeAndNil(menuFont);
 end;

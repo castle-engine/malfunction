@@ -46,7 +46,7 @@ var
 { TMalfunctionSceneManager --------------------------------------------------- }
 
 type
-  TMalfunctionSceneManager = class(TKamSceneManager)
+  TMalfunctionSceneManager = class(TCastleSceneManager)
     procedure ApplyProjection; override;
     procedure RenderFromViewEverything; override;
     function Headlight(out CustomHeadlight: TAbstractLightNode): boolean; override;
@@ -216,8 +216,8 @@ var
   Controls: TGame2DControls;
   Camera: TWalkCamera;
 
-procedure KeyDown(Window: TGLWindow; key: TKey; c: char); forward;
-procedure idle(Window: TGLWindow); forward;
+procedure KeyDown(Window: TCastleWindowBase; key: TKey; c: char); forward;
+procedure idle(Window: TCastleWindowBase); forward;
 
 procedure modeEnter;
 begin
@@ -263,7 +263,7 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure KeyDown(Window: TGLWindow; key: TKey; c: char);
+procedure KeyDown(Window: TCastleWindowBase; key: TKey; c: char);
 var fname: string;
 begin
  case key of
@@ -291,7 +291,7 @@ begin
  end;
 end;
 
-procedure idle(Window: TGLWindow);
+procedure idle(Window: TCastleWindowBase);
 begin
  if playerShip.ShipLife <= 0 then
  begin
@@ -306,7 +306,7 @@ end;
 
 { Open/Close glwin -------------------------------------------------------- }
 
-procedure OpenGLwin(Window: TGLWindow);
+procedure OpenGLwin(Window: TCastleWindowBase);
 var crossh_img: TImage;
     kokpit_img: TImage;
 begin
@@ -330,7 +330,7 @@ begin
  finally crossh_img.Free end;
 end;
 
-procedure CloseGLwin(Window: TGLWindow);
+procedure CloseGLwin(Window: TCastleWindowBase);
 begin
 
 end;

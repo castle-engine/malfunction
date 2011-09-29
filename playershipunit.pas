@@ -342,11 +342,11 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure OpenGLWin(Window: TGLWindow);
+procedure OpenGLWin(Window: TCastleWindowBase);
 begin
 end;
 
-procedure CloseGLWin(Window: TGLWindow);
+procedure CloseGLWin(Window: TCastleWindowBase);
 begin
  FreeAndNil(PlayerShip);
 end;

@@ -111,7 +111,7 @@ type
   end;
 
 var
-  levelScene: TVRMLGLScene;
+  levelScene: T3DScene;
   levelType: TLevelType;
   levelInfo: TMalfunctionLevelInfoNode;
   LevelBox: TBox3D; { poza ten box nie moze NIC wyleciec }
@@ -132,7 +132,7 @@ procedure FreeLevel;
 { LoadGame loads NewPlayer and then loads LoadLevel and then
   SetGameMode(modeGame).
 
-  You should terminate any TGLWindow event handling after PlayGame call. }
+  You should terminate any TCastleWindowBase event handling after PlayGame call. }
 procedure PlayGame(const vrmlSceneFName: string);
 
 implementation
@@ -297,7 +297,7 @@ procedure LoadLevel(const vrmlSceneFName: string);
 var
   vMiddle, vSizes: TVector3Single;
   halfMaxSize: Single;
-  LevelBoxShape: TVRMLShape;
+  LevelBoxShape: TShape;
   EnemiesConstructor: TEnemiesConstructor;
   DummyGravityUp: TVector3Single;
   BaseLights: TLightInstancesList;
@@ -305,7 +305,7 @@ begin
  FreeLevel;
 
  try
-  levelScene := TVRMLGLScene.Create(nil);
+  levelScene := T3DScene.Create(nil);
   levelScene.Load(vrmlSceneFName);
   levelScene.GetPerspectiveViewpoint(playerShip.shipPos, playerShip.shipDir,
     playerShip.shipUp,
@@ -404,7 +404,7 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure CloseGLWin(Window: TGLWindow);
+procedure CloseGLWin(Window: TCastleWindowBase);
 begin
  FreeLevel;
 end;
