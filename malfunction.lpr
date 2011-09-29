@@ -29,7 +29,7 @@ program malfunction;
 }
 { TODO:
   - Simplify all the mess with so-called "modes" in this unit:
-    thanks to CastleWindowModes unit I can now code this in much more
+    thanks to WindowModes unit I can now code this in much more
     clear way (using normal sequential code, like in kambi_lines
     or castle, instead of only event-driven). To be done if I ever
     will want to do anything larger with malfunction.
