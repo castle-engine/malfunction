@@ -29,7 +29,7 @@ program malfunction;
 }
 { TODO:
   - Simplify all the mess with so-called "modes" in this unit:
-    thanks to GLWinModes unit I can now code this in much more
+    thanks to CastleWindowModes unit I can now code this in much more
     clear way (using normal sequential code, like in kambi_lines
     or castle, instead of only event-driven). To be done if I ever
     will want to do anything larger with malfunction.
@@ -37,7 +37,7 @@ program malfunction;
 
 {$apptype GUI}
 
-uses GLWindow, GameGeneral, SysUtils, CastleUtils, ModeMenuUnit, ModeGameUnit,
+uses CastleWindow, GameGeneral, SysUtils, CastleUtils, ModeMenuUnit, ModeGameUnit,
   CastleParameters, CastleClassUtils, CastleFilesUtils, KeysMouse;
 
 { params ------------------------------------------------------------ }

@@ -111,8 +111,8 @@ procedure NewPlayerShip;
 
 implementation
 
-uses GLU, VectorMath, GameGeneral, GLWindow, CastleUtils, Math,
-  LevelUnit, GLWinMessages;
+uses GLU, VectorMath, GameGeneral, CastleWindow, CastleUtils, Math,
+  LevelUnit, CastleMessages;
 
 constructor TPlayerShip.Create;
 begin

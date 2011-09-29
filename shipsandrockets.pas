@@ -36,7 +36,7 @@ unit ShipsAndRockets;
 
 interface
 
-uses GLWindow, SysUtils, GL, GLU, CastleGLUtils, VectorMath, CastleUtils,
+uses CastleWindow, SysUtils, GL, GLU, CastleGLUtils, VectorMath, CastleUtils,
   CastleClassUtils, Classes, CastleTimeUtils, VRMLGLScene, Base3D,
   FGL {$ifdef VER2_2}, FGLObjectList22 {$endif};
 

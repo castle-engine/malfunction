@@ -29,8 +29,8 @@ interface
 
 implementation
 
-uses VectorMath, SysUtils, GL, GLWindow, GameGeneral, CastleGLUtils,
-  CastleUtils, LevelUnit, Boxes3D, GLWinMessages, PlayerShipUnit, Images,
+uses VectorMath, SysUtils, GL, CastleWindow, GameGeneral, CastleGLUtils,
+  CastleUtils, LevelUnit, Boxes3D, CastleMessages, PlayerShipUnit, Images,
   ShipsAndRockets, KeysMouse, CastleFilesUtils,
   CastleStringUtils, VRMLGLScene, GLImages, SkyCube, VRMLNodes,
   CastleSceneManager, UIControls, Cameras;

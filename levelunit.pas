@@ -90,7 +90,7 @@ unit LevelUnit;
 
 interface
 
-uses SysUtils, GameGeneral, GLWindow, VRMLGLScene, VRMLFields, VRMLNodes,
+uses SysUtils, GameGeneral, CastleWindow, VRMLGLScene, VRMLFields, VRMLNodes,
   CastleClassUtils, Boxes3D, VRMLShape, CastleGLUtils;
 
 type
@@ -138,7 +138,7 @@ procedure PlayGame(const vrmlSceneFName: string);
 implementation
 
 uses VectorMath, CastleUtils, PlayerShipUnit, ShipsAndRockets,
-  GLWinMessages, VRMLScene;
+  CastleMessages, VRMLScene;
 
 { TMalfunctionInfoNode ----------------------------------------------- }
 

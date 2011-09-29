@@ -35,7 +35,7 @@ unit GameGeneral;
 
 interface
 
-uses SysUtils, GLWindow, GLNotifications;
+uses SysUtils, CastleWindow, GLNotifications;
 
 {$define read_interface}
 
@@ -55,7 +55,7 @@ var
 { Game modes.
 
   At every time, the program is in some "mode".
-  Each mode has a specific callbacks to control GLWindow_malfunc
+  Each mode has a specific callbacks to control
   window, each mode can also init some OpenGL state for itself.
 
   Events OnOpen, OnClose, OnCloseQuery are defined in this unit
@@ -103,8 +103,8 @@ implementation
 
 {$define read_implementation}
 
-uses CastleGLUtils, CastleUtils, GLWinMessages, ProgressUnit,
-  GLProgress, OpenGLBmpFonts, BFNT_BitstreamVeraSansMono_m18_Unit;
+uses CastleGLUtils, CastleUtils, CastleMessages, ProgressUnit,
+  CastleProgress, OpenGLBmpFonts, BFNT_BitstreamVeraSansMono_m18_Unit;
 
 var fGameMode: TGameMode = modeNone;
 
@@ -137,12 +137,12 @@ end;
 
 procedure Open(Window: TCastleWindowBase);
 begin
- GLWinMessagesTheme.Font := TGLBitmapFont.Create(@BFNT_BitstreamVeraSansMono_m18);
+ MessagesTheme.Font := TGLBitmapFont.Create(@BFNT_BitstreamVeraSansMono_m18);
 
  Notifications := TCastleNotifications.Create(Window);
  Notifications.VerticalPosition := vpUp;
- GLProgressInterface.Window := Window;
- Progress.UserInterface := GLProgressInterface;
+ WindowProgressInterface.Window := Window;
+ Progress.UserInterface := WindowProgressInterface;
 
  SetGameMode(modeMenu);
 end;
@@ -153,7 +153,7 @@ begin
     (gameModeExit[fGameMode] <> nil) then gameModeExit[fGameMode];
  fGameMode := modeNone;
 
- FreeAndNil(GLWinMessagesTheme.Font);
+ FreeAndNil(MessagesTheme.Font);
 end;
 
 initialization
