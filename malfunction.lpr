@@ -37,8 +37,8 @@ program malfunction;
 
 {$apptype GUI}
 
-uses GLWindow, GameGeneral, SysUtils, KambiUtils, ModeMenuUnit, ModeGameUnit,
-  KambiParameters, KambiClassUtils, KambiFilesUtils, KeysMouse;
+uses GLWindow, GameGeneral, SysUtils, CastleUtils, ModeMenuUnit, ModeGameUnit,
+  CastleParameters, CastleClassUtils, CastleFilesUtils, KeysMouse;
 
 { params ------------------------------------------------------------ }
 

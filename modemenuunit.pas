@@ -27,8 +27,8 @@ interface
 implementation
 
 uses GL, SysUtils, GLWindow, GameGeneral, OpenGLBmpFonts,
-  BFNT_Isuckatgolf_m32_Unit, KambiGLUtils, GLWinMessages, LevelUnit, Images,
-  VectorMath, KambiUtils, GLImages;
+  BFNT_Isuckatgolf_m32_Unit, CastleGLUtils, GLWinMessages, LevelUnit, Images,
+  VectorMath, CastleUtils, GLImages;
 
 { module consts and vars ---------------------------------------------------- }
 

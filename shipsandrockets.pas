@@ -36,8 +36,8 @@ unit ShipsAndRockets;
 
 interface
 
-uses GLWindow, SysUtils, GL, GLU, KambiGLUtils, VectorMath, KambiUtils,
-  KambiClassUtils, Classes, KambiTimeUtils, VRMLGLScene, Base3D,
+uses GLWindow, SysUtils, GL, GLU, CastleGLUtils, VectorMath, CastleUtils,
+  CastleClassUtils, Classes, CastleTimeUtils, VRMLGLScene, Base3D,
   FGL {$ifdef VER2_2}, FGLObjectList22 {$endif};
 
 {$define read_interface}

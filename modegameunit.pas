@@ -29,11 +29,11 @@ interface
 
 implementation
 
-uses VectorMath, SysUtils, GL, GLWindow, GameGeneral, KambiGLUtils,
-  KambiUtils, LevelUnit, Boxes3D, GLWinMessages, PlayerShipUnit, Images,
-  ShipsAndRockets, KeysMouse, KambiFilesUtils,
-  KambiStringUtils, VRMLGLScene, GLImages, SkyCube, VRMLNodes,
-  KambiSceneManager, UIControls, Cameras;
+uses VectorMath, SysUtils, GL, GLWindow, GameGeneral, CastleGLUtils,
+  CastleUtils, LevelUnit, Boxes3D, GLWinMessages, PlayerShipUnit, Images,
+  ShipsAndRockets, KeysMouse, CastleFilesUtils,
+  CastleStringUtils, VRMLGLScene, GLImages, SkyCube, VRMLNodes,
+  CastleSceneManager, UIControls, Cameras;
 
 var
   kokpitbg_list: TGLuint;

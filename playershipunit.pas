@@ -30,7 +30,7 @@ unit PlayerShipUnit;
 
 interface
 
-uses GL, Boxes3D, ShipsAndRockets, SysUtils, KambiGLUtils;
+uses GL, Boxes3D, ShipsAndRockets, SysUtils, CastleGLUtils;
 
 const
   playerShipAbsoluteMaxSpeed = 45.0;
@@ -111,7 +111,7 @@ procedure NewPlayerShip;
 
 implementation
 
-uses GLU, VectorMath, GameGeneral, GLWindow, KambiUtils, Math,
+uses GLU, VectorMath, GameGeneral, GLWindow, CastleUtils, Math,
   LevelUnit, GLWinMessages;
 
 constructor TPlayerShip.Create;
@@ -237,8 +237,8 @@ begin
   if Pressed[K_Right] then shipRotationSpeed -= ROT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50;
   if Pressed[K_Up] then shipVertRotationSpeed -= ROT_VERT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50;
   if Pressed[K_Down] then shipVertRotationSpeed += ROT_VERT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50;
-  if Pressed[K_A] then shipSpeed := KambiUtils.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
-  if Pressed[K_Z] then shipSpeed := KambiUtils.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
+  if Pressed[K_A] then shipSpeed := CastleUtils.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
+  if Pressed[K_Z] then shipSpeed := CastleUtils.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
  end;
 
  {move ship using shipSpeed,
@@ -317,7 +317,7 @@ begin
   DrawIndicator(speedRect, Yellow4Single, Black4Single, LightBlue4Single,
     shipSpeed, playerShipAbsoluteMinSpeed, playerShipAbsoluteMaxSpeed);
   DrawIndicator(liveRect, Yellow4Single, Black4Single, Red4Single,
-    KambiUtils.max(shipLife, 0.0) , 0, MaxShipLife);
+    CastleUtils.max(shipLife, 0.0) , 0, MaxShipLife);
 
   {draw kompas arrow}
   glTranslatef(kompasMiddle[0], kompasMiddle[1], 0);
