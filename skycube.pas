@@ -18,14 +18,14 @@ unit SkyCube;
 
 interface
 
-uses VRMLNodes, VRMLGLBackground;
+uses X3DNodes, Background;
 
 type
   { Draw background as a cube usign 6 textures.
-    This is a subset of TVRMLGLBackground, with somewhat older standards:
+    This is a subset of TBackground, with somewhat older standards:
     bottom is in -Z, top in +Z. Constructor automatically loads images
     using BackgroundImagesLoadFromOldNamePattern. }
-  TSkyCube = class(TVRMLGLBackground)
+  TSkyCube = class(TBackground)
   public
     constructor Create(const SkyNamePattern: string; zNear, zFar: Single); overload;
     constructor Create(const Imgs: TBackgroundImages; zNear, zFar: Single); overload;

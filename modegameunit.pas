@@ -32,7 +32,7 @@ implementation
 uses VectorMath, SysUtils, GL, CastleWindow, GameGeneral, CastleGLUtils,
   CastleUtils, LevelUnit, Boxes3D, CastleMessages, PlayerShipUnit, Images,
   ShipsAndRockets, KeysMouse, CastleFilesUtils,
-  CastleStringUtils, VRMLGLScene, GLImages, SkyCube, VRMLNodes,
+  CastleStringUtils, CastleScene, GLImages, SkyCube, X3DNodes,
   CastleSceneManager, UIControls, Cameras;
 
 var

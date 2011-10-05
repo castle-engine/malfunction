@@ -23,7 +23,7 @@
 unit LevelUnit;
 
 (* this unit keeps track of the whole state of current level :
-   it's VRML scene, sky images and so on.
+   it's 3D scene, sky images and so on.
 
    Notka o wspolrzednych : ziemia to dla nas XY, pion to os Z.
    Ja tak lubie, tak napisalem SkyCube, kompas tez zwraca kierunek
@@ -73,7 +73,7 @@ unit LevelUnit;
      poczatkowa pozycja i kierunek lotu i pion statku sa odczytywane
      z ustawienia kamery (tylko PerspectiveCamera) w VRMLach levelu.
 
-     BTW, zgodnie z ustaleniami na poczatku VRMLNodes, dlugosc camera-dir
+     BTW, zgodnie z ustaleniami na poczatku X3DNodes, dlugosc camera-dir
      jest bez znaczenia (uzywamy TFlatScene.GetCamera ktore zawsze zwraca
      znormalizowany CamDir).
      Robimy to takze po to zeby statek gracza zawsze latal z taka sama
@@ -90,8 +90,8 @@ unit LevelUnit;
 
 interface
 
-uses SysUtils, GameGeneral, CastleWindow, VRMLGLScene, VRMLFields, VRMLNodes,
-  CastleClassUtils, Boxes3D, VRMLShape, CastleGLUtils;
+uses SysUtils, GameGeneral, CastleWindow, CastleScene, X3DFields, X3DNodes,
+  CastleClassUtils, Boxes3D, Shape, CastleGLUtils;
 
 type
   { levelType wplywa na wiele rzeczy. Ponizej bede dokumentowal sobie
@@ -126,19 +126,19 @@ var
     i w czasie Window.EventClose. W rezultacie wlasciwie mozesz nigdy nie
     wywolywac FreeLevel z zewnatrz tego modulu.
   LoadLevel jest odpowiedzialne za czesciowa inicjalizacje PlayerShip.  }
-procedure LoadLevel(const vrmlSceneFName: string);
+procedure LoadLevel(const SceneFileName: string);
 procedure FreeLevel;
 
 { LoadGame loads NewPlayer and then loads LoadLevel and then
   SetGameMode(modeGame).
 
   You should terminate any TCastleWindowBase event handling after PlayGame call. }
-procedure PlayGame(const vrmlSceneFName: string);
+procedure PlayGame(const SceneFileName: string);
 
 implementation
 
 uses VectorMath, CastleUtils, PlayerShipUnit, ShipsAndRockets,
-  CastleMessages, VRMLScene;
+  CastleMessages, CastleSceneCore;
 
 { TMalfunctionInfoNode ----------------------------------------------- }
 
@@ -293,7 +293,7 @@ type
    EnemyShips.Add(TVRMLMalfunctionEnemyNode(node).CreateEnemyShip);
   end;
 
-procedure LoadLevel(const vrmlSceneFName: string);
+procedure LoadLevel(const SceneFileName: string);
 var
   vMiddle, vSizes: TVector3Single;
   halfMaxSize: Single;
@@ -306,7 +306,7 @@ begin
 
  try
   levelScene := T3DScene.Create(nil);
-  levelScene.Load(vrmlSceneFName);
+  levelScene.Load(SceneFileName);
   levelScene.GetPerspectiveViewpoint(playerShip.shipPos, playerShip.shipDir,
     playerShip.shipUp,
     { We don't need GravityUp, we know it should be +Z in malfunction
@@ -376,7 +376,7 @@ begin
   finally FreeAndNil(BaseLights) end;
 
   Notifications.Clear;
-  Notifications.Show('Level '+vrmlSceneFName+' loaded.');
+  Notifications.Show('Level '+SceneFileName+' loaded.');
  except FreeLevel; raise end;
 end;
 
@@ -395,10 +395,10 @@ begin
  end;
 end;
 
-procedure PlayGame(const vrmlSceneFName: string);
+procedure PlayGame(const SceneFileName: string);
 begin
  NewPlayerShip;
- LoadLevel(vrmlSceneFName);
+ LoadLevel(SceneFileName);
  SetGameMode(modeGame);
 end;
 
