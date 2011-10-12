@@ -317,8 +317,8 @@ const
 
 var
   { modeliki; ladowane w Window.Open, niszczone w Window.Close  }
-  rocketVRML: T3DScene;
-  enemyShipVRMLs: array[TEnemyShipKind]of T3DScene;
+  rocketVRML: TCastleScene;
+  enemyShipVRMLs: array[TEnemyShipKind]of TCastleScene;
 
 { TSpaceShip ----------------------------------------------------------------- }
 
@@ -715,13 +715,13 @@ end;
 procedure OpenGLWin(Window: TCastleWindowBase);
 var sk: TEnemyShipKind;
 begin
- rocketVRML := T3DScene.Create(nil);
+ rocketVRML := TCastleScene.Create(nil);
  rocketVRML.Load(vrmlsDir +'rocket.wrl');
  rocketVRML.Attributes.Lighting := false;
 
  for sk := Low(sk) to High(sk) do
  begin
-  EnemyShipVRMLs[sk] := T3DScene.Create(nil);
+  EnemyShipVRMLs[sk] := TCastleScene.Create(nil);
   EnemyShipVRMLs[sk].Load(vrmlsDir +EnemyShipKindsInfos[sk].VrmlFname);
  end;
 end;

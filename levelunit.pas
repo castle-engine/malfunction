@@ -111,7 +111,7 @@ type
   end;
 
 var
-  levelScene: T3DScene;
+  levelScene: TCastleScene;
   levelType: TLevelType;
   levelInfo: TMalfunctionLevelInfoNode;
   LevelBox: TBox3D; { poza ten box nie moze NIC wyleciec }
@@ -305,7 +305,7 @@ begin
  FreeLevel;
 
  try
-  levelScene := T3DScene.Create(nil);
+  levelScene := TCastleScene.Create(nil);
   levelScene.Load(SceneFileName);
   levelScene.GetPerspectiveViewpoint(playerShip.shipPos, playerShip.shipDir,
     playerShip.shipUp,
