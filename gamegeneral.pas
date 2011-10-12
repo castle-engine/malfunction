@@ -35,7 +35,7 @@ unit GameGeneral;
 
 interface
 
-uses SysUtils, CastleWindow, GLNotifications;
+uses SysUtils, CastleWindow, CastleNotifications;
 
 {$define read_interface}
 
