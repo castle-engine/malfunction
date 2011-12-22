@@ -18,7 +18,7 @@ unit SkyCube;
 
 interface
 
-uses X3DNodes, Background;
+uses X3DNodes, Background, CastleColors;
 
 type
   { Draw background as a cube usign 6 textures.

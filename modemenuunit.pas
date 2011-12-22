@@ -28,7 +28,7 @@ implementation
 
 uses GL, SysUtils, CastleWindow, GameGeneral, OpenGLBmpFonts,
   BFNT_Isuckatgolf_m32_Unit, CastleGLUtils, CastleMessages, LevelUnit, Images,
-  VectorMath, CastleUtils, GLImages;
+  VectorMath, CastleUtils, GLImages, CastleColors;
 
 { module consts and vars ---------------------------------------------------- }
 

@@ -30,7 +30,7 @@ unit PlayerShipUnit;
 
 interface
 
-uses GL, Boxes3D, ShipsAndRockets, SysUtils, CastleGLUtils;
+uses GL, Boxes3D, ShipsAndRockets, SysUtils, CastleGLUtils, CastleColors;
 
 const
   playerShipAbsoluteMaxSpeed = 45.0;
