@@ -40,7 +40,7 @@ uses SysUtils, CastleWindow, CastleNotifications;
 {$define read_interface}
 
 const
-  Version = '1.2.6';
+  Version = '1.2.7';
   DisplayProgramName = 'malfunction';
 
 type
