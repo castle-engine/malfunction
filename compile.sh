@@ -12,4 +12,4 @@ cd ../castle_game_engine/
 # Force rebuilding CastleWindow unit with proper backend.
 make clean-window
 
-fpc -dRELEASE "${CASTLE_FPC_OPTIONS:-}" @castle-fpc.cfg -dCASTLE_WINDOW_BEST_NOGUI ../malfunction/malfunction.lpr
+fpc -dRELEASE ${CASTLE_FPC_OPTIONS:-} @castle-fpc.cfg -dCASTLE_WINDOW_BEST_NOGUI ../malfunction/malfunction.lpr
