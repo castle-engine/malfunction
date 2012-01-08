@@ -33,7 +33,7 @@ uses VectorMath, SysUtils, GL, CastleWindow, GameGeneral, CastleGLUtils,
   CastleUtils, LevelUnit, Boxes3D, CastleMessages, PlayerShipUnit, Images,
   ShipsAndRockets, KeysMouse, CastleFilesUtils,
   CastleStringUtils, CastleScene, GLImages, SkyCube, X3DNodes,
-  CastleSceneManager, UIControls, Cameras;
+  CastleSceneManager, UIControls, Cameras, Base3D;
 
 var
   kokpitbg_list: TGLuint;
@@ -72,37 +72,41 @@ begin
 end;
 
 procedure TMalfunctionSceneManager.RenderFromViewEverything;
+
+  procedure RenderAll(Params: TRenderParams);
+  begin
+    levelScene.Render(nil, Params);
+    ShipsRender(Params);
+    RocketsRender(Params);
+  end;
+
 var
   Params: TBasicRenderParams;
 begin
- {no need to clear COLOR_BUFFER - sky will cover everything}
- glClear(GL_DEPTH_BUFFER_BIT);
- glLoadIdentity;
+  {no need to clear COLOR_BUFFER - sky will cover everything}
+  glClear(GL_DEPTH_BUFFER_BIT);
+  glLoadIdentity;
 
- glPushMatrix;
-   playerShip.PlayerShipApplyMatrixNoTranslate;
-   sky.Render;
- glPopMatrix;
+  glPushMatrix;
+    playerShip.PlayerShipApplyMatrixNoTranslate;
+    sky.Render;
+  glPopMatrix;
 
- playerShip.PlayerShipApplyMatrix;
+  playerShip.PlayerShipApplyMatrix;
 
- Params := TBasicRenderParams.Create;
- try
-   { Synchronize Camera with playerShip right before using BaseLights,
-     as BaseLights initializes headlight based on Camera. }
-   Camera.SetView(playerShip.shipPos,
-     Normalized(playerShip.shipDir), playerShip.shipUp);
-   Params.FBaseLights.Assign(BaseLights);
+  Params := TBasicRenderParams.Create;
+  try
+    { Synchronize Camera with playerShip right before using BaseLights,
+      as BaseLights initializes headlight based on Camera. }
+    Camera.SetView(playerShip.shipPos,
+      Normalized(playerShip.shipDir), playerShip.shipUp);
+    Params.FBaseLights.Assign(BaseLights);
 
-   levelScene.Render(nil, Params);
-   ShipsRender(Params);
-   RocketsRender(Params);
-
-   Params.Transparent := true;
-   levelScene.Render(nil, Params);
-   ShipsRender(Params);
-   RocketsRender(Params);
- finally FreeAndNil(Params) end;
+    Params.Transparent := false; Params.ShadowVolumesReceivers := false; RenderAll(Params);
+    Params.Transparent := false; Params.ShadowVolumesReceivers := true ; RenderAll(Params);
+    Params.Transparent := true ; Params.ShadowVolumesReceivers := false; RenderAll(Params);
+    Params.Transparent := true ; Params.ShadowVolumesReceivers := true ; RenderAll(Params);
+  finally FreeAndNil(Params) end;
 end;
 
 function TMalfunctionSceneManager.Headlight(out CustomHeadlight: TAbstractLightNode): boolean;
@@ -255,7 +259,7 @@ begin
 
  Window.Controls.Remove(Controls);
  Window.Controls.Remove(Notifications);
- 
+
  Window.Controls.Remove(SceneManager);
 
  FreeAndNil(sky);
