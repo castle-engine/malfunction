@@ -65,7 +65,7 @@ begin
   projNear := PLAYER_SHIP_CAMERA_RADIUS;
   wholeLevelBox := levelScene.BoundingBox + levelBox;
   projFar := PointsDistance(wholeLevelBox.Data[0], wholeLevelBox.Data[1]);
-  ProjectionGLPerspective(30, Window.width/Window.height, projNear, projFar);
+  PerspectiveProjection(30, Window.width/Window.height, projNear, projFar);
 
   if Sky = nil then
     sky := TSkyCube.Create(skiesDir +levelInfo.FdSky.Value, projNear, projFar);

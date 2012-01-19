@@ -55,7 +55,7 @@ procedure KeyDown(Window: TCastleWindowBase; key: TKey; c: char); forward;
 
 procedure modeEnter;
 begin
- ProjectionGLOrtho(0, Window.width, 0, Window.height);
+ OrthoProjection(0, Window.width, 0, Window.height);
  Window.OnDraw := @draw;
  Window.OnKeyDown := @KeyDown;
 end;
