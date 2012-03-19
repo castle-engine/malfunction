@@ -268,7 +268,8 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 
 implementation
 
-uses Boxes3D, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit;
+uses Boxes3D, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
+  RenderingCameraUnit;
 
 type
   TEnemyShipKindInfo = record
@@ -421,7 +422,13 @@ begin
    glMultMatrix(TransformToCoordsNoScaleMatrix(
      ShipPos, GoodShipUp, VectorProduct(ShipDir, GoodShipUp), ShipDir));
 
-   EnemyShipVRMLs[Kind].Render(nil, Params);
+   { TODO: RenderingCamera.Frustum is actually invalid, it's not transformed
+     by matrix. But we pass TestShapeVisibility = nil, and we don't use
+     VisibilitySensor inside these models, so frustum value isn't really used.
+     We should remake ships as Base3D.T3DOrient, then this whole
+     unit can be trivial. }
+
+   EnemyShipVRMLs[Kind].Render(nil, RenderingCamera.Frustum, Params);
  glPopMatrix;
 end;
 
@@ -619,7 +626,14 @@ begin
    glTranslated(rocPos[0], rocPos[1], rocPos[2]);
    axis := VectorProduct(modelDir3d, rocDir);
    glRotated(RadToDeg(AngleRadBetweenVectors(modelDir3d, rocDir)), axis[0], axis[1], axis[2]);
-   rocketVRML.Render(nil, Params);
+
+   { TODO: RenderingCamera.Frustum is actually invalid, it's not transformed
+     by matrix. But we pass TestShapeVisibility = nil, and we don't use
+     VisibilitySensor inside these models, so frustum value isn't really used.
+     We should remake rockets as Base3D.T3DTransform, then this whole
+     unit can be trivial. }
+
+   rocketVRML.Render(nil, RenderingCamera.Frustum, Params);
  glPopMatrix;
 end;
 

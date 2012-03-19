@@ -33,7 +33,7 @@ uses VectorMath, SysUtils, GL, CastleWindow, GameGeneral, CastleGLUtils,
   CastleUtils, LevelUnit, Boxes3D, CastleMessages, PlayerShipUnit, Images,
   ShipsAndRockets, KeysMouse, CastleFilesUtils,
   CastleStringUtils, CastleScene, GLImages, SkyCube, X3DNodes,
-  CastleSceneManager, UIControls, Cameras, Base3D;
+  CastleSceneManager, UIControls, Cameras, Base3D, RenderingCameraUnit;
 
 var
   kokpitbg_list: TGLuint;
@@ -75,7 +75,15 @@ procedure TMalfunctionSceneManager.RenderFromViewEverything;
 
   procedure RenderAll(Params: TRenderParams);
   begin
-    levelScene.Render(nil, Params);
+    { TODO: RenderingCamera.Frustum is actually invalid, it's not derived from
+      current camera. But we pass TestShapeVisibility = nil, and we don't use
+      VisibilitySensor inside these models, so frustum value isn't really used.
+
+      We should remake Level to be placed on scene manager,
+      and camera updated when it should be, then this whole
+      unit can be trivial. }
+
+    levelScene.Render(nil, RenderingCamera.Frustum, Params);
     ShipsRender(Params);
     RocketsRender(Params);
   end;
