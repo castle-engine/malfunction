@@ -356,7 +356,7 @@ initialization
  Controls := TGame2DControls.Create(nil);
  SceneManager := TMalfunctionSceneManager.Create(nil);
  Camera := TWalkCamera.Create(SceneManager);
- Camera.IgnoreAllInputs := true;
+ Camera.Input := [];
  SceneManager.Camera := Camera;
 finalization
  FreeAndNil(Controls);
