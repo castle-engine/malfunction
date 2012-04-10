@@ -319,8 +319,8 @@ end;
 { Open/Close glwin -------------------------------------------------------- }
 
 procedure OpenGLwin(Window: TCastleWindowBase);
-var crossh_img: TImage;
-    kokpit_img: TImage;
+var crossh_img: TCastleImage;
+    kokpit_img: TCastleImage;
 begin
  kokpit_img := LoadImage(imagesDir +'kokpit.png',
    [TRGBAlphaImage, TGrayscaleAlphaImage], [ilcAlphaAdd]);
