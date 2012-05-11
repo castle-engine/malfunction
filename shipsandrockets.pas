@@ -37,8 +37,7 @@ unit ShipsAndRockets;
 interface
 
 uses CastleWindow, SysUtils, GL, GLU, CastleGLUtils, VectorMath, CastleUtils,
-  CastleClassUtils, Classes, CastleTimeUtils, CastleScene, Base3D,
-  FGL {$ifdef VER2_2}, FGLObjectList22 {$endif};
+  CastleClassUtils, Classes, CastleTimeUtils, CastleScene, Base3D, FGL;
 
 {$define read_interface}
 
