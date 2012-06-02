@@ -372,8 +372,7 @@ begin
     we should use SceneManager.BaseLights }
   BaseLights := TLightInstancesList.Create;
   try
-    levelScene.PrepareResources([prRender, prBackground, prBoundingBox], false, BaseLights,
-      1 { MultiSampling = 1, it is ignored as we do not include prScreenEffects });
+    levelScene.PrepareResources([prRender, prBackground, prBoundingBox], false, BaseLights);
   finally FreeAndNil(BaseLights) end;
 
   Notifications.Clear;
