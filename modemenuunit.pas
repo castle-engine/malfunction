@@ -28,7 +28,7 @@ implementation
 
 uses GL, SysUtils, CastleWindow, GameGeneral, OpenGLBmpFonts,
   BFNT_Isuckatgolf_m32_Unit, CastleGLUtils, CastleMessages, LevelUnit, Images,
-  VectorMath, CastleUtils, GLImages, CastleColors;
+  VectorMath, CastleUtils, GLImages, CastleColors, UIControls;
 
 { module consts and vars ---------------------------------------------------- }
 
@@ -153,13 +153,13 @@ begin
  end;
 end;
 
-procedure OpenGLwin(Window: TCastleWindowBase);
+procedure WindowOpen(const Container: IUIContainer);
 begin
  listBgDraw := LoadImageToDisplayList(imagesDir +'menubg.png', [TRGBImage], [], Window.width, Window.height);
  menuFont := TGLBitmapFont.Create(@BFNT_Isuckatgolf_m32);
 end;
 
-procedure CloseGLwin(Window: TCastleWindowBase);
+procedure WindowClose(const Container: IUIContainer);
 begin
  FreeAndNil(menuFont);
 end;
@@ -167,6 +167,6 @@ end;
 initialization
  gameModeEnter[modeMenu] := @modeEnter;
  gameModeExit[modeMenu] := @modeExit;
- Window.OnOpenList.Add(@OpenGLwin);
- Window.OnCloseList.Add(@CloseGLwin);
+ OnGLContextOpen.Add(@WindowOpen);
+ OnGLContextClose.Add(@WindowClose);
 end.

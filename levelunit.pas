@@ -138,7 +138,7 @@ procedure PlayGame(const SceneFileName: string);
 implementation
 
 uses VectorMath, CastleUtils, PlayerShipUnit, ShipsAndRockets,
-  CastleMessages, CastleSceneCore;
+  CastleMessages, CastleSceneCore, UIControls;
 
 { TMalfunctionInfoNode ----------------------------------------------- }
 
@@ -404,13 +404,13 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure CloseGLWin(Window: TCastleWindowBase);
+procedure WindowClose(const Container: IUIContainer);
 begin
  FreeLevel;
 end;
 
 initialization
- Window.OnCloseList.Add(@CloseGLWin);
+ OnGLContextClose.Add(@WindowClose);
  NodesManager.RegisterNodeClasses([ TMalfunctionLevelInfoNode,
    TMalfunctionNotMovingEnemyNode,
    TMalfunctionCircleMovingEnemyNode,

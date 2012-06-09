@@ -268,7 +268,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 implementation
 
 uses Boxes3D, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
-  RenderingCameraUnit;
+  RenderingCameraUnit, UIControls;
 
 type
   TEnemyShipKindInfo = record
@@ -725,7 +725,7 @@ end;
 
 { glw callbacks ------------------------------------------------------------- }
 
-procedure OpenGLWin(Window: TCastleWindowBase);
+procedure WindowOpen(const Container: IUIContainer);
 var sk: TEnemyShipKind;
 begin
  rocketVRML := TCastleScene.Create(nil);
@@ -739,7 +739,7 @@ begin
  end;
 end;
 
-procedure CloseGLWin(Window: TCastleWindowBase);
+procedure WindowClose(const Container: IUIContainer);
 var sk: TEnemyShipKind;
 begin
  FreeAndNil(rocketVRML);
@@ -747,6 +747,6 @@ begin
 end;
 
 initialization
- Window.OnOpenList.Add(@OpenGLwin);
- Window.OnCloseList.Add(@CloseGLwin);
+ OnGLContextOpen.Add(@WindowOpen);
+ OnGLContextClose.Add(@WindowClose);
 end.

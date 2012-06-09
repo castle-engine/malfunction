@@ -43,14 +43,10 @@ const
   Version = '1.2.7';
   DisplayProgramName = 'malfunction';
 
-type
-  TMalfunctionWindow = TCastleWindowCustom;
-
 var
-  { Whole program uses glw window of class TMalfunctionWindow.
-    Every unit may add some callbacks to Window.OnOpenList and Window.OnCloseList.
+  { Whole program uses this window.
     This is created and destroyed in init/fini of this module. }
-  Window: TMalfunctionWindow;
+  Window: TCastleWindowCustom;
 
 { Game modes.
 
@@ -158,7 +154,7 @@ begin
 end;
 
 initialization
- Window := TMalfunctionWindow.Create(nil);
+ Window := TCastleWindowCustom.Create(nil);
  Window.FpsShowOnCaption := true;
  Window.OnCloseQuery := @CloseQuery;
  Window.OnOpen := @Open;

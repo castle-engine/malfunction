@@ -112,7 +112,7 @@ procedure NewPlayerShip;
 implementation
 
 uses GLU, VectorMath, GameGeneral, CastleWindow, CastleUtils, Math,
-  LevelUnit, CastleMessages;
+  LevelUnit, CastleMessages, UIControls;
 
 constructor TPlayerShip.Create;
 begin
@@ -343,16 +343,16 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure OpenGLWin(Window: TCastleWindowBase);
+procedure WindowOpen(const Container: IUIContainer);
 begin
 end;
 
-procedure CloseGLWin(Window: TCastleWindowBase);
+procedure WindowClose(const Container: IUIContainer);
 begin
  FreeAndNil(PlayerShip);
 end;
 
 initialization
- Window.OnOpenList.Add(@OpenGLWin);
- Window.OnCloseList.Add(@CloseGLWin);
+ OnGLContextOpen.Add(@WindowOpen);
+ OnGLContextClose.Add(@WindowClose);
 end.
