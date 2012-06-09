@@ -140,6 +140,7 @@ begin
  MessagesTheme.Font := TGLBitmapFont.Create(@BFNT_BitstreamVeraSansMono_m18);
 
  Notifications := TCastleNotifications.Create(Window);
+ Notifications.MaxMessages := 10;
  Notifications.VerticalPosition := vpUp;
  WindowProgressInterface.Window := Window;
  Progress.UserInterface := WindowProgressInterface;
