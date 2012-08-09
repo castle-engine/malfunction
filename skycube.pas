@@ -32,8 +32,8 @@ type
   end;
 
 { Load background textures from files named in old "panoramaToSzescian"
-  convention. This is deprecated, used only by old "szklane lasy"
-  and old "malfunction" versions. @deprecated
+  convention. This is used only by old "szklane lasy"
+  and old "malfunction" versions, should not be used in new code.
 
   SkyNamePattern is the base filename. To construct actual filename,
   we will append to them '_' (underscore character) followed by one
