@@ -55,16 +55,16 @@ type
 procedure TMalfunctionSceneManager.ApplyProjection;
 var
   projNear, projFar: TGLfloat;
-  wholeLevelBox: TBox3D;
+  wholeMoveLimit: TBox3D;
 begin
-  { Player jest zawsze w obrebie levelBox i widzi rzeczy w obrebie
+  { Player jest zawsze w obrebie MoveLimit i widzi rzeczy w obrebie
     levelScene.BoundingBox. Wiec far = dlugosc przekatnej
-    Box3DSum(levelBox, levelScene.BoundingBox) bedzie na pewno wystarczajace.
+    Box3DSum(MoveLimit, levelScene.BoundingBox) bedzie na pewno wystarczajace.
 
     Near wybieramy arbitralnie jako PLAYER_SHIP_CAMERA_RADIUS. }
   projNear := PLAYER_SHIP_CAMERA_RADIUS;
-  wholeLevelBox := levelScene.BoundingBox + levelBox;
-  projFar := PointsDistance(wholeLevelBox.Data[0], wholeLevelBox.Data[1]);
+  wholeMoveLimit := levelScene.BoundingBox + MoveLimit;
+  projFar := PointsDistance(wholeMoveLimit.Data[0], wholeMoveLimit.Data[1]);
   PerspectiveProjection(30, Window.width/Window.height, projNear, projFar);
 
   if Sky = nil then
@@ -144,17 +144,17 @@ procedure TGame2DControls.Draw;
     { na ekranie jest kwadrat radaru wielkosci Size oddalony od gornej
       i prawej krawedzi ekranu o ScreenMargin. We wnetrzu tego kwadratu
       w srodku jest mniejszy kwadrat wielkosci Size-2*InsideMargin
-      i jego wnetrze odpowiada powierzchni XY levelBoxa. }
+      i jego wnetrze odpowiada powierzchni XY MoveLimit. }
     ScreenMargin = 10;
     Size = 100;
     InsideMargin = 5;
   var
     MinInsideX, MaxInsideX, MinInsideY, MaxInsideY: Integer;
 
-    procedure LevelBoxPosToPixel(const pos: TVector3Single; var x, y: TGLint);
+    procedure MoveLimitPosToPixel(const pos: TVector3Single; var x, y: TGLint);
     begin
-     x := Round(MapRange(pos[0], levelBox.Data[0, 0], levelBox.Data[1, 0], MinInsideX, MaxInsideX));
-     y := Round(MapRange(pos[1], levelBox.Data[0, 1], levelBox.Data[1, 1], MinInsideY, MaxInsideY));
+     x := Round(MapRange(pos[0], MoveLimit.Data[0, 0], MoveLimit.Data[1, 0], MinInsideX, MaxInsideX));
+     y := Round(MapRange(pos[1], MoveLimit.Data[0, 1], MoveLimit.Data[1, 1], MinInsideY, MaxInsideY));
     end;
 
   var
@@ -170,7 +170,7 @@ procedure TGame2DControls.Draw;
    glRectf(Window.Width-ScreenMargin-Size, Window.Height-ScreenMargin-Size,
            Window.Width-ScreenMargin, Window.Height-ScreenMargin);
 
-   LevelBoxPosToPixel(playerShip.shipPos, x, y);
+   MoveLimitPosToPixel(playerShip.shipPos, x, y);
    glColor4f(1, 1, 1, 0.8);
    glBegin(GL_LINES);
      glVertex2i(MinInsideX, y);  glVertex2i(MaxInsideX, y);
@@ -183,7 +183,7 @@ procedure TGame2DControls.Draw;
      for i := 0 to enemyShips.Count-1 do
       if enemyShips[i] <> nil then
       begin
-       LevelBoxPosToPixel(enemyShips[i].shipPos, x, y);
+       MoveLimitPosToPixel(enemyShips[i].shipPos, x, y);
        glVertex2i(x, y);
       end;
    glEnd;

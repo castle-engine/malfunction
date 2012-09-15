@@ -21,7 +21,7 @@ Switch {
 		shininess 0.500000 
 		transparency 0.000000 
 	}
-	DEF LevelBox
+	DEF CasMoveLimit # Kambi LevelBox -> CasMoveLimit
 	Separator {
 		Coordinate3 {
 			point [
@@ -35873,7 +35873,7 @@ DEF StartingSeparator Separator {
 			0.000000 0.000000 6.689416 0.000000
 			-36.456646 23.179073 -24.148392 1.000000
 		}
-		USE LevelBox
+		USE CasMoveLimit
 	}
 	Separator {
 		MatrixTransform {

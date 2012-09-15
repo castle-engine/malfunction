@@ -18879,7 +18879,7 @@ Switch {
 			]
 		}
 	}
-	DEF LevelBox
+	DEF CasMoveLimit # Kambi LevelBox -> CasMoveLimit
 	Separator {
 		Material {
 			diffuseColor [
@@ -19013,7 +19013,7 @@ DEF StartingSeparator Separator {
 			0.000000 0.000000 1.000000 0.000000
 			-0.057261 0.076360 1.986642 1.000000
 		}
-		USE LevelBox
+		USE CasMoveLimit
 	}
 	Separator {
 		MatrixTransform {

@@ -59,13 +59,13 @@ unit LevelUnit;
        SFVec3f position 0 0 0
      }
 
-   - DEF LevelBox <dowolny-node-o-niepustym-BoundingBox> { ... }
+   - DEF CasMoveLimit <dowolny-node-o-niepustym-BoundingBox> { ... }
      taki node jest dozwolony (chociaz nie wymagany).
-     Jezeli go znajdziemy to wymiary LevelBox'a beda wziete z wymiarow
+     Jezeli go znajdziemy to wymiary MoveLimit'a beda wziete z wymiarow
      BoundingBox'a tego node'a (a sam node bedzie usuniety ze sceny,
      zeby nie byl nigdy renderowany i nie bylo z nim kolizji...).
      Jezeli nie bedzie takiego node'a na scenie to zostanie obliczony pewien
-     domyslny zazwyczaj sensowny LevelBox (bedzie roznie liczony w zaleznosci
+     domyslny zazwyczaj sensowny MoveLimit (bedzie roznie liczony w zaleznosci
      od LevelType)
 
    - To nie jest specjalne (kiedys bylo specjalne, kiedys byly zamiast tego
@@ -96,7 +96,7 @@ uses SysUtils, GameGeneral, CastleWindow, CastleScene, X3DFields, X3DNodes,
 type
   { levelType wplywa na wiele rzeczy. Ponizej bede dokumentowal sobie
     je wszystkie :
-    - rozny levelType to roznie ustalany domyslny LevelBox w LoadLevel }
+    - rozny levelType to roznie ustalany domyslny MoveLimit w LoadLevel }
   TLevelType = (ltPlanet, ltSpace);
 
   TMalfunctionLevelInfoNode = class(TX3DNode)
@@ -114,7 +114,7 @@ var
   levelScene: TCastleScene;
   levelType: TLevelType;
   levelInfo: TMalfunctionLevelInfoNode;
-  LevelBox: TBox3D; { poza ten box nie moze NIC wyleciec }
+  MoveLimit: TBox3D; { poza ten box nie moze NIC wyleciec }
 
 { Loading and free'ing level NEEDS active gl context.
   Zwalnianie nie zainicjowanego levelu nie powoduje bledu,
@@ -297,7 +297,7 @@ procedure LoadLevel(const SceneFileName: string);
 var
   vMiddle, vSizes: TVector3Single;
   halfMaxSize: Single;
-  LevelBoxShape: TShape;
+  MoveLimitShape: TShape;
   EnemiesConstructor: TEnemiesConstructor;
   DummyGravityUp: TVector3Single;
   BaseLights: TLightInstancesList;
@@ -315,19 +315,19 @@ begin
   levelInfo := TMalfunctionLevelInfoNode(levelScene.RootNode.FindNode(TMalfunctionLevelInfoNode, true));
   levelType := TLevelType(ArrayPosText(levelInfo.FdType.Value, ['planet', 'space'] ));
 
-  { Calculate LevelBox }
-  LevelBoxShape := levelScene.Shapes.FindBlenderMesh('LevelBox');
-  if LevelBoxShape <> nil then
+  { Calculate MoveLimit }
+  MoveLimitShape := levelScene.Shapes.FindBlenderMesh('CasMoveLimit');
+  if MoveLimitShape <> nil then
   begin
-   { When node with name 'LevelBox' is found, then we calculate our
-     LevelBox from this node (and we delete 'LevelBox' from the scene,
+   { When node with name 'CasMoveLimit' is found, then we calculate our
+     MoveLimit from this node (and we delete 'CasMoveLimit' from the scene,
      as it should not be visible).
-     This way we can comfortably set LevelBox from Blender. }
-   LevelBox := LevelBoxShape.BoundingBox;
-   levelScene.RemoveShapeGeometry(LevelBoxShape);
+     This way we can comfortably set MoveLimit from Blender. }
+   MoveLimit := MoveLimitShape.BoundingBox;
+   levelScene.RemoveShapeGeometry(MoveLimitShape);
   end else
   begin
-   {ustal domyslnego LevelBoxa na podstawie levelScene.BoundingBox}
+   {ustal domyslnego MoveLimit na podstawie levelScene.BoundingBox}
    if levelType = ltSpace then
    begin
     {ustalamy shipPosBox na box o srodku tam gdzie levelScene.BoundingBox
@@ -337,19 +337,21 @@ begin
     halfMaxSize := max(vSizes[0], vSizes[1], vSizes[2])* 2.5;
     vSizes := Vector3Single(halfMaxSize, halfMaxSize, halfMaxSize);
     vMiddle := levelScene.BoundingBox.Middle;
-    LevelBox.Data[0] := VectorSubtract(vMiddle, vSizes);
-    LevelBox.Data[1] := VectorAdd(vMiddle, vSizes);
+    MoveLimit.Data[0] := VectorSubtract(vMiddle, vSizes);
+    MoveLimit.Data[1] := VectorAdd(vMiddle, vSizes);
    end else
    begin
     {Ustalamy shipPosBox na box levelu, za wyjatkiem z-ta ktorego przedluzamy
        5 razy. Czyli nie pozwalamy statkowi wyleciec poza x, y-levelu ani ponizej
        z-ow, ale moze wzleciec dosc wysoko ponad z-ty.}
-    LevelBox := levelScene.BoundingBox;
-    LevelBox.Data[1, 2] := LevelBox.Data[1, 2]+4*(LevelBox.Data[1, 2]-LevelBox.Data[0, 2]);
+    MoveLimit := levelScene.BoundingBox;
+    MoveLimit.Data[1, 2] := MoveLimit.Data[1, 2] +
+                       4 * (MoveLimit.Data[1, 2] -
+                            MoveLimit.Data[0, 2]);
    end;
   end;
 
-  {pamietaj ze konstruowanie octree musi byc PO ew. usunieciu node'a LevelBoxXY}
+  {pamietaj ze konstruowanie octree musi byc PO ew. usunieciu node'a MoveLimitXY}
   levelScene.TriangleOctreeProgressTitle := 'Loading ...';
   levelScene.Spatial := [ssDynamicCollisions];
 

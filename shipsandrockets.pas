@@ -449,7 +449,7 @@ begin
    (not levelScene.OctreeCollisions.IsSegmentCollision(ShipPos, newShipPos,
      nil, false, nil)) and
    (CollisionWithOtherEnemyShip(newShipPos) = nil) and
-   levelBox.PointInside(newShipPos);
+   MoveLimit.PointInside(newShipPos);
  if result then ShipPos := newShipPos;
 end;
 
@@ -650,8 +650,8 @@ begin
  newRocPos := VectorAdd(rocPos, VectorScale(rocDir, Window.Fps.IdleSpeed * 50));
  if (levelScene.OctreeCollisions.IsSegmentCollision(rocPos,
        newRocPos, nil, false, nil)) or
-    (not levelBox.PointInside(rocPos)) then
-  {rakieta zderzyla sie z czescia levelu lub wyleciala poza levelBox}
+    (not MoveLimit.PointInside(rocPos)) then
+  {rakieta zderzyla sie z czescia levelu lub wyleciala poza MoveLimit}
   Self.Destroy else
  begin
   {sprawdzamy czy rakieta zderzyla sie z jakims statkiem, naszym lub wroga.
