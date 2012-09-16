@@ -117,14 +117,16 @@ var
   MoveLimit: TBox3D; { poza ten box nie moze NIC wyleciec }
 
 { Loading and free'ing level NEEDS active gl context.
+
   Zwalnianie nie zainicjowanego levelu nie powoduje bledu,
-    po prostu nic nie robi.
+  po prostu nic nie robi.
+
   Poniewaz caly czas tylko jeden level na raz jest zainicjowany
-    (w rezultacie czego zmienne w rodzaju levelScene moga byc
-    zwyczajne, globalne, a nie opakowane w jakas klase "TLevel")
-    level jest zawsze automatycznie zwalniany przed kazdym LoadLevel
-    i w czasie Window.EventClose. W rezultacie wlasciwie mozesz nigdy nie
-    wywolywac FreeLevel z zewnatrz tego modulu.
+  (w rezultacie czego zmienne w rodzaju levelScene moga byc globalne)
+  level jest zawsze automatycznie zwalniany przed kazdym LoadLevel
+  i w czasie Window.EventClose. W rezultacie wlasciwie mozesz nigdy nie
+  wywolywac FreeLevel z zewnatrz tego modulu.
+
   LoadLevel jest odpowiedzialne za czesciowa inicjalizacje PlayerShip.  }
 procedure LoadLevel(const SceneFileName: string);
 procedure FreeLevel;
