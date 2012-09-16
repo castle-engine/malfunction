@@ -114,8 +114,8 @@ begin
  if gameModeExit[fGameMode] <> nil then gameModeExit[fGameMode];
 
  Window.OnDraw := nil;
- Window.OnKeyDown := nil;
- Window.OnKeyUp := nil;
+ Window.OnPress := nil;
+ Window.OnRelease := nil;
  Window.OnIdle := nil;
 
  if gameModeEnter[value] <> nil then gameModeEnter[value];

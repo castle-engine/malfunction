@@ -28,7 +28,7 @@ implementation
 
 uses GL, SysUtils, CastleWindow, GameGeneral, OpenGLBmpFonts,
   BFNT_Isuckatgolf_m32_Unit, CastleGLUtils, CastleMessages, LevelUnit, Images,
-  VectorMath, CastleUtils, GLImages, CastleColors, UIControls;
+  VectorMath, CastleUtils, GLImages, CastleColors, UIControls, KeysMouse;
 
 { module consts and vars ---------------------------------------------------- }
 
@@ -51,13 +51,13 @@ var currentMenu: TMenuItem = Low(TMenuItem);
 { mode enter/exit ----------------------------------------------------------- }
 
 procedure draw(Window: TCastleWindowBase); forward;
-procedure KeyDown(Window: TCastleWindowBase; key: TKey; c: char); forward;
+procedure Press(Window: TCastleWindowBase; const Event: TInputPressRelease); forward;
 
 procedure modeEnter;
 begin
  OrthoProjection(0, Window.width, 0, Window.height);
  Window.OnDraw := @draw;
- Window.OnKeyDown := @KeyDown;
+ Window.OnPress := @Press;
 end;
 
 procedure modeExit;
@@ -101,9 +101,10 @@ begin
  courierFont.print(SLower);}
 end;
 
-procedure KeyDown(Window: TCastleWindowBase; key: TKey; c: char);
+procedure Press(Window: TCastleWindowBase; const Event: TInputPressRelease);
 begin
- case key of
+ if Event.EventType <> itKey then Exit;
+ case Event.key of
   K_Up:
     begin
      if currentMenu = Low(currentMenu) then

@@ -228,7 +228,7 @@ var
   Controls: TGame2DControls;
   Camera: TWalkCamera;
 
-procedure KeyDown(Window: TCastleWindowBase; key: TKey; c: char); forward;
+procedure Press(Window: TCastleWindowBase; const Event: TInputPressRelease); forward;
 procedure idle(Window: TCastleWindowBase); forward;
 
 procedure modeEnter;
@@ -248,7 +248,7 @@ begin
  Window.Controls.Add(Notifications);
  Window.Controls.Add(SceneManager);
 
- Window.OnKeyDown := @KeyDown;
+ Window.OnPress := @Press;
  Window.OnIdle := @idle;
 
  Window.AutoRedisplay := true;
@@ -275,10 +275,11 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure KeyDown(Window: TCastleWindowBase; key: TKey; c: char);
+procedure Press(Window: TCastleWindowBase; const Event: TInputPressRelease);
 var fname: string;
 begin
- case key of
+ if Event.EventType <> itKey then Exit;
+ case Event.key of
   K_Space: playerShip.FireRocket(playerShip.shipDir, 1);
   K_Escape:
     if MessageYesNo(Window, 'End this game and return to menu ?') then
