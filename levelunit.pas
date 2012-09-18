@@ -295,6 +295,25 @@ type
    EnemyShips.Add(TVRMLMalfunctionEnemyNode(node).CreateEnemyShip);
   end;
 
+function FindBlenderMesh(ShapeTree: TShapeTree;
+  const AName: string; OnlyActive: boolean = false): TShape;
+var
+  SI: TShapeTreeIterator;
+  ModelerName: string;
+  ModelerNode: TX3DNode;
+begin
+  SI := TShapeTreeIterator.Create(ShapeTree, OnlyActive);
+  try
+    while SI.GetNext do
+    begin
+      ModelerName := BlenderShapeName(SI.Current, ModelerNode);
+      if ModelerName = AName then
+        Exit(SI.Current);
+    end;
+  finally FreeAndNil(SI) end;
+  Result := nil;
+end;
+
 procedure LoadLevel(const SceneFileName: string);
 var
   vMiddle, vSizes: TVector3Single;
@@ -318,7 +337,8 @@ begin
   levelType := TLevelType(ArrayPosText(levelInfo.FdType.Value, ['planet', 'space'] ));
 
   { Calculate MoveLimit }
-  MoveLimitShape := levelScene.Shapes.FindBlenderMesh('CasMoveLimit');
+
+  MoveLimitShape := FindBlenderMesh(levelScene.Shapes, 'CasMoveLimit');
   if MoveLimitShape <> nil then
   begin
    { When node with name 'CasMoveLimit' is found, then we calculate our
