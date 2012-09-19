@@ -299,15 +299,14 @@ function FindBlenderMesh(ShapeTree: TShapeTree;
   const AName: string; OnlyActive: boolean = false): TShape;
 var
   SI: TShapeTreeIterator;
-  ModelerName: string;
-  ModelerNode: TX3DNode;
+  BlenderPlaceholder: TPlaceholderName;
 begin
+  BlenderPlaceholder := PlaceholderNames['blender'];
   SI := TShapeTreeIterator.Create(ShapeTree, OnlyActive);
   try
     while SI.GetNext do
     begin
-      ModelerName := BlenderShapeName(SI.Current, ModelerNode);
-      if ModelerName = AName then
+      if BlenderPlaceholder(SI.Current) = AName then
         Exit(SI.Current);
     end;
   finally FreeAndNil(SI) end;
