@@ -45,7 +45,7 @@ const
     'Quit');
 
 var currentMenu: TMenuItem = Low(TMenuItem);
-    listBgDraw: TGLuint;
+    listBg: TGLImage;
     menuFont: TGLBitmapFont;
 
 { mode enter/exit ----------------------------------------------------------- }
@@ -72,7 +72,7 @@ var mi: TMenuItem;
 begin
  glLoadIdentity;
  glRasterPos2i(0, 0);
- glCallList(listBgDraw);
+ listBg.Draw;
 
  glTranslatef(Window.width*50 div 640, Window.height*350 div 480, 0);
  for mi := Low(mi) to High(mi) do
@@ -156,13 +156,14 @@ end;
 
 procedure WindowOpen(const Container: IUIContainer);
 begin
- listBgDraw := LoadImageToDisplayList(imagesDir +'menubg.png', [TRGBImage], [], Window.width, Window.height);
+ listBg := TGLImage.Create(imagesDir +'menubg.png', [TRGBImage], [], Window.width, Window.height);
  menuFont := TGLBitmapFont.Create(@BFNT_Isuckatgolf_m32);
 end;
 
 procedure WindowClose(const Container: IUIContainer);
 begin
  FreeAndNil(menuFont);
+ FreeAndNil(ListBG);
 end;
 
 initialization

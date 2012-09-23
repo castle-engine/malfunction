@@ -36,8 +36,8 @@ uses VectorMath, SysUtils, GL, CastleWindow, GameGeneral, CastleGLUtils,
   CastleSceneManager, UIControls, Cameras, Base3D, RenderingCameraUnit;
 
 var
-  kokpitbg_list: TGLuint;
-  crossh_list: TGLuint;
+  kokpit_gl: TGLImage;
+  crossh_gl: TGLImage;
   sky: TSkyCube;
   {crossh_orig_* to oryginalne (tzn. wzgledem ekranu 640x480) rozmiary
    crosshair image (upakowanego w crossh_list) }
@@ -196,7 +196,7 @@ begin
 
  glAlphaFunc(GL_GREATER, 0.5);
  glEnable(GL_ALPHA_TEST);
- glCallList(kokpitbg_list);
+ kokpit_gl.Draw;
  glDisable(GL_ALPHA_TEST);
 
  if playerShip.drawCrosshair then
@@ -206,7 +206,7 @@ begin
   glRasterPos2i(
     (Window.Width - crossh_orig_width) div 2,
     (Window.Height - crossh_orig_height) div 2);
-  glCallList(crossh_list);
+  crossh_gl.Draw;
   glDisable(GL_BLEND);
  end;
 
@@ -327,7 +327,7 @@ begin
    [TRGBAlphaImage, TGrayscaleAlphaImage], [ilcAlphaAdd]);
  try
   kokpit_img.Resize(Window.width, kokpit_img.Height * Window.Height div 480);
-  kokpitbg_list := ImageDrawToDisplayList(kokpit_img);
+  kokpit_gl := TGLImage.Create(kokpit_img);
  finally kokpit_img.Free end;
 
  { przyjmujemy ze crosshair.png bylo przygotowane dla ekranu 640x480.
@@ -339,13 +339,14 @@ begin
   crossh_orig_height := crossh_img.Height;
   crossh_img.Resize(crossh_img.Width * Window.width div 640,
                     crossh_img.Height * Window.height div 480);
-  crossh_list := ImageDrawToDisplayList(crossh_img);
+  crossh_gl := TGLImage.Create(crossh_img);
  finally crossh_img.Free end;
 end;
 
 procedure WindowClose(const Container: IUIContainer);
 begin
-
+  FreeAndNil(kokpit_gl);
+  FreeAndNil(crossh_gl);
 end;
 
 initialization
