@@ -27,7 +27,7 @@ interface
 implementation
 
 uses GL, SysUtils, CastleWindow, GameGeneral, OpenGLBmpFonts,
-  BFNT_Isuckatgolf_m32_Unit, CastleGLUtils, CastleMessages, LevelUnit, Images,
+  BFNT_Isuckatgolf_m32_Unit, CastleGLUtils, CastleMessages, LevelUnit, CastleImages,
   VectorMath, CastleUtils, GLImages, CastleColors, UIControls, KeysMouse;
 
 { module consts and vars ---------------------------------------------------- }

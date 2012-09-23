@@ -78,7 +78,7 @@ function BackgroundImagesLoadFromOldNamePattern(
 
 implementation
 
-uses VectorMath, TextureImages, Images;
+uses VectorMath, TextureImages, CastleImages;
 
 { TSkyCube ------------------------------------------------------------------- }
 
