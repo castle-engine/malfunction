@@ -156,7 +156,7 @@ end;
 
 procedure WindowOpen(const Container: IUIContainer);
 begin
- listBg := TGLImage.Create(imagesDir +'menubg.png', [TRGBImage], [], Window.width, Window.height);
+ listBg := TGLImage.Create(imagesDir +'menubg.png', [TRGBImage], Window.width, Window.height);
  menuFont := TGLBitmapFont.Create(@BFNT_Isuckatgolf_m32);
 end;
 

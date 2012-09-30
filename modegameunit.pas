@@ -324,7 +324,7 @@ var crossh_img: TCastleImage;
     kokpit_img: TCastleImage;
 begin
  kokpit_img := LoadImage(imagesDir +'kokpit.png',
-   [TRGBAlphaImage, TGrayscaleAlphaImage], [ilcAlphaAdd]);
+   [TRGBAlphaImage, TGrayscaleAlphaImage]);
  try
   kokpit_img.Resize(Window.width, kokpit_img.Height * Window.Height div 480);
   kokpit_gl := TGLImage.Create(kokpit_img);
@@ -333,7 +333,7 @@ begin
  { przyjmujemy ze crosshair.png bylo przygotowane dla ekranu 640x480.
    Resizujemy odpowiednio do naszego okienka. }
  crossh_img := LoadImage(imagesDir +'crosshair.png',
-   [TRGBAlphaImage, TGrayscaleAlphaImage], [ilcAlphaAdd]);
+   [TRGBAlphaImage, TGrayscaleAlphaImage]);
  try
   crossh_orig_width := crossh_img.Width;
   crossh_orig_height := crossh_img.Height;
