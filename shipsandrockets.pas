@@ -99,7 +99,7 @@ type
     {w tej klasie HitByRocket powoduje tylko ze shipLife spada.
      NIE wywoluje Destroy. Mozesz pokryc ta metode w podklasach
      (tylko pamietaj wywolac na poczatku inherited) wlasnie aby dodac destroy
-     i/lub wyswietlic jakies Notification lub zrobic blackout graczowi.}
+     i/lub wyswietlic jakies Notification lub zrobic FadeOut graczowi.}
     procedure HitByRocket; virtual;
 
     {sprawdza czy gdybysmy stali na pozycji pos to kolidowalibysmy z jakims

@@ -52,8 +52,8 @@ type
     procedure SetCheatDontCheckCollisions(value: boolean);
     procedure SetCheatImmuneToRockets(value: boolean);
   private
-    BlackOutIntensity: TGLfloat;
-    BlackOutColor: TVector3f;
+    FadeOutIntensity: TGLfloat;
+    FadeOutColor: TVector3f;
   public
     shipRotationSpeed: Single;
     shipVertRotationSpeed: Single;
@@ -68,10 +68,8 @@ type
     property CheatImmuneToRockets: boolean read FCheatImmuneToRockets
       write SetCheatImmuneToRockets;
 
-    { Make blackout with given Color (so it's not really a "black"out,
-      it's fadeout + fadein with given Color; e.g. pass here red
-      to get "redout").}
-    procedure BlackOut(const Color: TVector3f);
+    { Make FadeOut with given Color. }
+    procedure FadeOut(const Color: TVector3f);
 
     { zawsze ran player ship przez WoundPlayerShip albo przynajmniej
       po zmniejszeniu ShipLife rob WoundedPlayerShip. To zapewnia
@@ -149,10 +147,10 @@ begin
  end;
 end;
 
-procedure TPlayerShip.BlackOut(const color: TVector3f);
+procedure TPlayerShip.FadeOut(const color: TVector3f);
 begin
- BlackOutColor := color;
- BlackOutIntensity := 1;
+ FadeOutColor := color;
+ FadeOutIntensity := 1;
 end;
 
 function TPlayerShip.shipRadius: Single;
@@ -169,7 +167,7 @@ end;
 procedure TPlayerShip.WoundedPlayerShip(const Messg: string);
 begin
  Notifications.Show(Messg+' Ship damaged in '+IntToStr(Round(100-ShipLife))+'%.');
- BlackOut(Red3Single);
+ FadeOut(Red3Single);
 end;
 
 procedure TPlayerShip.HitByRocket;
@@ -283,8 +281,8 @@ begin
  {apply shipPosBox}
  MoveLimit.Clamp(shipPos);
 
- if BlackOutIntensity > 0 then
-   BlackOutIntensity -= 0.02 * Window.Fps.IdleSpeed * 50;
+ if FadeOutIntensity > 0 then
+   FadeOutIntensity -= 0.02 * Window.Fps.IdleSpeed * 50;
 end;
 
 procedure TPlayerShip.PlayerShipDraw2d;
@@ -328,9 +326,9 @@ begin
   glColorv(Yellow3Single);
   drawArrow(0.3, 0.8);
 
-  {draw blackout}
+  {draw FadeOut}
   glLoadIdentity;
-  DrawGLBlackOutRect(BlackOutColor, BlackOutIntensity, 0, 0, Window.Width, Window.Height);
+  GLFadeRectangle(0, 0, Window.Width, Window.Height, FadeOutColor, FadeOutIntensity);
 end;
 
 { globa procs ------------------------------------------------------------ }
