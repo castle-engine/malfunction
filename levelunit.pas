@@ -345,7 +345,7 @@ begin
      as it should not be visible).
      This way we can comfortably set MoveLimit from Blender. }
    MoveLimit := MoveLimitShape.BoundingBox;
-   levelScene.RemoveShapeGeometry(MoveLimitShape);
+   levelScene.RemoveShape(MoveLimitShape);
   end else
   begin
    {ustal domyslnego MoveLimit na podstawie levelScene.BoundingBox}
