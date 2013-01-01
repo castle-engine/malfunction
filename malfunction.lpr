@@ -38,7 +38,7 @@ program malfunction;
 {$apptype GUI}
 
 uses CastleWindow, GameGeneral, SysUtils, CastleUtils, ModeMenuUnit, ModeGameUnit,
-  CastleParameters, CastleClassUtils, CastleFilesUtils, KeysMouse;
+  CastleParameters, CastleClassUtils, CastleFilesUtils, CastleKeysMouse;
 
 { params ------------------------------------------------------------ }
 
