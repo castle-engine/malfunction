@@ -99,8 +99,8 @@ implementation
 
 {$define read_implementation}
 
-uses CastleGLUtils, CastleUtils, CastleMessages, ProgressUnit,
-  CastleProgress, OpenGLBmpFonts, BFNT_BitstreamVeraSansMono_m18_Unit;
+uses CastleGLUtils, CastleUtils, CastleMessages, CastleProgress,
+  CastleWindowProgress, OpenGLBmpFonts, BFNT_BitstreamVeraSansMono_m18_Unit;
 
 var fGameMode: TGameMode = modeNone;
 
