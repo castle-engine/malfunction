@@ -100,7 +100,7 @@ implementation
 {$define read_implementation}
 
 uses CastleGLUtils, CastleUtils, CastleMessages, CastleProgress,
-  CastleWindowProgress, OpenGLBmpFonts, BFNT_BitstreamVeraSansMono_m18_Unit;
+  CastleWindowProgress, CastleGLBitmapFonts, CastleBitmapFont_BVSansMono_m18;
 
 var fGameMode: TGameMode = modeNone;
 
@@ -133,7 +133,7 @@ end;
 
 procedure Open(Window: TCastleWindowBase);
 begin
- MessagesTheme.Font := TGLBitmapFont.Create(@BFNT_BitstreamVeraSansMono_m18);
+ MessagesTheme.Font := TGLBitmapFont.Create(BitmapFont_BVSansMono_m18);
 
  Notifications := TCastleNotifications.Create(Window);
  Notifications.MaxMessages := 10;

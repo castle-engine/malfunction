@@ -26,8 +26,8 @@ interface
 
 implementation
 
-uses GL, SysUtils, CastleWindow, GameGeneral, OpenGLBmpFonts,
-  BFNT_Isuckatgolf_m32_Unit, CastleGLUtils, CastleMessages, LevelUnit, CastleImages,
+uses GL, SysUtils, CastleWindow, GameGeneral, CastleGLBitmapFonts,
+  CastleBitmapFont_Isuckatgolf_m32, CastleGLUtils, CastleMessages, LevelUnit, CastleImages,
   CastleVectors, CastleUtils, GLImages, CastleColors, UIControls, CastleKeysMouse;
 
 { module consts and vars ---------------------------------------------------- }
@@ -157,7 +157,7 @@ end;
 procedure WindowOpen(const Container: IUIContainer);
 begin
  listBg := TGLImage.Create(imagesDir +'menubg.png', [TRGBImage], Window.width, Window.height);
- menuFont := TGLBitmapFont.Create(@BFNT_Isuckatgolf_m32);
+ menuFont := TGLBitmapFont.Create(BitmapFont_Isuckatgolf_m32);
 end;
 
 procedure WindowClose(const Container: IUIContainer);
