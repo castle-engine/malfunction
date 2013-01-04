@@ -30,10 +30,10 @@ interface
 implementation
 
 uses CastleVectors, SysUtils, GL, CastleWindow, GameGeneral, CastleGLUtils,
-  CastleUtils, LevelUnit, Boxes3D, CastleMessages, PlayerShipUnit, CastleImages,
+  CastleUtils, LevelUnit, CastleBoxes, CastleMessages, PlayerShipUnit, CastleImages,
   ShipsAndRockets, CastleKeysMouse, CastleFilesUtils,
   CastleStringUtils, CastleScene, GLImages, SkyCube, X3DNodes,
-  CastleSceneManager, UIControls, Cameras, Base3D, CastleRenderingCamera;
+  CastleSceneManager, UIControls, Cameras, Castle3D, CastleRenderingCamera;
 
 var
   kokpit_gl: TGLImage;

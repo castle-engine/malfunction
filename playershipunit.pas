@@ -30,7 +30,7 @@ unit PlayerShipUnit;
 
 interface
 
-uses GL, Boxes3D, ShipsAndRockets, SysUtils, CastleGLUtils, CastleColors,
+uses GL, CastleBoxes, ShipsAndRockets, SysUtils, CastleGLUtils, CastleColors,
   CastleKeysMouse;
 
 const

@@ -37,7 +37,7 @@ unit ShipsAndRockets;
 interface
 
 uses CastleWindow, SysUtils, GL, GLU, CastleGLUtils, CastleVectors, CastleUtils,
-  CastleClassUtils, Classes, CastleTimeUtils, CastleScene, Base3D, FGL;
+  CastleClassUtils, Classes, CastleTimeUtils, CastleScene, Castle3D, FGL;
 
 {$define read_interface}
 
@@ -267,7 +267,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 
 implementation
 
-uses Boxes3D, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
+uses CastleBoxes, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
   CastleRenderingCamera, UIControls;
 
 type
@@ -424,7 +424,7 @@ begin
    { TODO: RenderingCamera.Frustum is actually invalid, it's not transformed
      by matrix. But we pass TestShapeVisibility = nil, and we don't use
      VisibilitySensor inside these models, so frustum value isn't really used.
-     We should remake ships as Base3D.T3DOrient, then this whole
+     We should remake ships as Castle3D.T3DOrient, then this whole
      unit can be trivial. }
 
    EnemyShipVRMLs[Kind].Render(nil, RenderingCamera.Frustum, Params);
@@ -629,7 +629,7 @@ begin
    { TODO: RenderingCamera.Frustum is actually invalid, it's not transformed
      by matrix. But we pass TestShapeVisibility = nil, and we don't use
      VisibilitySensor inside these models, so frustum value isn't really used.
-     We should remake rockets as Base3D.T3DTransform, then this whole
+     We should remake rockets as Castle3D.T3DTransform, then this whole
      unit can be trivial. }
 
    rocketVRML.Render(nil, RenderingCamera.Frustum, Params);

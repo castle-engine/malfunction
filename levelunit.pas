@@ -91,7 +91,7 @@ unit LevelUnit;
 interface
 
 uses SysUtils, GameGeneral, CastleWindow, CastleScene, X3DFields, X3DNodes,
-  CastleClassUtils, CastleShapes, Boxes3D, CastleGLUtils;
+  CastleClassUtils, CastleShapes, CastleBoxes, CastleGLUtils;
 
 type
   { levelType wplywa na wiele rzeczy. Ponizej bede dokumentowal sobie
