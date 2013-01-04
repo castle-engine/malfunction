@@ -139,7 +139,7 @@ procedure PlayGame(const SceneFileName: string);
 
 implementation
 
-uses VectorMath, CastleUtils, PlayerShipUnit, ShipsAndRockets,
+uses CastleVectors, CastleUtils, PlayerShipUnit, ShipsAndRockets,
   CastleMessages, CastleSceneCore, UIControls;
 
 { TMalfunctionInfoNode ----------------------------------------------- }

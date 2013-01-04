@@ -36,7 +36,7 @@ unit ShipsAndRockets;
 
 interface
 
-uses CastleWindow, SysUtils, GL, GLU, CastleGLUtils, VectorMath, CastleUtils,
+uses CastleWindow, SysUtils, GL, GLU, CastleGLUtils, CastleVectors, CastleUtils,
   CastleClassUtils, Classes, CastleTimeUtils, CastleScene, Base3D, FGL;
 
 {$define read_interface}
@@ -268,7 +268,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 implementation
 
 uses Boxes3D, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
-  RenderingCameraUnit, UIControls;
+  CastleRenderingCamera, UIControls;
 
 type
   TEnemyShipKindInfo = record
