@@ -18,7 +18,7 @@ unit SkyCube;
 
 interface
 
-uses X3DNodes, Background, CastleColors;
+uses X3DNodes, CastleBackground, CastleColors;
 
 type
   { Draw background as a cube usign 6 textures.
@@ -61,7 +61,7 @@ type
 
     @item(Note (!) that left / right textures are swapped.
       Reason: I defined it like this in "panoramaToSzescian" and
-      much later realized VRML Background node (and so my TBackground class)
+      much later realized VRML/X3D Background node (and so my TBackground class)
       has it exactly inverted.
 
       (In "panoramaToSzescian" one the images sequence
@@ -78,7 +78,7 @@ function BackgroundImagesLoadFromOldNamePattern(
 
 implementation
 
-uses CastleVectors, TextureImages, CastleImages;
+uses CastleVectors, CastleTextureImages, CastleImages;
 
 { TSkyCube ------------------------------------------------------------------- }
 

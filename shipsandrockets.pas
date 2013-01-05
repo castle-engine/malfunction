@@ -268,7 +268,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 implementation
 
 uses CastleBoxes, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
-  CastleRenderingCamera, UIControls;
+  CastleRenderingCamera, CastleUIControls;
 
 type
   TEnemyShipKindInfo = record

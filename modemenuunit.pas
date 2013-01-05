@@ -28,7 +28,7 @@ implementation
 
 uses GL, SysUtils, CastleWindow, GameGeneral, CastleGLBitmapFonts,
   CastleBitmapFont_Isuckatgolf_m32, CastleGLUtils, CastleMessages, LevelUnit, CastleImages,
-  CastleVectors, CastleUtils, GLImages, CastleColors, UIControls, CastleKeysMouse;
+  CastleVectors, CastleUtils, CastleGLImages, CastleColors, CastleUIControls, CastleKeysMouse;
 
 { module consts and vars ---------------------------------------------------- }
 
