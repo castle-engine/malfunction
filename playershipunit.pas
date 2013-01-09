@@ -299,7 +299,7 @@ const
   procedure DrawIndicator(const r: TRect2d; const BorderColor, BGColor,
     InsideCol: TVector4f; const Height, MinHeight, MaxHeight: Single);
   begin
-   drawGLBorderedRectangle(r[0, 0], r[0, 1], r[1, 0], r[1, 1], BGColor, BorderColor);
+   GLRectangleWithBorder(r[0, 0], r[0, 1], r[1, 0], r[1, 1], BGColor, BorderColor);
    glColorv(InsideCol);
    glRectf(r[0, 0]+RectMargin, r[0, 1]+RectMargin, r[1, 0]-RectMargin,
      MapRange(Height, MinHeight, MaxHeight,

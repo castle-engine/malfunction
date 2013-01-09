@@ -84,7 +84,7 @@ begin
     begin
      glColorv(White3Single);
      glLineWidth(1.0);
-     drawGLRectBorder(-10, -menufont.Descend, menufont.TextWidth(menuNames[mi])+10, menuFont.RowHeight);
+     GLRectangleBorder(-10, -menufont.Descend, menufont.TextWidth(menuNames[mi])+10, menuFont.RowHeight);
      glColorv(Yellow3Single);
     end else
      glColorv(White3Single);
