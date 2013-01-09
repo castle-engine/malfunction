@@ -325,7 +325,7 @@ begin
   glScalef(10, kompasSrednica/2, 1);
   glTranslatef(0, -1, 0);
   glColorv(Yellow3Single);
-  drawArrow(0.3, 0.8);
+  GLDrawArrow(0.3, 0.8);
 
   {draw FadeOut}
   glLoadIdentity;
