@@ -82,7 +82,7 @@ begin
 
     if mi = currentMenu then
     begin
-     GLRectangleBorder(-10, -menufont.Descend, 
+     GLRectangleBorder(-10, -menufont.Descend,
        menufont.TextWidth(menuNames[mi])+10, menuFont.RowHeight,
        White4Single);
      glColorv(Yellow3Single);
@@ -156,7 +156,8 @@ end;
 
 procedure WindowOpen(const Container: IUIContainer);
 begin
- listBg := TGLImage.Create(imagesDir +'menubg.png', [TRGBImage], Window.width, Window.height);
+ listBg := TGLImage.Create(imagesDir +'menubg.png', [TRGBImage],
+   Window.width, Window.height, riBilinear);
  menuFont := TGLBitmapFont.Create(BitmapFont_Isuckatgolf_m32);
 end;
 
