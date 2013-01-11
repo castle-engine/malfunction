@@ -236,8 +236,8 @@ begin
  Assert(levelScene <> nil,
    'Error - setting game mode to modeGame but level uninitialized');
 
- if (LevelScene.FogNode <> nil) and
-    (LevelScene.FogNode.FdVolumetric.Value) and
+ if (LevelScene.FogStack.Top <> nil) and
+    (LevelScene.FogStack.Top.FdVolumetric.Value) and
     (not GL_EXT_fog_coord) then
    MessageOK(Window,
      'Your OpenGL implementation doesn''t support GL_EXT_fog_coord. '+
