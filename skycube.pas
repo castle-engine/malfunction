@@ -70,7 +70,6 @@ type
       is @italic(front, right, back, left).))
   )
 
-  Filename extension for textures is guessed by FindExistingImageExt.
   Images will be loaded by LoadTextureImage(FileName)
   so they will be forced into some format renderable as OpenGL texture. }
 function BackgroundImagesLoadFromOldNamePattern(
@@ -111,10 +110,9 @@ var
 begin
  for bs := Low(bs) to High(bs) do
  begin
-  ImgFileName :=
-    TryFindExistingImageExt(SkyNamePattern +'_' +names_suffix[bs], true);
+  ImgFileName := SkyNamePattern +'_' +names_suffix[bs] + '.png';
   if ImgFileName = '' then
-   ImgFileName := FindExistingImageExt(SkyNamePattern +'_any', true);
+   ImgFileName := SkyNamePattern +'_any.png';
   result.Images[bs] := LoadTextureImage(ImgFileName);
  end;
 end;
