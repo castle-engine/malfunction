@@ -89,7 +89,7 @@ const
   skiesDir = 'skies' +PathDelim;
 
 { ----------------------------------------------------------------------------
-  zainicjowane w niszczone w tym module. Wyswietlane i Idle'owane w ModeGameUnit.
+  zainicjowane w niszczone w tym module. Wyswietlane i Update'owane w ModeGameUnit.
   Moze byc uzywane z kazdego miejsca. }
 
 var
@@ -116,7 +116,7 @@ begin
  Window.OnDraw := nil;
  Window.OnPress := nil;
  Window.OnRelease := nil;
- Window.OnIdle := nil;
+ Window.OnUpdate := nil;
 
  if gameModeEnter[value] <> nil then gameModeEnter[value];
  fGameMode := value;

@@ -90,8 +90,8 @@ type
       - like if shipPos would be = (0, 0, 0). }
     procedure PlayerShipApplyMatrix;
     procedure PlayerShipApplyMatrixNoTranslate;
-    { call PlayerShipIdle in idle in modeGame }
-    procedure PlayerShipIdle;
+    { call PlayerShipUpdate in Update in modeGame }
+    procedure PlayerShipUpdate;
 
     { draw some 2D things after displaying the scene. Current projection should
       be Ortho(0, 640, 0, 480) and all attribs should be set up for
@@ -193,7 +193,7 @@ begin
                     shipUp[0] , shipUp[1] , shipUp[2]);
 end;
 
-procedure TPlayerShip.PlayerShipIdle;
+procedure TPlayerShip.PlayerShipUpdate;
 
   procedure RotationSpeedBackToZero(var rotSpeed: Single;
     const rotSpeedChange: Single);
@@ -201,10 +201,10 @@ procedure TPlayerShip.PlayerShipIdle;
     Jezeli sa one bardzo blisko zera to juz nie wracamy ich do zera
     tylko ustawiamy je na zero - zeby nie bylo tak ze ich wartosci "skacza
     nad zerem" to na dodatnia to na ujemna strone. Granica wynosi
-    (rotSpeedBack*2/3)*Window.IdleSpeed * 50 bo musi byc wieksza niz
-    rotSpeedBack *Window.IdleSpeed * 50/2 (zeby zawsze przesuwajac sie o
-    rotSpeedBack *Window.IdleSpeed * 50 trafic do tej granicy; chociaz tak naprawde
-    Window.IdleSpeed zmienia sie w czasie wiec nic nie jest pewne). }
+    (rotSpeedBack*2/3)*Window.UpdateSecondsPassed * 50 bo musi byc wieksza niz
+    rotSpeedBack *Window.UpdateSecondsPassed * 50/2 (zeby zawsze przesuwajac sie o
+    rotSpeedBack *Window.UpdateSecondsPassed * 50 trafic do tej granicy; chociaz tak naprawde
+    Window.UpdateSecondsPassed zmienia sie w czasie wiec nic nie jest pewne). }
   var rotSpeedBack: Single;
   begin
    rotSpeedBack := rotSpeedChange * 2/5;
@@ -232,19 +232,19 @@ begin
  {odczytaj wcisniete klawisze}
  with Window do
  begin
-  if Pressed[K_Left] then shipRotationSpeed += ROT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50;
-  if Pressed[K_Right] then shipRotationSpeed -= ROT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50;
-  if Pressed[K_Up] then shipVertRotationSpeed -= ROT_VERT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50;
-  if Pressed[K_Down] then shipVertRotationSpeed += ROT_VERT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50;
-  if Pressed[K_A] then shipSpeed := CastleUtils.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
-  if Pressed[K_Z] then shipSpeed := CastleUtils.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
+  if Pressed[K_Left] then shipRotationSpeed += ROT_SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50;
+  if Pressed[K_Right] then shipRotationSpeed -= ROT_SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50;
+  if Pressed[K_Up] then shipVertRotationSpeed -= ROT_VERT_SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50;
+  if Pressed[K_Down] then shipVertRotationSpeed += ROT_VERT_SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50;
+  if Pressed[K_A] then shipSpeed := CastleUtils.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50);
+  if Pressed[K_Z] then shipSpeed := CastleUtils.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50);
  end;
 
  {move ship using shipSpeed,
   check for collisions with level using octree,
   check for collisions with enemyShips using simple sphere collision detecion}
  newShipPos := VectorAdd(shipPos, VectorScale(shipDir,
-   shipSpeed * Window.Fps.IdleSpeed * 50));
+   shipSpeed * Window.Fps.UpdateSecondsPassed * 50));
  if CheatDontCheckCollisions then
   shipPos := newShipPos else
  begin
@@ -267,23 +267,23 @@ begin
  shipUpZSign := Sign(shipUp[2]);
  if shipUpZSign <> 0 then
  begin
-  shipDir := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.IdleSpeed * 50, shipDir, Vector3Single(0, 0, shipUpZSign));
-  shipUp := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.IdleSpeed * 50, shipUp, Vector3Single(0, 0, shipUpZSign));
+  shipDir := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.UpdateSecondsPassed * 50, shipDir, Vector3Single(0, 0, shipUpZSign));
+  shipUp := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.UpdateSecondsPassed * 50, shipUp, Vector3Single(0, 0, shipUpZSign));
  end;
  {apply speed vertical - here we will need shipSideAxis}
  shipSideAxis := VectorProduct(shipDir, shipUp);
- shipDir := RotatePointAroundAxisDeg(shipVertRotationSpeed * Window.Fps.IdleSpeed * 50, shipDir, shipSideAxis);
- shipUp := RotatePointAroundAxisDeg(shipVertRotationSpeed * Window.Fps.IdleSpeed * 50, shipUp, shipSideAxis);
+ shipDir := RotatePointAroundAxisDeg(shipVertRotationSpeed * Window.Fps.UpdateSecondsPassed * 50, shipDir, shipSideAxis);
+ shipUp := RotatePointAroundAxisDeg(shipVertRotationSpeed * Window.Fps.UpdateSecondsPassed * 50, shipUp, shipSideAxis);
 
  {decrease rotations speeds}
- RotationSpeedBackToZero(shipRotationSpeed, ROT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
- RotationSpeedBackToZero(shipVertRotationSpeed, ROT_VERT_SPEED_CHANGE * Window.Fps.IdleSpeed * 50);
+ RotationSpeedBackToZero(shipRotationSpeed, ROT_SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50);
+ RotationSpeedBackToZero(shipVertRotationSpeed, ROT_VERT_SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50);
 
  {apply shipPosBox}
  MoveLimit.Clamp(shipPos);
 
  if FadeOutIntensity > 0 then
-   FadeOutIntensity -= 0.02 * Window.Fps.IdleSpeed * 50;
+   FadeOutIntensity -= 0.02 * Window.Fps.UpdateSecondsPassed * 50;
 end;
 
 procedure TPlayerShip.PlayerShipDraw2d;

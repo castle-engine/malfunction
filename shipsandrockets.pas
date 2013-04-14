@@ -125,7 +125,7 @@ type
      You should use glPush/PopMatrix mechanism to save current matrix.
      Zawsze wywoluj inherited w podklasach. }
     procedure Render(const Params: TRenderParams); virtual;
-    procedure Idle; virtual;
+    procedure Update; virtual;
 
     procedure HitByRocket; override;
     function ShipRadius: Single; override;
@@ -139,20 +139,20 @@ type
 
   TEnemyShipList = specialize TFPGObjectList<TEnemyShip>;
 
-  {statki tej klasy wywoluja w Idle FireRocket co jakis czas, zalezny od
-   FireDelay dla tego shipKind. Pamietaj wywolac inherited w Idle; }
+  {statki tej klasy wywoluja w Update FireRocket co jakis czas, zalezny od
+   FireDelay dla tego shipKind. Pamietaj wywolac inherited w Update; }
   TFiringRocketsEnemyShip = class(TEnemyShip)
   private
     LastFiredRocketTime, NextFireRocketDelay: TMilisecTime;
     RocketFiringInited: boolean;
   protected
     {uzywaj tego w podklasach aby sterowac tym kiedy statek strzela
-     rakietami (bo ZAWSZE powinienes wywolywac Idle.inherited !).
+     rakietami (bo ZAWSZE powinienes wywolywac Update.inherited !).
      Domyslnie jest true.}
     FiringRocketsAllowed: boolean;
   public
     constructor Create(AKind: TEnemyShipKind; const AShipPos: TVector3Single);
-    procedure Idle; override;
+    procedure Update; override;
   end;
 
   TNotMovingEnemyShip = class(TFiringRocketsEnemyShip)
@@ -161,7 +161,7 @@ type
   TCircleMovingEnemyShip = class(TFiringRocketsEnemyShip)
   private
     AngleRad: Single; { aktualny kat na kole (w radianach) }
-    AngleRadChange: Single; { zmiana kata co Idle (moze byc ujemna) }
+    AngleRadChange: Single; { zmiana kata co Update (moze byc ujemna) }
     FCircleCenter: TVector3Single;
     FCircleRadius: Single;
     FUniqueCircleMovingSpeed: Single;
@@ -181,7 +181,7 @@ type
     constructor Create(AKind: TEnemyShipKind; const ACircleCenter: TVector3Single;
       const ACircleRadius, AUniqueCircleMovingSpeed: Single);
 
-    procedure Idle; override;
+    procedure Update; override;
   end;
 
   THuntingEnemyShip = class(TFiringRocketsEnemyShip)
@@ -202,7 +202,7 @@ type
     property HuntingAttack: boolean read FHuntingAttack write SetHuntingAttack;
   public
     constructor Create(AKind: TEnemyShipKind; const AShipPos: TVector3Single);
-    procedure Idle; override;
+    procedure Update; override;
   end;
 
   TRocket = class
@@ -229,7 +229,7 @@ type
     {render yourself to OpenGL at the right position and direction.
      You should use glPush/PopMatrix mechanism to save current matrix.}
     procedure Render(const Params: TRenderParams);
-    procedure Idle;
+    procedure Update;
   end;
 
 var
@@ -242,13 +242,13 @@ var
    TEnemyShip i TRocket kiedy sa niszczone zmieniaja wszystkie swoje
    wystapienia na odpowiednich listach na nil. NIE moga sie z nich usuwac
    bo byc moze beda musialy to zrobic kiedy jakis kod iteruje po tych listach.
-   (np. w ShipsAndRocketsIdle jest robione
-    for i := 0 to rockets.Count-1 do rockets[i].Idle;
-    a przeciez rakieta moze zostac zniszczona w czasie swojego idle.
-    Statki chwilowo nie moga zostac zniszczone w czasie wlasnego Idle
+   (np. w ShipsAndRocketsUpdate jest robione
+    for i := 0 to rockets.Count-1 do rockets[i].Update;
+    a przeciez rakieta moze zostac zniszczona w czasie swojego Update.
+    Statki chwilowo nie moga zostac zniszczone w czasie wlasnego Update
     ale z pewnoscia myslac przyszlosciowo nalezy dopuscic taka mozliwosc
     (statki - kamikadze na przyklad).
-   Listy sa czyszczone z nil'i na koncu ShipsAndRocketsIdle kiedy jest to
+   Listy sa czyszczone z nil'i na koncu ShipsAndRocketsUpdate kiedy jest to
      bezpieczne (wiadomo ze nic nie iteruje wtedy po listach) i nie powinny
      byc czyszczone z nil'i nigdzie indziej (uzywamy wyniku DeleteAll(nil)
      aby ew. wypisac komunikat "All enemy ships destroyed") }
@@ -259,7 +259,7 @@ var
   They don't modify current matrix. }
 procedure ShipsRender(const Params: TRenderParams);
 procedure RocketsRender(const Params: TRenderParams);
-procedure ShipsAndRocketsIdle;
+procedure ShipsAndRocketsUpdate;
 
 { inne funkcje }
 
@@ -431,8 +431,8 @@ begin
  glPopMatrix;
 end;
 
-procedure TEnemyShip.Idle;
-{ w klasie TEnemyShip Idle nie robi nic; ale nie jest zdefiniowane
+procedure TEnemyShip.Update;
+{ w klasie TEnemyShip Update nie robi nic; ale nie jest zdefiniowane
   jako abstrakcyjne zeby mozna bylo bezproblemowo ZAWSZE zrobic inherited
   w podklasach (i nie martwic sie tym samym czy klasa dziedziczy posrednio
   czy bezposrednio od TEnemyShip) }
@@ -462,7 +462,7 @@ begin
  FiringRocketsAllowed := true;
 end;
 
-procedure TFiringRocketsEnemyShip.Idle;
+procedure TFiringRocketsEnemyShip.Update;
 begin
  inherited;
  if RocketFiringInited then
@@ -478,7 +478,7 @@ begin
   end;
  end else
  begin
-  {ustalamy czas wystrzelenia pierwszej rakiety dopiero tutaj, naszym Idle,
+  {ustalamy czas wystrzelenia pierwszej rakiety dopiero tutaj, naszym Update,
    zamiast w naszym konstruktorze bo po skonstruowaniu obiektu enemyShip
    w LoadLevel moze minac duzo czasu do poczatku gry - np. czas na ten MessageOK
    w ModeGameUnit.modeGameEnter; }
@@ -521,13 +521,13 @@ begin
  UniqueCircleMovingSpeed := AUniqueCircleMovingSpeed;
 end;
 
-procedure TCircleMovingEnemyShip.Idle;
+procedure TCircleMovingEnemyShip.Update;
 var newAngleRad: Double;
     newShipPos, newShipDir: TVector3Single;
 begin
  inherited;
 
- newAngleRad := AngleRad + AngleRadChange * Window.Fps.IdleSpeed * 50;
+ newAngleRad := AngleRad + AngleRadChange * Window.Fps.UpdateSecondsPassed * 50;
  newShipPos[0] := cos(newAngleRad)*CircleRadius + CircleCenter[0];
  newShipPos[1] := sin(newAngleRad)*CircleRadius + CircleCenter[1];
  newShipPos[2] := CircleCenter[2];
@@ -565,7 +565,7 @@ begin
  Randomize;
 end;
 
-procedure THuntingEnemyShip.Idle;
+procedure THuntingEnemyShip.Update;
 begin
  inherited;
 
@@ -593,7 +593,7 @@ begin
   ShipDir := VectorNegate(ShipDir);
 
  if not TryShipMove( VectorAdd(ShipPos,
-   VectorScale(ShipDir, Window.Fps.IdleSpeed * 50)) ) then
+   VectorScale(ShipDir, Window.Fps.UpdateSecondsPassed * 50)) ) then
  begin
   Randomize;
   HuntingAttack := not HuntingAttack
@@ -636,7 +636,7 @@ begin
  glPopMatrix;
 end;
 
-procedure TRocket.Idle;
+procedure TRocket.Update;
 var newRocPos: TVector3Single;
 
   function CollidesWith(ship: TSpaceShip): boolean;
@@ -647,7 +647,7 @@ var newRocPos: TVector3Single;
 
 var i: integer;
 begin
- newRocPos := VectorAdd(rocPos, VectorScale(rocDir, Window.Fps.IdleSpeed * 50));
+ newRocPos := VectorAdd(rocPos, VectorScale(rocDir, Window.Fps.UpdateSecondsPassed * 50));
  if (levelScene.OctreeCollisions.IsSegmentCollision(rocPos,
        newRocPos, nil, false, nil)) or
     (not MoveLimit.PointInside(rocPos)) then
@@ -702,13 +702,13 @@ begin
   if rockets[i] <> nil then rockets[i].Render(Params);
 end;
 
-procedure ShipsAndRocketsIdle;
+procedure ShipsAndRocketsUpdate;
 var i: integer;
 begin
  for i := 0 to rockets.Count-1 do
-  if rockets[i] <> nil then rockets[i].Idle;
+  if rockets[i] <> nil then rockets[i].Update;
  for i := 0 to enemyShips.Count-1 do
-  if enemyShips[i] <> nil then enemyShips[i].Idle;
+  if enemyShips[i] <> nil then enemyShips[i].Update;
 
  FPGObjectList_RemoveNils(rockets);
  if (FPGObjectList_RemoveNils(enemyShips) > 0) and (enemyShips.Count = 0) then

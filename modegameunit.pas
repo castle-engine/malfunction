@@ -229,7 +229,7 @@ var
   Camera: TWalkCamera;
 
 procedure Press(Window: TCastleWindowBase; const Event: TInputPressRelease); forward;
-procedure idle(Window: TCastleWindowBase); forward;
+procedure Update(Window: TCastleWindowBase); forward;
 
 procedure modeEnter;
 begin
@@ -249,7 +249,7 @@ begin
  Window.Controls.Add(SceneManager);
 
  Window.OnPress := @Press;
- Window.OnIdle := @idle;
+ Window.OnUpdate := @Update;
 
  Window.AutoRedisplay := true;
 end;
@@ -304,7 +304,7 @@ begin
  end;
 end;
 
-procedure idle(Window: TCastleWindowBase);
+procedure Update(Window: TCastleWindowBase);
 begin
  if playerShip.ShipLife <= 0 then
  begin
@@ -313,8 +313,8 @@ begin
   Exit;
  end;
 
- playerShip.PlayerShipIdle;
- ShipsAndRocketsIdle;
+ playerShip.PlayerShipUpdate;
+ ShipsAndRocketsUpdate;
 end;
 
 { Open/Close glwin -------------------------------------------------------- }
