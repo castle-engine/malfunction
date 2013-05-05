@@ -28,7 +28,7 @@ type
   TSkyCube = class(TBackground)
   public
     constructor Create(const SkyNamePattern: string; zNear, zFar: Single); overload;
-    constructor Create(const Imgs: TBackgroundImages; zNear, zFar: Single); overload;
+    constructor Create(const Imgs: TBackgroundTextures; zNear, zFar: Single); overload;
   end;
 
 { Load background textures from files named in old "panoramaToSzescian"
@@ -73,7 +73,7 @@ type
   Images will be loaded by LoadTextureImage(FileName)
   so they will be forced into some format renderable as OpenGL texture. }
 function BackgroundImagesLoadFromOldNamePattern(
-  const SkyNamePattern: string): TBackgroundImages;
+  const SkyNamePattern: string): TBackgroundTextures;
 
 implementation
 
@@ -82,7 +82,7 @@ uses CastleVectors, CastleTextureImages, CastleImages;
 { TSkyCube ------------------------------------------------------------------- }
 
 constructor TSkyCube.Create(const SkyNamePattern: string; zNear, zFar: Single);
-var SkyImgs: TBackgroundImages;
+var SkyImgs: TBackgroundTextures;
 begin
  SkyImgs := BackgroundImagesLoadFromOldNamePattern(SkyNamePattern);
  try
@@ -90,7 +90,7 @@ begin
  finally SkyImgs.FreeAll(nil) end;
 end;
 
-constructor TSkyCube.Create(const Imgs: TBackgroundImages; zNear, zFar: Single);
+constructor TSkyCube.Create(const Imgs: TBackgroundTextures; zNear, zFar: Single);
 begin
   inherited Create(
     nil, 0, nil, 0, Imgs, nil, 0, @Black3Single, 1,
@@ -101,7 +101,7 @@ end;
 { global --------------------------------------------------------------------- }
 
 function BackgroundImagesLoadFromOldNamePattern(
-  const SkyNamePattern: string): TBackgroundImages;
+  const SkyNamePattern: string): TBackgroundTextures;
 const
   names_suffix: array[TBackgroundSide]of string = ('b', 'd', 'f', 'r', 'l', 'u');
 var
