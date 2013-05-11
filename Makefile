@@ -11,3 +11,5 @@ install:
 .PHONY: clean
 clean:
 	rm -f malfunction malfunction.exe
+	rm -Rf malfunction.app
+
