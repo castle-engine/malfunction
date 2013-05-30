@@ -38,7 +38,8 @@ program malfunction;
 {$apptype GUI}
 
 uses CastleWindow, GameGeneral, SysUtils, CastleUtils, ModeMenuUnit, ModeGameUnit,
-  CastleParameters, CastleClassUtils, CastleFilesUtils, CastleKeysMouse;
+  CastleParameters, CastleClassUtils, CastleFilesUtils, CastleKeysMouse,
+  CastleURIUtils;
 
 { params ------------------------------------------------------------ }
 
@@ -62,7 +63,7 @@ begin
         'By default, window size will be 640x480 (if your screen has size'+nl+
         '  640x480 then we will run in --fullscreen).'+nl+
         nl+
-        SCastleEngineProgramHelpSuffix(DisplayProgramName, Version, true));
+        SCastleEngineProgramHelpSuffix(DisplayApplicationName, Version, true));
       ProgramBreak;
      end;
   1: begin
@@ -76,10 +77,11 @@ end;
 { main program ------------------------------------------------------- }
 
 begin
- { set current directory; we will load files throughout whole program
+ { Set current directory; we will load files throughout whole program
    using relative paths, like 'images/menubg.png'. This line is responsible
-   for making these relative paths valid. }
- ChangeDir(ProgramDataPath + 'data');
+   for making these relative paths valid.
+   TODO: we should instead use ApplicationData for all paths. }
+ ChangeDir(URIToFilenameSafe(ApplicationData('data')));
 
  { This must be done before initial Glwn.ScreenWidth, since Application.ScreenWidth
    already initializes display. }

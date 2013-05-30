@@ -143,7 +143,7 @@ begin
          nl+
          'There is only one goal: destroy all enemy ships on every level.' +nl+
          nl+
-         SCastleEngineProgramHelpSuffix(DisplayProgramName, Version, false),
+         SCastleEngineProgramHelpSuffix(DisplayApplicationName, Version, false),
 	 taLeft);
      miPlaySunnyDay: PlayGame(vrmlsDir +'lake.wrl');
      miPlayDeepSpace: PlayGame(vrmlsDir +'mobius.wrl');

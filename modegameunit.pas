@@ -296,8 +296,7 @@ begin
     with playerShip do drawRadar := not drawRadar;
   K_F5:
     begin
-     fname := FileNameAutoInc(SUnformattable(UserConfigPath)+
-       'malfunction_screen_%d.png');
+     fname := FileNameAutoInc('malfunction_screen_%d.png');
      Window.SaveScreen(fname);
      Notifications.Show('Screen saved to '+fname);
     end;

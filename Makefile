@@ -4,8 +4,8 @@ default:
 # Simple install.
 # You may as well symlink to /usr/local/share/malfunction, for system-wide install.
 install:
-	rm -f $(HOME)/.malfunction.data
-	ln -s $(shell pwd) $(HOME)/.malfunction.data
+	rm -f $(HOME)/.local/share/malfunction
+	ln -s $(shell pwd) $(HOME)/.local/share/malfunction
 
 # Run also "dircleaner . clean" here to really clean
 .PHONY: clean

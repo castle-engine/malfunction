@@ -41,7 +41,7 @@ uses SysUtils, CastleWindow, CastleNotifications;
 
 const
   Version = '1.2.8';
-  DisplayProgramName = 'malfunction';
+  DisplayApplicationName = 'malfunction';
 
 var
   { Whole program uses this window.
