@@ -84,9 +84,9 @@ var
 { game data directories ------------------------------------------------------ }
 
 const
-  imagesDir = 'images' +PathDelim;
-  vrmlsDir = 'vrmls' +PathDelim;
-  skiesDir = 'skies' +PathDelim;
+  imagesDir = 'images/';
+  vrmlsDir = 'vrmls/';
+  skiesDir = 'skies/';
 
 { ----------------------------------------------------------------------------
   zainicjowane w niszczone w tym module. Wyswietlane i Update'owane w ModeGameUnit.

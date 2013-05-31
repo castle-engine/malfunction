@@ -128,14 +128,14 @@ var
   wywolywac FreeLevel z zewnatrz tego modulu.
 
   LoadLevel jest odpowiedzialne za czesciowa inicjalizacje PlayerShip.  }
-procedure LoadLevel(const SceneFileName: string);
+procedure LoadLevel(const SceneURL: string);
 procedure FreeLevel;
 
 { LoadGame loads NewPlayer and then loads LoadLevel and then
   SetGameMode(modeGame).
 
   You should terminate any TCastleWindowBase event handling after PlayGame call. }
-procedure PlayGame(const SceneFileName: string);
+procedure PlayGame(const SceneURL: string);
 
 implementation
 
@@ -313,7 +313,7 @@ begin
   Result := nil;
 end;
 
-procedure LoadLevel(const SceneFileName: string);
+procedure LoadLevel(const SceneURL: string);
 var
   vMiddle, vSizes: TVector3Single;
   halfMaxSize: Single;
@@ -326,7 +326,7 @@ begin
 
  try
   levelScene := TCastleScene.Create(nil);
-  levelScene.Load(SceneFileName);
+  levelScene.Load(SceneURL);
   levelScene.GetPerspectiveViewpoint(playerShip.shipPos, playerShip.shipDir,
     playerShip.shipUp,
     { We don't need GravityUp, we know it should be +Z in malfunction
@@ -399,7 +399,7 @@ begin
   finally FreeAndNil(BaseLights) end;
 
   Notifications.Clear;
-  Notifications.Show('Level '+SceneFileName+' loaded.');
+  Notifications.Show('Level '+SceneURL+' loaded.');
  except FreeLevel; raise end;
 end;
 
@@ -418,10 +418,10 @@ begin
  end;
 end;
 
-procedure PlayGame(const SceneFileName: string);
+procedure PlayGame(const SceneURL: string);
 begin
  NewPlayerShip;
- LoadLevel(SceneFileName);
+ LoadLevel(SceneURL);
  SetGameMode(modeGame);
 end;
 

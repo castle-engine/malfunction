@@ -35,7 +35,7 @@ type
   convention. This is used only by old "szklane lasy"
   and old "malfunction" versions, should not be used in new code.
 
-  SkyNamePattern is the base filename. To construct actual filename,
+  SkyNamePattern is the base URL. To construct actual URL,
   we will append to them '_' (underscore character) followed by one
   letter indicating cube side:
 
@@ -70,7 +70,7 @@ type
       is @italic(front, right, back, left).))
   )
 
-  Images will be loaded by LoadTextureImage(FileName)
+  Images will be loaded by LoadTextureImage(URL)
   so they will be forced into some format renderable as OpenGL texture. }
 function BackgroundImagesLoadFromOldNamePattern(
   const SkyNamePattern: string): TBackgroundTextures;
@@ -105,15 +105,15 @@ function BackgroundImagesLoadFromOldNamePattern(
 const
   names_suffix: array[TBackgroundSide]of string = ('b', 'd', 'f', 'r', 'l', 'u');
 var
-  ImgFileName: string;
+  ImgURL: string;
   bs: TBackgroundSide;
 begin
  for bs := Low(bs) to High(bs) do
  begin
-  ImgFileName := SkyNamePattern +'_' +names_suffix[bs] + '.png';
-  if ImgFileName = '' then
-   ImgFileName := SkyNamePattern +'_any.png';
-  result.Images[bs] := LoadTextureImage(ImgFileName);
+  ImgURL := SkyNamePattern +'_' +names_suffix[bs] + '.png';
+  if ImgURL = '' then
+   ImgURL := SkyNamePattern +'_any.png';
+  result.Images[bs] := LoadTextureImage(ImgURL);
  end;
 end;
 
