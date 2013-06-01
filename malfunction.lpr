@@ -81,7 +81,7 @@ begin
    using relative paths, like 'images/menubg.png'. This line is responsible
    for making these relative paths valid.
    TODO: we should instead use ApplicationData for all paths. }
- ChangeDir(URIToFilenameSafe(ApplicationData('data')));
+ ChangeDir(URIToFilenameSafe(ApplicationData('')));
 
  { This must be done before initial Glwn.ScreenWidth, since Application.ScreenWidth
    already initializes display. }
