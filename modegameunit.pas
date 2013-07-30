@@ -308,7 +308,7 @@ begin
  ShipsAndRocketsUpdate;
 end;
 
-{ Open/Close glwin -------------------------------------------------------- }
+{ Open/Close Window -------------------------------------------------------- }
 
 procedure WindowOpen(const Container: IUIContainer);
 var crossh_img: TCastleImage;
