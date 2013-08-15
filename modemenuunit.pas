@@ -90,8 +90,7 @@ begin
     end else
       glColorv(White3Single);
 
-    SetWindowPos(X, Y);
-    menufont.PrintAndMove(menuNames[mi]);
+    menufont.Print(X, Y, menuNames[mi]);
   end;
 end;
 
