@@ -161,62 +161,50 @@ procedure TGame2DControls.Draw;
     i: integer;
     x, y: TGLint;
   begin
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+
     MinInsideX := Window.Width - ScreenMargin - Size + InsideMargin;
     MaxInsideX := Window.Width - ScreenMargin - InsideMargin;
     MinInsideY := Window.Height - ScreenMargin - Size + InsideMargin;
     MaxInsideY := Window.Height - ScreenMargin - InsideMargin;
 
-   glColor4f(0, 0, 0, 0.5);
-   glRectf(Window.Width-ScreenMargin-Size, Window.Height-ScreenMargin-Size,
-           Window.Width-ScreenMargin, Window.Height-ScreenMargin);
+    glColor4f(0, 0, 0, 0.5);
+    glRectf(Window.Width-ScreenMargin-Size, Window.Height-ScreenMargin-Size,
+            Window.Width-ScreenMargin, Window.Height-ScreenMargin);
 
-   MoveLimitPosToPixel(playerShip.shipPos, x, y);
-   glColor4f(1, 1, 1, 0.8);
-   glBegin(GL_LINES);
-     glVertex2i(MinInsideX, y);  glVertex2i(MaxInsideX, y);
-     glVertex2i(x, MinInsideY);  glVertex2i(x, MaxInsideY);
-   glEnd;
+    MoveLimitPosToPixel(playerShip.shipPos, x, y);
+    glColor4f(1, 1, 1, 0.8);
+    glBegin(GL_LINES);
+      glVertex2i(MinInsideX, y);  glVertex2i(MaxInsideX, y);
+      glVertex2i(x, MinInsideY);  glVertex2i(x, MaxInsideY);
+    glEnd;
 
-   glColor4f(1, 1, 0, 0.8);
-   glPointSize(2);
-   glBegin(GL_POINTS);
-     for i := 0 to enemyShips.Count-1 do
-      if enemyShips[i] <> nil then
-      begin
-       MoveLimitPosToPixel(enemyShips[i].shipPos, x, y);
-       glVertex2i(x, y);
-      end;
-   glEnd;
-   glPointSize(1);
+    glColor4f(1, 1, 0, 0.8);
+    glPointSize(2);
+    glBegin(GL_POINTS);
+      for i := 0 to enemyShips.Count-1 do
+       if enemyShips[i] <> nil then
+       begin
+        MoveLimitPosToPixel(enemyShips[i].shipPos, x, y);
+        glVertex2i(x, y);
+       end;
+    glEnd;
+    glPointSize(1);
+
+    glDisable(GL_BLEND);
   end;
 
 begin
- glLoadIdentity;
- glRasterPos2i(0, 0);
-
- glAlphaFunc(GL_GREATER, 0.5);
- glEnable(GL_ALPHA_TEST);
- kokpit_gl.Draw;
- glDisable(GL_ALPHA_TEST);
+ kokpit_gl.Draw(0, 0);
 
  if playerShip.drawCrosshair then
- begin
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glEnable(GL_BLEND);
-  glRasterPos2i(
+  crossh_gl.Draw(
     (Window.Width - crossh_orig_width) div 2,
     (Window.Height - crossh_orig_height) div 2);
-  crossh_gl.Draw;
-  glDisable(GL_BLEND);
- end;
 
  if playerShip.drawRadar then
- begin
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glEnable(GL_BLEND);
   radarDraw2D;
-  glDisable(GL_BLEND);
- end;
 
  playerShip.PlayerShipDraw2D;
 end;

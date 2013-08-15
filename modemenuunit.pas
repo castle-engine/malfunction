@@ -71,8 +71,7 @@ var mi: TMenuItem;
 {const SLower = 'by Michalis Kamburelis';}
 begin
  glLoadIdentity;
- glRasterPos2i(0, 0);
- listBg.Draw;
+ listBg.Draw(0, 0);
 
  glTranslatef(Window.width*50 div 640, Window.height*350 div 480, 0);
  for mi := Low(mi) to High(mi) do
