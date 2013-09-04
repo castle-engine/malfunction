@@ -53,7 +53,7 @@ var
 { mode enter/exit ----------------------------------------------------------- }
 
 procedure draw(Window: TCastleWindowBase); forward;
-procedure Press(Window: TCastleWindowBase; const Event: TInputPressRelease); forward;
+procedure Press(Sender: TCastleWindowBase; const Event: TInputPressRelease); forward;
 
 procedure modeEnter;
 begin
@@ -94,7 +94,7 @@ begin
   end;
 end;
 
-procedure Press(Window: TCastleWindowBase; const Event: TInputPressRelease);
+procedure Press(Sender: TCastleWindowBase; const Event: TInputPressRelease);
 begin
   if Event.EventType <> itKey then Exit;
   case Event.key of

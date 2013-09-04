@@ -126,7 +126,7 @@ end;
 
 { glw general events handling ----------------------------------------------- }
 
-procedure CloseQuery(Window: TCastleWindowBase);
+procedure CloseQuery(Sender: TCastleWindowBase);
 begin
  if MessageYesNo(Window, 'Are you sure you want to quit ?') then Window.Close;
 end;

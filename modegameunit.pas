@@ -216,8 +216,8 @@ var
   Controls: TGame2DControls;
   Camera: TWalkCamera;
 
-procedure Press(Window: TCastleWindowBase; const Event: TInputPressRelease); forward;
-procedure Update(Window: TCastleWindowBase); forward;
+procedure Press(Sender: TCastleWindowBase; const Event: TInputPressRelease); forward;
+procedure Update(Sender: TCastleWindowBase); forward;
 
 procedure modeEnter;
 begin
@@ -255,7 +255,7 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure Press(Window: TCastleWindowBase; const Event: TInputPressRelease);
+procedure Press(Sender: TCastleWindowBase; const Event: TInputPressRelease);
 var fname: string;
 begin
  if Event.EventType <> itKey then Exit;
@@ -283,7 +283,7 @@ begin
  end;
 end;
 
-procedure Update(Window: TCastleWindowBase);
+procedure Update(Sender: TCastleWindowBase);
 begin
  if playerShip.ShipLife <= 0 then
  begin
