@@ -133,8 +133,6 @@ end;
 
 procedure Open(Window: TCastleWindowBase);
 begin
- MessagesTheme.Font := TGLBitmapFont.Create(BitmapFont_BVSansMono_m18);
-
  Notifications := TCastleNotifications.Create(Window);
  Notifications.MaxMessages := 10;
  Notifications.VerticalPosition := vpUp;
@@ -149,8 +147,6 @@ begin
  if (fGameMode <> modeNone) and
     (gameModeExit[fGameMode] <> nil) then gameModeExit[fGameMode];
  fGameMode := modeNone;
-
- FreeAndNil(MessagesTheme.Font);
 end;
 
 initialization
