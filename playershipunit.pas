@@ -111,7 +111,7 @@ procedure NewPlayerShip;
 implementation
 
 uses GLU, CastleVectors, GameGeneral, CastleWindow, CastleUtils, Math,
-  LevelUnit, CastleMessages, CastleUIControls;
+  LevelUnit, CastleMessages, CastleUIControls, CastleRectangles;
 
 constructor TPlayerShip.Create;
 begin
@@ -287,23 +287,28 @@ begin
 end;
 
 procedure TPlayerShip.PlayerShipDraw2d;
-type TRect2d = array[0..1]of TVector2Single;
 const
   {ponizsze stale musza byc skoordynowane z kokpit.png}
-  speedRect: TRect2d = ((80, 20), (110, 90));
-  liveRect: TRect2d = ((30, 20), (60, 90));
+  SpeedRect: TRectangle = (Left: 80; Bottom: 20; Width: 30; Height: 70);
+  LiveRect : TRectangle = (Left: 30; Bottom: 20; Width: 30; Height: 70);
   RectMargin = 2.0;
-  kompasMiddle: TVector2f = (560, 480-428);
+  kompasMiddle: TVector2f = (560, 480 - 428);
   kompasSrednica = 70;
 
-  procedure DrawIndicator(const r: TRect2d; const BorderColor, BGColor,
+  procedure DrawIndicator(const R: TRectangle; const BorderColor, BGColor,
     InsideCol: TVector4f; const Height, MinHeight, MaxHeight: Single);
   begin
-   GLRectangleWithBorder(r[0, 0], r[0, 1], r[1, 0], r[1, 1], BGColor, BorderColor);
-   glColorv(InsideCol);
-   glRectf(r[0, 0]+RectMargin, r[0, 1]+RectMargin, r[1, 0]-RectMargin,
-     MapRange(Height, MinHeight, MaxHeight,
-       r[0, 1]+RectMargin, r[1, 1]-RectMargin));
+    glColorv(BorderColor);
+    glRectf(r.Left, r.Bottom, r.Right, r.Top);
+
+    glColorv(BGColor);
+    glRectf(r.Left + RectMargin, r.Bottom + RectMargin,
+      r.Right-RectMargin, r.Top - RectMargin);
+
+    glColorv(InsideCol);
+    glRectf(r.Left + RectMargin, r.Bottom + RectMargin, r.Right-RectMargin,
+      MapRange(Height, MinHeight, MaxHeight,
+        r.Bottom + RectMargin, r.Top - RectMargin));
   end;
 
 begin

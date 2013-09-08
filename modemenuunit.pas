@@ -29,7 +29,7 @@ implementation
 uses GL, SysUtils, CastleWindow, GameGeneral, CastleGLBitmapFonts,
   CastleBitmapFont_Isuckatgolf_m32, CastleGLUtils, CastleMessages, LevelUnit,
   CastleImages, CastleVectors, CastleUtils, CastleGLImages, CastleColors,
-  CastleUIControls, CastleKeysMouse;
+  CastleUIControls, CastleKeysMouse, CastleControls, CastleRectangles;
 
 { module consts and vars ---------------------------------------------------- }
 
@@ -83,9 +83,9 @@ begin
 
     if mi = currentMenu then
     begin
-      GLRectangleBorder(X - 10, Y - menufont.Descend,
-        X + menufont.TextWidth(menuNames[mi])+10, Y + menuFont.RowHeight,
-        White4Single);
+      Theme.Draw(Rectangle(X - 10, Y - menufont.Descend,
+        menufont.TextWidth(menuNames[mi]) + 20,
+        menufont.Descend + menuFont.RowHeight), tiActiveFrame);
       glColorv(Yellow3Single);
     end else
       glColorv(White3Single);
