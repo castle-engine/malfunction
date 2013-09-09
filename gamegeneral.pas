@@ -131,7 +131,7 @@ begin
  if MessageYesNo(Window, 'Are you sure you want to quit ?') then Window.Close;
 end;
 
-procedure Open(Window: TCastleWindowBase);
+procedure Open(Sender: TCastleWindowBase);
 begin
  Notifications := TCastleNotifications.Create(Window);
  Notifications.MaxMessages := 10;
