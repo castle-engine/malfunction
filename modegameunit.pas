@@ -31,7 +31,7 @@ implementation
 
 uses CastleVectors, SysUtils, GL, CastleWindow, GameGeneral, CastleGLUtils,
   CastleUtils, LevelUnit, CastleBoxes, CastleMessages, PlayerShipUnit, CastleImages,
-  ShipsAndRockets, CastleKeysMouse, CastleFilesUtils,
+  ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
   CastleStringUtils, CastleScene, CastleGLImages, SkyCube, X3DNodes,
   CastleSceneManager, CastleUIControls, CastleCameras, Castle3D, CastleRenderingCamera;
 
@@ -92,7 +92,7 @@ var
   Params: TBasicRenderParams;
 begin
   {no need to clear COLOR_BUFFER - sky will cover everything}
-  glClear(GL_DEPTH_BUFFER_BIT);
+  GLClear([cbDepth], Black);
   glLoadIdentity;
 
   glPushMatrix;
