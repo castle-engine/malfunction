@@ -31,7 +31,7 @@ unit PlayerShipUnit;
 interface
 
 uses GL, CastleBoxes, ShipsAndRockets, SysUtils, CastleGLUtils, CastleColors,
-  CastleKeysMouse;
+  CastleKeysMouse, CastleVectors;
 
 const
   playerShipAbsoluteMaxSpeed = 45.0;
@@ -54,7 +54,7 @@ type
     procedure SetCheatImmuneToRockets(value: boolean);
   private
     FadeOutIntensity: TGLfloat;
-    FadeOutColor: TVector3f;
+    FadeOutColor: TCastleColor; //< color's alpha doesn't matter
   public
     shipRotationSpeed: Single;
     shipVertRotationSpeed: Single;
@@ -70,7 +70,7 @@ type
       write SetCheatImmuneToRockets;
 
     { Make FadeOut with given Color. }
-    procedure FadeOut(const Color: TVector3f);
+    procedure FadeOut(const Color: TCastleColor);
 
     { zawsze ran player ship przez WoundPlayerShip albo przynajmniej
       po zmniejszeniu ShipLife rob WoundedPlayerShip. To zapewnia
@@ -110,7 +110,7 @@ procedure NewPlayerShip;
 
 implementation
 
-uses GLU, CastleVectors, GameGeneral, CastleWindow, CastleUtils, Math,
+uses GLU, GameGeneral, CastleWindow, CastleUtils, Math,
   LevelUnit, CastleMessages, CastleUIControls, CastleRectangles;
 
 constructor TPlayerShip.Create;
@@ -148,7 +148,7 @@ begin
  end;
 end;
 
-procedure TPlayerShip.FadeOut(const color: TVector3f);
+procedure TPlayerShip.FadeOut(const color: TCastleColor);
 begin
  FadeOutColor := color;
  FadeOutIntensity := 1;
@@ -168,7 +168,7 @@ end;
 procedure TPlayerShip.WoundedPlayerShip(const Messg: string);
 begin
  Notifications.Show(Messg+' Ship damaged in '+IntToStr(Round(100-ShipLife))+'%.');
- FadeOut(Red3Single);
+ FadeOut(Red);
 end;
 
 procedure TPlayerShip.HitByRocket;
@@ -295,8 +295,9 @@ const
   kompasMiddle: TVector2f = (560, 480 - 428);
   kompasSrednica = 70;
 
-  procedure DrawIndicator(const R: TRectangle; const BorderColor, BGColor,
-    InsideCol: TVector4f; const Height, MinHeight, MaxHeight: Single);
+  procedure DrawIndicator(const R: TRectangle;
+    const BorderColor, BGColor, InsideCol: TCastleColor;
+    const Height, MinHeight, MaxHeight: Single);
   begin
     glColorv(BorderColor);
     glRectf(r.Left, r.Bottom, r.Right, r.Top);
@@ -319,9 +320,9 @@ begin
   glScalef(Window.Width / 640, Window.Height / 480, 1);
 
   {draw speed and live indicators}
-  DrawIndicator(speedRect, Yellow4Single, Black4Single, LightBlue4Single,
+  DrawIndicator(speedRect, Yellow, Black, LightBlue,
     shipSpeed, playerShipAbsoluteMinSpeed, playerShipAbsoluteMaxSpeed);
-  DrawIndicator(liveRect, Yellow4Single, Black4Single, Red4Single,
+  DrawIndicator(liveRect, Yellow, Black, Red,
     CastleUtils.max(shipLife, 0.0) , 0, MaxShipLife);
 
   {draw kompas arrow}
@@ -329,7 +330,7 @@ begin
   glRotatef(RadToDeg(AngleRadPointToPoint(0, 0, shipDir[0], shipDir[1]))-90, 0, 0, 1);
   glScalef(10, kompasSrednica/2, 1);
   glTranslatef(0, -1, 0);
-  glColorv(Yellow3Single);
+  glColorv(Yellow);
   GLDrawArrow(0.3, 0.8);
 
   {draw FadeOut}

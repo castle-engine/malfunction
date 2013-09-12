@@ -72,6 +72,7 @@ procedure draw(Window: TCastleWindowBase);
 var
   mi: TMenuItem;
   X, Y: Integer;
+  Color: TCastleColor;
 begin
   listBg.Draw(0, 0);
 
@@ -80,17 +81,15 @@ begin
   for mi := Low(mi) to High(mi) do
   begin
     Y -= menufont.RowHeight+10;
-
     if mi = currentMenu then
     begin
       Theme.Draw(Rectangle(X - 10, Y - menufont.Descend,
         menufont.TextWidth(menuNames[mi]) + 20,
         menufont.Descend + menuFont.RowHeight), tiActiveFrame);
-      glColorv(Yellow3Single);
+      Color := Yellow;
     end else
-      glColorv(White3Single);
-
-    menufont.Print(X, Y, menuNames[mi]);
+      Color := White;
+    menufont.Print(X, Y, Color, menuNames[mi]);
   end;
 end;
 
