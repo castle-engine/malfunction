@@ -22,6 +22,8 @@
 
 unit ModeGameUnit;
 
+{$I castleconf.inc}
+
 { zeby wejsc w modeGame level musi byc loaded.
   I nie wolno robic FreeLevel dopoki jestesmy w modeGame. }
 
@@ -29,7 +31,7 @@ interface
 
 implementation
 
-uses CastleVectors, SysUtils, GL, CastleWindow, GameGeneral, CastleGLUtils,
+uses CastleVectors, SysUtils, CastleGL, CastleWindow, GameGeneral, CastleGLUtils,
   CastleUtils, LevelUnit, CastleBoxes, CastleMessages, PlayerShipUnit, CastleImages,
   ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
   CastleStringUtils, CastleScene, CastleGLImages, SkyCube, X3DNodes,

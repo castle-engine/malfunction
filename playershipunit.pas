@@ -28,9 +28,11 @@ unit PlayerShipUnit;
     zainicjowany.
 }
 
+{$I castleconf.inc}
+
 interface
 
-uses GL, CastleBoxes, ShipsAndRockets, SysUtils, CastleGLUtils, CastleColors,
+uses CastleBoxes, ShipsAndRockets, SysUtils, CastleGLUtils, CastleColors,
   CastleKeysMouse, CastleVectors;
 
 const
@@ -110,7 +112,7 @@ procedure NewPlayerShip;
 
 implementation
 
-uses GLU, GameGeneral, CastleWindow, CastleUtils, Math,
+uses CastleGL, GameGeneral, CastleWindow, CastleUtils, Math,
   LevelUnit, CastleMessages, CastleUIControls, CastleRectangles;
 
 constructor TPlayerShip.Create;

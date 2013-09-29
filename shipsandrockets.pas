@@ -34,12 +34,12 @@ unit ShipsAndRockets;
     Cos co jest uwazane za "up" modelu musi byc skierowane w strone +X.
 }
 
+{$I castleconf.inc}
+
 interface
 
-uses CastleWindow, SysUtils, GL, GLU, CastleGLUtils, CastleVectors, CastleUtils,
+uses CastleWindow, SysUtils, CastleGLUtils, CastleVectors, CastleUtils,
   CastleClassUtils, Classes, CastleTimeUtils, CastleScene, Castle3D, FGL;
-
-{$define read_interface}
 
 type
   TEnemyShipKind = (skHedgehog, skTieFighter, skDestroyer);
@@ -268,7 +268,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 implementation
 
 uses CastleBoxes, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
-  CastleRenderingCamera, CastleUIControls;
+  CastleRenderingCamera, CastleUIControls, CastleGL;
 
 type
   TEnemyShipKindInfo = record
