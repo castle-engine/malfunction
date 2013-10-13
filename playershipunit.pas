@@ -293,25 +293,19 @@ const
   {ponizsze stale musza byc skoordynowane z kokpit.png}
   SpeedRect: TRectangle = (Left: 80; Bottom: 20; Width: 30; Height: 70);
   LiveRect : TRectangle = (Left: 30; Bottom: 20; Width: 30; Height: 70);
-  RectMargin = 2.0;
+  RectMargin = 2;
   kompasMiddle: TVector2f = (560, 480 - 428);
   kompasSrednica = 70;
 
-  procedure DrawIndicator(const R: TRectangle;
+  procedure DrawIndicator(R: TRectangle;
     const BorderColor, BGColor, InsideCol: TCastleColor;
     const Height, MinHeight, MaxHeight: Single);
   begin
-    glColorv(BorderColor);
-    glRectf(r.Left, r.Bottom, r.Right, r.Top);
-
-    glColorv(BGColor);
-    glRectf(r.Left + RectMargin, r.Bottom + RectMargin,
-      r.Right-RectMargin, r.Top - RectMargin);
-
-    glColorv(InsideCol);
-    glRectf(r.Left + RectMargin, r.Bottom + RectMargin, r.Right-RectMargin,
-      MapRange(Height, MinHeight, MaxHeight,
-        r.Bottom + RectMargin, r.Top - RectMargin));
+    DrawRectangle(R, BorderColor);
+    R := R.Grow(-RectMargin);
+    DrawRectangle(R, BGColor);
+    R.Height := Max(0, Round(MapRange(Height, MinHeight, MaxHeight, 0, R.Height)));
+    DrawRectangle(R, InsideCol);
   end;
 
 begin
