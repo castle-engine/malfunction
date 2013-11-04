@@ -23,18 +23,14 @@
 unit LevelUnit;
 
 (* this unit keeps track of the whole state of current level :
-   it's 3D scene, sky images and so on.
+   it's 3D scene and so on.
 
    Notka o wspolrzednych : ziemia to dla nas XY, pion to os Z.
-   Ja tak lubie, tak napisalem SkyCube, kompas tez zwraca kierunek
-   w plaszczyznie XY i wreszcie nawet Blender domyslnie uznaje Z
-   jako pion.
 
    Specjalne rzeczy jakie odczytujemy z VRMLa:
 
    - Dokladnie jeden taki node MUSI byc obecny na kazdym levelu :
      MalfunctionLevelInfo {
-       SFString sky  ""           # nazwa nieba istniejacego w skiesDir
        SFString type "planet"
          # Dopuszczalne wartosci : "planet" i "space".
          # Patrz typ TLevelType w tym module.
@@ -103,9 +99,6 @@ type
     procedure CreateNode; override;
     class function ClassNodeTypeName: string; override;
 
-    private FFdSky: TSFString;
-    public property FdSky: TSFString read FFdSky;
-
     private FFdType: TSFString;
     public property FdType: TSFString read FFdType;
   end;
@@ -147,9 +140,6 @@ uses CastleVectors, CastleUtils, PlayerShipUnit, ShipsAndRockets,
 procedure TMalfunctionLevelInfoNode.CreateNode;
 begin
   inherited;
-
-  FFdsky := TSFString.Create(Self, 'sky', '');
-  Fields.Add(FFdsky);
 
   FFdtype := TSFString.Create(Self, 'type', 'planet');
   Fields.Add(FFdtype);

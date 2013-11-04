@@ -22,8 +22,19 @@ Group{
     WWWInline { name "lake_bl.wrl" }
   }
 
+  Separator {
+    Transform { rotation 1 0 0 1.57 }
+    Background {
+      backUrl "../skies/lake_sky_back.png"
+      bottomUrl "../skies/lake_sky_bottom.png"
+      frontUrl "../skies/lake_sky_front.png"
+      leftUrl "../skies/lake_sky_left.png"
+      rightUrl "../skies/lake_sky_right.png"
+      topUrl "../skies/lake_sky_top.png"
+    }
+  }
+
   MalfunctionLevelInfo {
-    sky "lake_sky"
     type "planet"
   }
 

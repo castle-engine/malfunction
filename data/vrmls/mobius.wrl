@@ -25,8 +25,19 @@ Group{
     WWWInline { name "mobius_bl.wrl" }
   }
 
+  Separator {
+    Transform { rotation 1 0 0 1.57 }
+    Background {
+      backUrl "../skies/thespace_any.png"
+      bottomUrl "../skies/thespace_any.png"
+      frontUrl "../skies/thespace_any.png"
+      leftUrl "../skies/thespace_any.png"
+      rightUrl "../skies/thespace_any.png"
+      topUrl "../skies/thespace_any.png"
+    }
+  }
+
   MalfunctionLevelInfo {
-    sky "thespace"
     type "space"
   }
 

@@ -34,13 +34,13 @@ implementation
 uses CastleVectors, SysUtils, CastleGL, CastleWindow, GameGeneral, CastleGLUtils,
   CastleUtils, LevelUnit, CastleBoxes, CastleMessages, PlayerShipUnit, CastleImages,
   ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
-  CastleStringUtils, CastleScene, CastleGLImages, SkyCube, X3DNodes,
-  CastleSceneManager, CastleUIControls, CastleCameras, Castle3D, CastleRenderingCamera;
+  CastleStringUtils, CastleScene, CastleGLImages, X3DNodes,
+  CastleSceneManager, CastleUIControls, CastleCameras, Castle3D,
+  CastleRenderingCamera, CastleBackground;
 
 var
   kokpit_gl: TGLImage;
   crossh_gl: TGLImage;
-  sky: TSkyCube;
   {crossh_orig_* to oryginalne (tzn. wzgledem ekranu 640x480) rozmiary
    crosshair image (upakowanego w crossh_list) }
   crossh_orig_width, crossh_orig_height: integer;
@@ -49,6 +49,9 @@ var
 
 type
   TMalfunctionSceneManager = class(TCastleSceneManager)
+  private
+    projNear, projFar: TGLfloat;
+  public
     procedure ApplyProjection; override;
     procedure RenderFromViewEverything; override;
     function Headlight(out CustomHeadlight: TAbstractLightNode): boolean; override;
@@ -56,7 +59,6 @@ type
 
 procedure TMalfunctionSceneManager.ApplyProjection;
 var
-  projNear, projFar: TGLfloat;
   wholeMoveLimit: TBox3D;
 begin
   { Player jest zawsze w obrebie MoveLimit i widzi rzeczy w obrebie
@@ -68,9 +70,6 @@ begin
   wholeMoveLimit := levelScene.BoundingBox + MoveLimit;
   projFar := PointsDistance(wholeMoveLimit.Data[0], wholeMoveLimit.Data[1]);
   PerspectiveProjection(30, Window.width/Window.height, projNear, projFar);
-
-  if Sky = nil then
-    sky := TSkyCube.Create(skiesDir +levelInfo.FdSky.Value, projNear, projFar);
 end;
 
 procedure TMalfunctionSceneManager.RenderFromViewEverything;
@@ -92,15 +91,24 @@ procedure TMalfunctionSceneManager.RenderFromViewEverything;
 
 var
   Params: TBasicRenderParams;
+  B: TBackground;
 begin
   {no need to clear COLOR_BUFFER - sky will cover everything}
   GLClear([cbDepth], Black);
   glLoadIdentity;
 
-  glPushMatrix;
-    playerShip.PlayerShipApplyMatrixNoTranslate;
-    sky.Render;
-  glPopMatrix;
+  levelScene.BackgroundSkySphereRadius :=
+    TBackground.NearFarToSkySphereRadius(projNear, projFar,
+      levelScene.BackgroundSkySphereRadius);
+
+  B := levelScene.Background;
+  if B <> nil then
+  begin
+    glPushMatrix;
+      playerShip.PlayerShipApplyMatrixNoTranslate;
+      levelScene.Background.Render(false, RenderingCamera.Frustum);
+    glPopMatrix;
+  end;
 
   playerShip.PlayerShipApplyMatrix;
 
@@ -251,8 +259,6 @@ begin
  Window.Controls.Remove(Notifications);
 
  Window.Controls.Remove(SceneManager);
-
- FreeAndNil(sky);
 end;
 
 { glw callbacks ----------------------------------------------------------- }
