@@ -344,16 +344,11 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure WindowOpen(const Container: IUIContainer);
-begin
-end;
-
-procedure WindowClose(const Container: IUIContainer);
+procedure ContextClose;
 begin
  FreeAndNil(PlayerShip);
 end;
 
 initialization
- OnGLContextOpen.Add(@WindowOpen);
- OnGLContextClose.Add(@WindowClose);
+ OnGLContextClose.Add(@ContextClose);
 end.

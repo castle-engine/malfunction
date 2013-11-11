@@ -725,7 +725,7 @@ end;
 
 { glw callbacks ------------------------------------------------------------- }
 
-procedure WindowOpen(const Container: IUIContainer);
+procedure ContextOpen;
 var sk: TEnemyShipKind;
 begin
  rocketVRML := TCastleScene.Create(nil);
@@ -739,7 +739,7 @@ begin
  end;
 end;
 
-procedure WindowClose(const Container: IUIContainer);
+procedure ContextClose;
 var sk: TEnemyShipKind;
 begin
  FreeAndNil(rocketVRML);
@@ -747,6 +747,6 @@ begin
 end;
 
 initialization
- OnGLContextOpen.Add(@WindowOpen);
- OnGLContextClose.Add(@WindowClose);
+ OnGLContextOpen.Add(@ContextOpen);
+ OnGLContextClose.Add(@ContextClose);
 end.

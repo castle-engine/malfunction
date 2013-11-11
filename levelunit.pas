@@ -417,13 +417,13 @@ end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure WindowClose(const Container: IUIContainer);
+procedure ContextClose;
 begin
  FreeLevel;
 end;
 
 initialization
- OnGLContextClose.Add(@WindowClose);
+ OnGLContextClose.Add(@ContextClose);
  NodesManager.RegisterNodeClasses([ TMalfunctionLevelInfoNode,
    TMalfunctionNotMovingEnemyNode,
    TMalfunctionCircleMovingEnemyNode,

@@ -306,7 +306,7 @@ end;
 
 { Open/Close Window -------------------------------------------------------- }
 
-procedure WindowOpen(const Container: IUIContainer);
+procedure ContextOpen;
 var crossh_img: TCastleImage;
     kokpit_img: TCastleImage;
 begin
@@ -330,7 +330,7 @@ begin
  finally crossh_img.Free end;
 end;
 
-procedure WindowClose(const Container: IUIContainer);
+procedure ContextClose;
 begin
   FreeAndNil(kokpit_gl);
   FreeAndNil(crossh_gl);
@@ -339,8 +339,8 @@ end;
 initialization
  gameModeEnter[modeGame] := @modeEnter;
  gameModeExit[modeGame] := @modeExit;
- OnGLContextOpen.Add(@WindowOpen);
- OnGLContextClose.Add(@WindowClose);
+ OnGLContextOpen.Add(@ContextOpen);
+ OnGLContextClose.Add(@ContextClose);
 
  Controls := TGame2DControls.Create(nil);
  SceneManager := TMalfunctionSceneManager.Create(nil);

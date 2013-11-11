@@ -147,14 +147,14 @@ begin
   end;
 end;
 
-procedure WindowOpen(const Container: IUIContainer);
+procedure ContextOpen;
 begin
   listBg := TGLImage.Create(imagesDir +'menubg.png', [TRGBImage],
     Window.width, Window.height, riBilinear);
   menuFont := TGLBitmapFont.Create(BitmapFont_Isuckatgolf_m32);
 end;
 
-procedure WindowClose(const Container: IUIContainer);
+procedure ContextClose;
 begin
   FreeAndNil(menuFont);
   FreeAndNil(ListBG);
@@ -163,6 +163,6 @@ end;
 initialization
   gameModeEnter[modeMenu] := @modeEnter;
   gameModeExit[modeMenu] := @modeExit;
-  OnGLContextOpen.Add(@WindowOpen);
-  OnGLContextClose.Add(@WindowClose);
+  OnGLContextOpen.Add(@ContextOpen);
+  OnGLContextClose.Add(@ContextClose);
 end.
