@@ -37,8 +37,6 @@ interface
 
 uses SysUtils, CastleWindow, CastleNotifications;
 
-{$define read_interface}
-
 const
   Version = '1.2.8';
   DisplayApplicationName = 'malfunction';
@@ -81,13 +79,6 @@ var
     GameMode bedzie ciagle rowne staremu mode'owi. }
   gameModeEnter, gameModeExit: array[TGameMode]of TProcedure;
 
-{ game data directories ------------------------------------------------------ }
-
-const
-  imagesDir = 'images/';
-  vrmlsDir = 'vrmls/';
-  skiesDir = 'skies/';
-
 { ----------------------------------------------------------------------------
   zainicjowane w niszczone w tym module. Wyswietlane i Update'owane w ModeGameUnit.
   Moze byc uzywane z kazdego miejsca. }
@@ -96,8 +87,6 @@ var
   Notifications: TCastleNotifications;
 
 implementation
-
-{$define read_implementation}
 
 uses CastleGLUtils, CastleUtils, CastleMessages, CastleProgress,
   CastleWindowProgress, CastleGLBitmapFonts, CastleBitmapFont_BVSansMono_m18;

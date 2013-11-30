@@ -77,32 +77,26 @@ end;
 { main program ------------------------------------------------------- }
 
 begin
- { Set current directory; we will load files throughout whole program
-   using relative paths, like 'images/menubg.png'. This line is responsible
-   for making these relative paths valid.
-   TODO: we should instead use ApplicationData for all paths. }
- ChangeDir(URIToFilenameSafe(ApplicationData('')));
+  { This must be done before initial Application.ScreenWidth,
+    since Application.ScreenWidth already initializes display. }
+  Window.ParseParameters([poDisplay]);
 
- { This must be done before initial Glwn.ScreenWidth, since Application.ScreenWidth
-   already initializes display. }
- Window.ParseParameters([poDisplay]);
+  { set initial size/fullscreen mode }
+  if (Application.ScreenWidth = 640) and (Application.ScreenHeight = 480) then
+   Window.FullScreen := true else
+  begin
+   Window.Width := 640;
+   Window.Height := 480;
+  end;
 
- { set initial size/fullscreen mode }
- if (Application.ScreenWidth = 640) and (Application.ScreenHeight = 480) then
-  Window.FullScreen := true else
- begin
-  Window.Width := 640;
-  Window.Height := 480;
- end;
+  { parse params }
+  Window.ParseParameters(StandardParseOptions);
+  Parameters.Parse(Options, @OptionProc, nil);
+  if Parameters.High > 0 then
+    raise EInvalidParams.Create('Unrecognized parameter : ' + Parameters[1]);
 
- { parse params }
- Window.ParseParameters(StandardParseOptions);
- Parameters.Parse(Options, @OptionProc, nil);
- if Parameters.High > 0 then
-  raise EInvalidParams.Create('Unrecognized parameter : ' + Parameters[1]);
+  { Mouse is useless, so hide }
+  Window.Cursor := mcNone;
 
- { Mouse is useless, so hide }
- Window.Cursor := mcNone;
-
- Window.OpenAndRun;
+  Window.OpenAndRun;
 end.

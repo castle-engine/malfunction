@@ -268,7 +268,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 implementation
 
 uses CastleBoxes, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
-  CastleRenderingCamera, CastleUIControls, CastleGL;
+  CastleRenderingCamera, CastleUIControls, CastleGL, CastleFilesUtils;
 
 type
   TEnemyShipKindInfo = record
@@ -729,13 +729,13 @@ procedure ContextOpen;
 var sk: TEnemyShipKind;
 begin
  rocketVRML := TCastleScene.Create(nil);
- rocketVRML.Load(vrmlsDir +'rocket.wrl');
+ rocketVRML.Load(ApplicationData('vrmls/rocket.wrl'));
  rocketVRML.Attributes.Lighting := false;
 
  for sk := Low(sk) to High(sk) do
  begin
   EnemyShipVRMLs[sk] := TCastleScene.Create(nil);
-  EnemyShipVRMLs[sk].Load(vrmlsDir +EnemyShipKindsInfos[sk].VrmlFname);
+  EnemyShipVRMLs[sk].Load(ApplicationData('vrmls/' + EnemyShipKindsInfos[sk].VrmlFname));
  end;
 end;
 

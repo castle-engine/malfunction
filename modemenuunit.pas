@@ -31,7 +31,8 @@ implementation
 uses CastleGL, SysUtils, CastleWindow, GameGeneral, CastleGLBitmapFonts,
   CastleBitmapFont_Isuckatgolf_m32, CastleGLUtils, CastleMessages, LevelUnit,
   CastleImages, CastleVectors, CastleUtils, CastleGLImages, CastleColors,
-  CastleUIControls, CastleKeysMouse, CastleControls, CastleRectangles;
+  CastleUIControls, CastleKeysMouse, CastleControls, CastleRectangles,
+  CastleFilesUtils;
 
 { module consts and vars ---------------------------------------------------- }
 
@@ -138,9 +139,9 @@ begin
             'There is only one goal: destroy all enemy ships on every level.' +nl+
             nl+
             SCastleEngineProgramHelpSuffix(DisplayApplicationName, Version, false));
-        miPlaySunnyDay: PlayGame(vrmlsDir +'lake.wrl');
-        miPlayDeepSpace: PlayGame(vrmlsDir +'mobius.wrl');
-        miPlayRainMountains: PlayGame(vrmlsDir +'wawoz.wrl');
+        miPlaySunnyDay: PlayGame(ApplicationData('vrmls/lake.wrl'));
+        miPlayDeepSpace: PlayGame(ApplicationData('vrmls/mobius.wrl'));
+        miPlayRainMountains: PlayGame(ApplicationData('vrmls/wawoz.wrl'));
         miQuit:
           if MessageYesNo(Window, 'Are you sure you want to quit ?') then Window.close;
       end;
@@ -149,7 +150,7 @@ end;
 
 procedure ContextOpen;
 begin
-  listBg := TGLImage.Create(imagesDir +'menubg.png', [TRGBImage],
+  listBg := TGLImage.Create(ApplicationData('images/menubg.png'), [TRGBImage],
     Window.width, Window.height, riBilinear);
   menuFont := TGLBitmapFont.Create(BitmapFont_Isuckatgolf_m32);
 end;
