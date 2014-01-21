@@ -29,7 +29,8 @@ interface
 implementation
 
 uses CastleGL, SysUtils, CastleWindow, GameGeneral, CastleGLBitmapFonts,
-  CastleBitmapFont_Isuckatgolf_m32, CastleGLUtils, CastleMessages, LevelUnit,
+  CastleTextureFont,
+  CastleTextureFont_suckgolf_32, CastleGLUtils, CastleMessages, LevelUnit,
   CastleImages, CastleVectors, CastleUtils, CastleGLImages, CastleColors,
   CastleUIControls, CastleKeysMouse, CastleControls, CastleRectangles,
   CastleFilesUtils;
@@ -51,7 +52,7 @@ const
 var
   currentMenu: TMenuItem = Low(TMenuItem);
   listBg: TGLImage;
-  menuFont: TGLBitmapFont;
+  menuFont: TTextureFont;
 
 { mode enter/exit ----------------------------------------------------------- }
 
@@ -152,7 +153,7 @@ procedure ContextOpen;
 begin
   listBg := TGLImage.Create(ApplicationData('images/menubg.png'), [TRGBImage],
     Window.width, Window.height, riBilinear);
-  menuFont := TGLBitmapFont.Create(BitmapFont_Isuckatgolf_m32);
+  menuFont := TTextureFont.Create(TextureFont_suckgolf_32, false);
 end;
 
 procedure ContextClose;

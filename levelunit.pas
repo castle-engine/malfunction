@@ -133,7 +133,7 @@ procedure PlayGame(const SceneURL: string);
 implementation
 
 uses CastleVectors, CastleUtils, PlayerShipUnit, ShipsAndRockets,
-  CastleMessages, CastleSceneCore, CastleUIControls;
+  CastleMessages, CastleSceneCore, CastleUIControls, CastleURIUtils;
 
 { TMalfunctionInfoNode ----------------------------------------------- }
 
@@ -389,7 +389,7 @@ begin
   finally FreeAndNil(BaseLights) end;
 
   Notifications.Clear;
-  Notifications.Show('Level '+SceneURL+' loaded.');
+  Notifications.Show('Level '+URICaption(SceneURL)+' loaded.');
  except FreeLevel; raise end;
 end;
 

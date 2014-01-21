@@ -89,7 +89,7 @@ var
 implementation
 
 uses CastleGLUtils, CastleUtils, CastleMessages, CastleProgress,
-  CastleWindowProgress, CastleGLBitmapFonts, CastleBitmapFont_BVSansMono_m18;
+  CastleWindowProgress, CastleGLBitmapFonts;
 
 var fGameMode: TGameMode = modeNone;
 

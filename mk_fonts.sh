@@ -3,9 +3,4 @@ set -eu
 
 # Make fonts sources used only by malfunction.
 
-do_font2pascal ()
-{
-  font2pascal "$@" --dir .
-}
-
-do_font2pascal --font-name 'I suck at golf' --font-height -32 --grab-to bitmap
+texturefont2pascal --size 32 data_devel/fonts/suckgolf.ttf
