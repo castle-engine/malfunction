@@ -28,8 +28,7 @@ interface
 
 implementation
 
-uses CastleGL, SysUtils, CastleWindow, GameGeneral, CastleGLBitmapFonts,
-  CastleTextureFont,
+uses SysUtils, CastleWindow, GameGeneral, CastleFonts,
   CastleTextureFont_suckgolf_32, CastleGLUtils, CastleMessages, LevelUnit,
   CastleImages, CastleVectors, CastleUtils, CastleGLImages, CastleColors,
   CastleUIControls, CastleKeysMouse, CastleControls, CastleRectangles,
