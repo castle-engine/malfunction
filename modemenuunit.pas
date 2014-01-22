@@ -152,7 +152,7 @@ procedure ContextOpen;
 begin
   listBg := TGLImage.Create(ApplicationData('images/menubg.png'), [TRGBImage],
     Window.width, Window.height, riBilinear);
-  menuFont := TTextureFont.Create(TextureFont_suckgolf_32, false);
+  menuFont := TTextureFont.Create(TextureFont_suckgolf_32);
 end;
 
 procedure ContextClose;
