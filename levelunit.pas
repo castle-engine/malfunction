@@ -378,7 +378,7 @@ begin
   playerShip.shipVertRotationSpeed := 0.0;
   playerShip.shipSpeed := 5;
 
-  { zeby pierwsze OnDraw gry nie zajmowalo zbyt duzo czasu zeby enemyShips
+  { zeby pierwsze OnRender gry nie zajmowalo zbyt duzo czasu zeby enemyShips
     nie strzelaly od razu kilkoma rakietami na starcie po zaladowaniu
     levelu. }
   { TODO: it's not clean to create BaseLights here,

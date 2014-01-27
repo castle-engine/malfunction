@@ -138,16 +138,16 @@ end;
 type
   TGame2DControls = class(TUIControl)
   public
-    procedure Draw; override;
-    function DrawStyle: TUIControlDrawStyle; override;
+    procedure Render; override;
+    function RenderStyle: TRenderStyle; override;
   end;
 
-function TGame2DControls.DrawStyle: TUIControlDrawStyle;
+function TGame2DControls.RenderStyle: TRenderStyle;
 begin
-  Result := ds2D;
+  Result := rs2D;
 end;
 
-procedure TGame2DControls.Draw;
+procedure TGame2DControls.Render;
 
   procedure radarDraw2D;
   const

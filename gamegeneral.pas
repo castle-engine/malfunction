@@ -102,7 +102,7 @@ begin
 
  if gameModeExit[fGameMode] <> nil then gameModeExit[fGameMode];
 
- Window.OnDraw := nil;
+ Window.OnRender := nil;
  Window.OnPress := nil;
  Window.OnRelease := nil;
  Window.OnUpdate := nil;

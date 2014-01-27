@@ -55,13 +55,13 @@ var
 
 { mode enter/exit ----------------------------------------------------------- }
 
-procedure draw(Window: TCastleWindowBase); forward;
+procedure Render(Window: TCastleWindowBase); forward;
 procedure Press(Sender: TCastleWindowBase; const Event: TInputPressRelease); forward;
 
 procedure modeEnter;
 begin
   OrthoProjection(0, Window.width, 0, Window.height);
-  Window.OnDraw := @draw;
+  Window.OnRender := @Render;
   Window.OnPress := @Press;
 end;
 
@@ -71,7 +71,7 @@ end;
 
 { window callbacks ----------------------------------------------------------- }
 
-procedure draw(Window: TCastleWindowBase);
+procedure Render(Window: TCastleWindowBase);
 var
   mi: TMenuItem;
   X, Y: Integer;
