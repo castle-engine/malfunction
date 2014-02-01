@@ -105,14 +105,14 @@ begin
         if currentMenu = Low(currentMenu) then
           currentMenu := High(currentMenu) else
           currentMenu := Pred(currentMenu);
-        Window.PostRedisplay;
+        Window.Invalidate;
       end;
     K_Down:
       begin
         if currentMenu = High(currentMenu) then
           currentMenu := Low(currentMenu) else
           currentMenu := Succ(currentMenu);
-        Window.PostRedisplay;
+        Window.Invalidate;
       end;
     K_Enter:
       case currentMenu of

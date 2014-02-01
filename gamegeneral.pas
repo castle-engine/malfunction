@@ -110,7 +110,7 @@ begin
  if gameModeEnter[value] <> nil then gameModeEnter[value];
  fGameMode := value;
 
- Window.PostRedisplay;
+ Window.Invalidate;
 end;
 
 { glw general events handling ----------------------------------------------- }
