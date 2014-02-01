@@ -125,8 +125,6 @@ begin
  Notifications := TCastleNotifications.Create(Window);
  Notifications.MaxMessages := 10;
  Notifications.VerticalPosition := vpUp;
- WindowProgressInterface.Window := Window;
- Progress.UserInterface := WindowProgressInterface;
 
  SetGameMode(modeMenu);
 end;
@@ -139,17 +137,15 @@ begin
 end;
 
 initialization
- Window := TCastleWindowCustom.Create(nil);
- Window.FpsShowOnCaption := true;
- Window.OnCloseQuery := @CloseQuery;
- Window.OnOpen := @Open;
- Window.OnClose := @Close;
+  Window := TCastleWindowCustom.Create(nil);
+  Window.FpsShowOnCaption := true;
+  Window.OnCloseQuery := @CloseQuery;
+  Window.OnOpen := @Open;
+  Window.OnClose := @Close;
+  Window.ResizeAllowed := raOnlyAtOpen;
 
- {leave OnResize to nil - dont set default projection matrix
-  (we will set it in modeEnter, and because we can't be resized -
-  we will never have to set it in OnResize)}
-
- Window.ResizeAllowed := raOnlyAtOpen;
+  Application.MainWindow := Window;
+  Progress.UserInterface := WindowProgressInterface;
 finalization
- FreeAndNil(Window);
+  FreeAndNil(Window);
 end.
