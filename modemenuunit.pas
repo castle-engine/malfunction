@@ -55,8 +55,8 @@ var
 
 { mode enter/exit ----------------------------------------------------------- }
 
-procedure Render(Window: TCastleWindowBase); forward;
-procedure Press(Sender: TCastleWindowBase; const Event: TInputPressRelease); forward;
+procedure Render(Container: TUIContainer); forward;
+procedure Press(Container: TUIContainer; const Event: TInputPressRelease); forward;
 
 procedure modeEnter;
 begin
@@ -71,7 +71,7 @@ end;
 
 { window callbacks ----------------------------------------------------------- }
 
-procedure Render(Window: TCastleWindowBase);
+procedure Render(Container: TUIContainer);
 var
   mi: TMenuItem;
   X, Y: Integer;
@@ -96,7 +96,7 @@ begin
   end;
 end;
 
-procedure Press(Sender: TCastleWindowBase; const Event: TInputPressRelease);
+procedure Press(Container: TUIContainer; const Event: TInputPressRelease);
 begin
   if Event.EventType <> itKey then Exit;
   case Event.key of

@@ -65,7 +65,7 @@ var
   modeNone is a very specific mode : this is the initial mode
   when program starts. Never do SetGameMode(modeNone).
 
-  You should terminate any TCastleWindowBase event handling after SetGameMode call. }
+  You should terminate any TCastleWindowCustom event handling after SetGameMode call. }
 
 type
   TGameMode = (modeNone, modeMenu, modeGame);
@@ -115,12 +115,12 @@ end;
 
 { glw general events handling ----------------------------------------------- }
 
-procedure CloseQuery(Sender: TCastleWindowBase);
+procedure CloseQuery(Container: TUIContainer);
 begin
  if MessageYesNo(Window, 'Are you sure you want to quit ?') then Window.Close;
 end;
 
-procedure Open(Sender: TCastleWindowBase);
+procedure Open(Container: TUIContainer);
 begin
  Notifications := TCastleNotifications.Create(Window);
  Notifications.MaxMessages := 10;
@@ -131,7 +131,7 @@ begin
  SetGameMode(modeMenu);
 end;
 
-procedure Close(Window: TCastleWindowBase);
+procedure Close(Container: TUIContainer);
 begin
  if (fGameMode <> modeNone) and
     (gameModeExit[fGameMode] <> nil) then gameModeExit[fGameMode];

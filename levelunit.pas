@@ -127,7 +127,7 @@ procedure FreeLevel;
 { LoadGame loads NewPlayer and then loads LoadLevel and then
   SetGameMode(modeGame).
 
-  You should terminate any TCastleWindowBase event handling after PlayGame call. }
+  You should terminate any TCastleWindowCustom event handling after PlayGame call. }
 procedure PlayGame(const SceneURL: string);
 
 implementation
