@@ -113,36 +113,30 @@ begin
  Window.Invalidate;
 end;
 
-{ glw general events handling ----------------------------------------------- }
+{ events --------------------------------------------------------------------- }
 
 procedure CloseQuery(Container: TUIContainer);
 begin
  if MessageYesNo(Window, 'Are you sure you want to quit ?') then Window.Close;
 end;
 
-procedure Open(Container: TUIContainer);
-begin
- Notifications := TCastleNotifications.Create(Window);
- Notifications.MaxMessages := 10;
- Notifications.VerticalPosition := vpUp;
-
- SetGameMode(modeMenu);
-end;
-
 procedure Close(Container: TUIContainer);
 begin
- if (fGameMode <> modeNone) and
-    (gameModeExit[fGameMode] <> nil) then gameModeExit[fGameMode];
- fGameMode := modeNone;
+  if (fGameMode <> modeNone) and
+     (gameModeExit[fGameMode] <> nil) then gameModeExit[fGameMode];
+  fGameMode := modeNone;
 end;
 
 initialization
   Window := TCastleWindowCustom.Create(nil);
   Window.FpsShowOnCaption := true;
   Window.OnCloseQuery := @CloseQuery;
-  Window.OnOpen := @Open;
   Window.OnClose := @Close;
   Window.ResizeAllowed := raOnlyAtOpen;
+
+  Notifications := TCastleNotifications.Create(Window);
+  Notifications.MaxMessages := 10;
+  Notifications.VerticalPosition := vpUp;
 
   Application.MainWindow := Window;
   Progress.UserInterface := WindowProgressInterface;

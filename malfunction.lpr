@@ -98,5 +98,6 @@ begin
   { Mouse is useless, so hide }
   Window.Cursor := mcNone;
 
+  SetGameMode(modeMenu);
   Window.OpenAndRun;
 end.
