@@ -36,7 +36,7 @@ uses CastleVectors, SysUtils, CastleGL, CastleWindow, GameGeneral, CastleGLUtils
   ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
   CastleStringUtils, CastleScene, CastleGLImages, X3DNodes,
   CastleSceneManager, CastleUIControls, CastleCameras, Castle3D,
-  CastleRenderingCamera, CastleBackground;
+  CastleRenderingCamera, CastleBackground, CastleRays;
 
 var
   kokpit_gl: TGLImage;
@@ -49,27 +49,29 @@ var
 
 type
   TMalfunctionSceneManager = class(TCastleSceneManager)
-  private
-    projNear, projFar: TGLfloat;
   public
-    procedure ApplyProjection; override;
+    function CalculateProjection: TProjection; override;
     procedure RenderFromViewEverything; override;
     function Headlight(out CustomHeadlight: TAbstractLightNode): boolean; override;
   end;
 
-procedure TMalfunctionSceneManager.ApplyProjection;
+function TMalfunctionSceneManager.CalculateProjection: TProjection;
 var
   wholeMoveLimit: TBox3D;
+const
+  AngleOfViewY = 30;
 begin
+  Result.ProjectionType := ptPerspective;
+  Result.PerspectiveAngles[0] := AdjustViewAngleDegToAspectRatio(
+    AngleOfViewY, Rect.Width / Rect.Height); // actually unused for now
+  Result.PerspectiveAngles[1] := AngleOfViewY;
+  Result.ProjectionNear := PLAYER_SHIP_CAMERA_RADIUS;
   { Player jest zawsze w obrebie MoveLimit i widzi rzeczy w obrebie
     levelScene.BoundingBox. Wiec far = dlugosc przekatnej
-    Box3DSum(MoveLimit, levelScene.BoundingBox) bedzie na pewno wystarczajace.
-
-    Near wybieramy arbitralnie jako PLAYER_SHIP_CAMERA_RADIUS. }
-  projNear := PLAYER_SHIP_CAMERA_RADIUS;
+    Box3DSum(MoveLimit, levelScene.BoundingBox) bedzie na pewno wystarczajace. }
   wholeMoveLimit := levelScene.BoundingBox + MoveLimit;
-  projFar := PointsDistance(wholeMoveLimit.Data[0], wholeMoveLimit.Data[1]);
-  PerspectiveProjection(30, Window.width/Window.height, projNear, projFar);
+  Result.ProjectionFarFinite := PointsDistance(wholeMoveLimit.Data[0], wholeMoveLimit.Data[1]);
+  Result.ProjectionFar := Result.ProjectionFarFinite;
 end;
 
 procedure TMalfunctionSceneManager.RenderFromViewEverything;
@@ -98,7 +100,8 @@ begin
   glLoadIdentity;
 
   levelScene.BackgroundSkySphereRadius :=
-    TBackground.NearFarToSkySphereRadius(projNear, projFar,
+    TBackground.NearFarToSkySphereRadius(
+      Projection.ProjectionNear, Projection.ProjectionFar,
       levelScene.BackgroundSkySphereRadius);
 
   B := levelScene.Background;
