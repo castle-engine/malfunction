@@ -49,11 +49,21 @@ var
 
 type
   TMalfunctionSceneManager = class(TCastleSceneManager)
-  public
+  private
+    DefaultHeadlightNode: TDirectionalLightNode;
+  protected
     function CalculateProjection: TProjection; override;
     procedure RenderFromViewEverything; override;
-    function Headlight(out CustomHeadlight: TAbstractLightNode): boolean; override;
+    function Headlight: TAbstractLightNode; override;
+  public
+    destructor Destroy; override;
   end;
+
+destructor TMalfunctionSceneManager.Destroy;
+begin
+  FreeAndNil(DefaultHeadlightNode);
+  inherited;
+end;
 
 function TMalfunctionSceneManager.CalculateProjection: TProjection;
 var
@@ -130,10 +140,11 @@ begin
   finally FreeAndNil(Params) end;
 end;
 
-function TMalfunctionSceneManager.Headlight(out CustomHeadlight: TAbstractLightNode): boolean;
+function TMalfunctionSceneManager.Headlight: TAbstractLightNode;
 begin
-  Result := true;
-  CustomHeadlight := nil;
+  if DefaultHeadlightNode = nil then
+    DefaultHeadlightNode := TDirectionalLightNode.Create('', '');;
+  Result := DefaultHeadlightNode;
 end;
 
 { TGame2DControls ------------------------------------------------------------ }
