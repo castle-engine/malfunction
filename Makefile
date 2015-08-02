@@ -1,16 +1,12 @@
-default:
-	@echo 'No default target in this Makefile'
+# This Makefile uses "castle-engine" build tool for most operations
+# (like compilation).
+# See https://sourceforge.net/p/castle-engine/wiki/Build%20tool/
+# for instructions how to install/use this build tool.
 
-# Simple install.
-# You may as well symlink data to /usr/local/share/malfunction,
-# for system-wide install.
-install:
-	rm -f $(HOME)/.local/share/malfunction
-	ln -s $(shell pwd)/data $(HOME)/.local/share/malfunction
+.PHONY: standalone
+standalone:
+	castle-engine compile $(CASTLE_ENGINE_TOOL_OPTIONS)
 
-# Run also "dircleaner . clean" here to really clean
 .PHONY: clean
 clean:
-	rm -f malfunction malfunction.exe
-	rm -Rf malfunction.app
-
+	castle-engine clean
