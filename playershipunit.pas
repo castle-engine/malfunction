@@ -282,7 +282,7 @@ begin
  RotationSpeedBackToZero(shipVertRotationSpeed, ROT_VERT_SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50);
 
  {apply shipPosBox}
- MoveLimit.Clamp(shipPos);
+ MoveLimit.ClampVar(shipPos);
 
  if FadeOutIntensity > 0 then
    FadeOutIntensity -= 0.02 * Window.Fps.UpdateSecondsPassed * 50;
