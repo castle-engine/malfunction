@@ -89,7 +89,7 @@ var
 implementation
 
 uses CastleGLUtils, CastleUtils, CastleMessages, CastleProgress,
-  CastleWindowProgress, CastleFonts;
+  CastleWindowProgress, CastleFonts, CastleRectangles, CastleColors;
 
 var fGameMode: TGameMode = modeNone;
 
@@ -136,7 +136,10 @@ initialization
 
   Notifications := TCastleNotifications.Create(Window);
   Notifications.MaxMessages := 10;
-  Notifications.VerticalPosition := vpUp;
+  Notifications.Anchor(hpMiddle);
+  Notifications.Anchor(vpTop, -10);
+  Notifications.TextAlignment := hpMiddle;
+  Notifications.Color := Yellow;
 
   Application.MainWindow := Window;
   Progress.UserInterface := WindowProgressInterface;
