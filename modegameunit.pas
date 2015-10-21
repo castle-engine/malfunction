@@ -242,9 +242,9 @@ begin
  Assert(levelScene <> nil,
    'Error - setting game mode to modeGame but level uninitialized');
 
- Window.Controls.Add(Controls);
- Window.Controls.Add(Notifications);
- Window.Controls.Add(SceneManager);
+ Window.Controls.InsertFront(SceneManager);
+ Window.Controls.InsertFront(Controls);
+ Window.Controls.InsertFront(Notifications);
 
  Window.OnPress := @Press;
  Window.OnUpdate := @Update;
@@ -263,10 +263,9 @@ begin
  if Window <> nil then
    Window.AutoRedisplay := false;
 
- Window.Controls.Remove(Controls);
- Window.Controls.Remove(Notifications);
-
- Window.Controls.Remove(SceneManager);
+ Window.Controls.RemoveAll(Controls);
+ Window.Controls.RemoveAll(Notifications);
+ Window.Controls.RemoveAll(SceneManager);
 end;
 
 { glw callbacks ----------------------------------------------------------- }
