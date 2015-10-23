@@ -263,9 +263,9 @@ begin
  if Window <> nil then
    Window.AutoRedisplay := false;
 
- Window.Controls.RemoveAll(Controls);
- Window.Controls.RemoveAll(Notifications);
- Window.Controls.RemoveAll(SceneManager);
+ Window.Controls.Remove(Controls);
+ Window.Controls.Remove(Notifications);
+ Window.Controls.Remove(SceneManager);
 end;
 
 { glw callbacks ----------------------------------------------------------- }
