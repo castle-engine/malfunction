@@ -96,7 +96,7 @@ begin
     raise EInvalidParams.Create('Unrecognized parameter : ' + Parameters[1]);
 
   { Mouse is useless, so hide }
-  Window.Cursor := mcNone;
+  Window.Cursor := mcForceNone;
 
   SetGameMode(modeMenu);
   Window.OpenAndRun;
