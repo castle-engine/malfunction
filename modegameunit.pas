@@ -36,7 +36,7 @@ uses CastleVectors, SysUtils, CastleGL, CastleWindow, GameGeneral, CastleGLUtils
   ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
   CastleStringUtils, CastleScene, CastleGLImages, X3DNodes,
   CastleSceneManager, CastleUIControls, CastleCameras, Castle3D,
-  CastleRenderingCamera, CastleBackground, CastleRays;
+  CastleRenderingCamera, CastleBackground, CastleRays, CastleApplicationProperties;
 
 var
   kokpit_gl: TGLImage;
@@ -321,7 +321,7 @@ begin
    [TRGBAlphaImage, TGrayscaleAlphaImage]);
  try
   kokpit_img.Resize(Window.width, kokpit_img.Height * Window.Height div 480);
-  kokpit_gl := TGLImage.Create(kokpit_img);
+  kokpit_gl := TGLImage.Create(kokpit_img, false);
  finally kokpit_img.Free end;
 
  { przyjmujemy ze crosshair.png bylo przygotowane dla ekranu 640x480.
@@ -333,7 +333,7 @@ begin
   crossh_orig_height := crossh_img.Height;
   crossh_img.Resize(crossh_img.Width * Window.width div 640,
                     crossh_img.Height * Window.height div 480);
-  crossh_gl := TGLImage.Create(crossh_img);
+  crossh_gl := TGLImage.Create(crossh_img, false);
  finally crossh_img.Free end;
 end;
 
@@ -346,8 +346,8 @@ end;
 initialization
  gameModeEnter[modeGame] := @modeEnter;
  gameModeExit[modeGame] := @modeExit;
- OnGLContextOpen.Add(@ContextOpen);
- OnGLContextClose.Add(@ContextClose);
+ ApplicationProperties.OnGLContextOpen.Add(@ContextOpen);
+ ApplicationProperties.OnGLContextClose.Add(@ContextClose);
 
  Controls := TGame2DControls.Create(nil);
  SceneManager := TMalfunctionSceneManager.Create(nil);

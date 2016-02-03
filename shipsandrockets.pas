@@ -268,7 +268,8 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 implementation
 
 uses CastleBoxes, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
-  CastleRenderingCamera, CastleUIControls, CastleGL, CastleFilesUtils;
+  CastleRenderingCamera, CastleUIControls, CastleGL, CastleFilesUtils,
+  CastleApplicationProperties;
 
 type
   TEnemyShipKindInfo = record
@@ -747,6 +748,6 @@ begin
 end;
 
 initialization
- OnGLContextOpen.Add(@ContextOpen);
- OnGLContextClose.Add(@ContextClose);
+ ApplicationProperties.OnGLContextOpen.Add(@ContextOpen);
+ ApplicationProperties.OnGLContextClose.Add(@ContextClose);
 end.

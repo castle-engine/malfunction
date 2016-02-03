@@ -32,7 +32,7 @@ uses SysUtils, CastleWindow, GameGeneral, CastleFonts,
   CastleTextureFont_suckgolf_32, CastleGLUtils, CastleMessages, LevelUnit,
   CastleImages, CastleVectors, CastleUtils, CastleGLImages, CastleColors,
   CastleUIControls, CastleKeysMouse, CastleControls, CastleRectangles,
-  CastleFilesUtils;
+  CastleFilesUtils, CastleApplicationProperties;
 
 { module consts and vars ---------------------------------------------------- }
 
@@ -164,6 +164,6 @@ end;
 initialization
   gameModeEnter[modeMenu] := @modeEnter;
   gameModeExit[modeMenu] := @modeExit;
-  OnGLContextOpen.Add(@ContextOpen);
-  OnGLContextClose.Add(@ContextClose);
+  ApplicationProperties.OnGLContextOpen.Add(@ContextOpen);
+  ApplicationProperties.OnGLContextClose.Add(@ContextClose);
 end.

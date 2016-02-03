@@ -133,7 +133,8 @@ procedure PlayGame(const SceneURL: string);
 implementation
 
 uses CastleVectors, CastleUtils, PlayerShipUnit, ShipsAndRockets,
-  CastleMessages, CastleSceneCore, CastleUIControls, CastleURIUtils;
+  CastleMessages, CastleSceneCore, CastleUIControls, CastleURIUtils,
+  CastleApplicationProperties;
 
 { TMalfunctionInfoNode ----------------------------------------------- }
 
@@ -423,7 +424,7 @@ begin
 end;
 
 initialization
- OnGLContextClose.Add(@ContextClose);
+ ApplicationProperties.OnGLContextClose.Add(@ContextClose);
  NodesManager.RegisterNodeClasses([ TMalfunctionLevelInfoNode,
    TMalfunctionNotMovingEnemyNode,
    TMalfunctionCircleMovingEnemyNode,

@@ -113,7 +113,8 @@ procedure NewPlayerShip;
 implementation
 
 uses CastleGL, GameGeneral, CastleWindow, CastleUtils, Math,
-  LevelUnit, CastleMessages, CastleUIControls, CastleRectangles;
+  LevelUnit, CastleMessages, CastleUIControls, CastleRectangles,
+  CastleApplicationProperties;
 
 constructor TPlayerShip.Create;
 begin
@@ -350,5 +351,5 @@ begin
 end;
 
 initialization
- OnGLContextClose.Add(@ContextClose);
+ ApplicationProperties.OnGLContextClose.Add(@ContextClose);
 end.
