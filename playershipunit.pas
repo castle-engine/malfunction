@@ -258,7 +258,7 @@ begin
    Notifications.Show('"'+sCollider.ShipName+'" was destroyed by the crash.');
    sCollider.Free;
   end else
-  if not levelScene.OctreeCollisions.MoveCollision(
+  if not levelScene.InternalOctreeCollisions.MoveCollision(
     shipPos, newShipPos, true, shipRadius,
     { boxes will be just ignored } EmptyBox3D, EmptyBox3D) then
    Crash(Random(40)+40, '') else

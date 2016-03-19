@@ -289,7 +289,7 @@ type
 
     { Determinuje jak czesto statek bedzie strzelal rakiety,
       istotne tylko jesli statek jest TFiringRocketsEnemyShip. }
-    FireDelay: TMilisecTime;
+    FireDelay: Int64;
 
     { Okreslaja jaka jest szybkosc statku przy danym stanie
       HuntingAttack, w skali gdzie wartosc 1.0 oznacza pewna domyslna
@@ -447,7 +447,7 @@ begin
   Wszystko to dla prostoty i szybkosci.}
 
  result :=
-   (not levelScene.OctreeCollisions.IsSegmentCollision(ShipPos, newShipPos,
+   (not levelScene.InternalOctreeCollisions.IsSegmentCollision(ShipPos, newShipPos,
      nil, false, nil)) and
    (CollisionWithOtherEnemyShip(newShipPos) = nil) and
    MoveLimit.PointInside(newShipPos);
@@ -468,12 +468,12 @@ begin
  inherited;
  if RocketFiringInited then
  begin
-  if TimeTickSecondLater(LastFiredRocketTime, GetTickCount, NextFireRocketDelay) then
+  if TimeTickSecondLater(LastFiredRocketTime, CastleTimeUtils.GetTickCount64, NextFireRocketDelay) then
   begin
    if FiringRocketsAllowed then
     FireRocket(VectorSubtract(playerShip.shipPos, shipPos), 1);
    {w ten sposob statki beda strzelaly w dosc zroznicowanych odstepach czasu}
-   LastFiredRocketTime := GetTickCount;
+   LastFiredRocketTime := CastleTimeUtils.GetTickCount64;
    with EnemyShipKindsInfos[Kind] do
     NextFireRocketDelay := FireDelay div 2+ Random(FireDelay div 2);
   end;
@@ -483,7 +483,7 @@ begin
    zamiast w naszym konstruktorze bo po skonstruowaniu obiektu enemyShip
    w LoadLevel moze minac duzo czasu do poczatku gry - np. czas na ten MessageOK
    w ModeGameUnit.modeGameEnter; }
-  LastFiredRocketTime := GetTickCount;
+  LastFiredRocketTime := CastleTimeUtils.GetTickCount64;
   with EnemyShipKindsInfos[Kind] do
    NextFireRocketDelay := FireDelay div 2+ Random(FireDelay div 2);
   RocketFiringInited := true;
@@ -649,7 +649,7 @@ var newRocPos: TVector3Single;
 var i: integer;
 begin
  newRocPos := VectorAdd(rocPos, VectorScale(rocDir, Window.Fps.UpdateSecondsPassed * 50));
- if (levelScene.OctreeCollisions.IsSegmentCollision(rocPos,
+ if (levelScene.InternalOctreeCollisions.IsSegmentCollision(rocPos,
        newRocPos, nil, false, nil)) or
     (not MoveLimit.PointInside(rocPos)) then
   {rakieta zderzyla sie z czescia levelu lub wyleciala poza MoveLimit}
