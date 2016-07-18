@@ -143,7 +143,7 @@ begin
   inherited;
 
   FFdtype := TSFString.Create(Self, 'type', 'planet');
-  Fields.Add(FFdtype);
+  AddField(FFdtype);
 end;
 
 class function TMalfunctionLevelInfoNode.ClassNodeTypeName: string;
@@ -205,7 +205,7 @@ begin
   inherited;
 
   FFdkind := TSFString.Create(Self, 'kind', 'hedgehog');
-  Fields.Add(FFdkind);
+  AddField(FFdkind);
 end;
 
 function TVRMLMalfunctionEnemyNode.Kind: TEnemyShipKind;
@@ -218,7 +218,7 @@ begin
   inherited;
 
   FFdposition := TSFVec3f.Create(Self, 'position', Vector3Single(0, 0, 0));
-  Fields.Add(FFdposition);
+  AddField(FFdposition);
 end;
 
 class function TMalfunctionNotMovingEnemyNode.ClassNodeTypeName: string;
@@ -236,13 +236,13 @@ begin
   inherited;
 
   FFdcircleCenter := TSFVec3f.Create(Self, 'circleCenter', Vector3Single(0, 0, 0));
-  Fields.Add(FFdcircleCenter);
+  AddField(FFdcircleCenter);
 
   FFdcircleRadius := TSFFloat.Create(Self, 'circleRadius', 1.0);
-  Fields.Add(FFdcircleRadius);
+  AddField(FFdcircleRadius);
 
   FFduniqueCircleMovingSpeed := TSFFloat.Create(Self, 'uniqueCircleMovingSpeed', 1.0);
-  Fields.Add(FFduniqueCircleMovingSpeed);
+  AddField(FFduniqueCircleMovingSpeed);
 end;
 
 class function TMalfunctionCircleMovingEnemyNode.ClassNodeTypeName: string;
@@ -261,7 +261,7 @@ begin
   inherited;
 
   FFdposition := TSFVec3f.Create(Self, 'position', Vector3Single(0, 0, 0));
-  Fields.Add(FFdposition);
+  AddField(FFdposition);
 end;
 
 class function TMalfunctionHuntingEnemyNode.ClassNodeTypeName: string;
