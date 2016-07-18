@@ -317,24 +317,20 @@ procedure ContextOpen;
 var crossh_img: TCastleImage;
     kokpit_img: TCastleImage;
 begin
- kokpit_img := LoadImage(ApplicationData('images/kokpit.png'),
-   [TRGBAlphaImage, TGrayscaleAlphaImage]);
- try
+  kokpit_img := LoadImage(ApplicationData('images/kokpit.png'),
+    [TRGBAlphaImage, TGrayscaleAlphaImage]);
   kokpit_img.Resize(Window.width, kokpit_img.Height * Window.Height div 480);
-  kokpit_gl := TGLImage.Create(kokpit_img, false);
- finally kokpit_img.Free end;
+  kokpit_gl := TGLImage.Create(kokpit_img, false { smooth scaling }, true { owns image });
 
- { przyjmujemy ze crosshair.png bylo przygotowane dla ekranu 640x480.
-   Resizujemy odpowiednio do naszego okienka. }
- crossh_img := LoadImage(ApplicationData('images/crosshair.png'),
-   [TRGBAlphaImage, TGrayscaleAlphaImage]);
- try
+  { przyjmujemy ze crosshair.png bylo przygotowane dla ekranu 640x480.
+    Resizujemy odpowiednio do naszego okienka. }
+  crossh_img := LoadImage(ApplicationData('images/crosshair.png'),
+    [TRGBAlphaImage, TGrayscaleAlphaImage]);
   crossh_orig_width := crossh_img.Width;
   crossh_orig_height := crossh_img.Height;
   crossh_img.Resize(crossh_img.Width * Window.width div 640,
                     crossh_img.Height * Window.height div 480);
-  crossh_gl := TGLImage.Create(crossh_img, false);
- finally crossh_img.Free end;
+  crossh_gl := TGLImage.Create(crossh_img, false { smooth scaling }, true { owns image });
 end;
 
 procedure ContextClose;
@@ -344,17 +340,17 @@ begin
 end;
 
 initialization
- gameModeEnter[modeGame] := @modeEnter;
- gameModeExit[modeGame] := @modeExit;
- ApplicationProperties.OnGLContextOpen.Add(@ContextOpen);
- ApplicationProperties.OnGLContextClose.Add(@ContextClose);
+  gameModeEnter[modeGame] := @modeEnter;
+  gameModeExit[modeGame] := @modeExit;
+  ApplicationProperties.OnGLContextOpen.Add(@ContextOpen);
+  ApplicationProperties.OnGLContextClose.Add(@ContextClose);
 
- Controls := TGame2DControls.Create(nil);
- SceneManager := TMalfunctionSceneManager.Create(nil);
- Camera := TWalkCamera.Create(SceneManager);
- Camera.Input := [];
- SceneManager.Camera := Camera;
+  Controls := TGame2DControls.Create(nil);
+  SceneManager := TMalfunctionSceneManager.Create(nil);
+  Camera := TWalkCamera.Create(SceneManager);
+  Camera.Input := [];
+  SceneManager.Camera := Camera;
 finalization
- FreeAndNil(Controls);
- FreeAndNil(SceneManager);
+  FreeAndNil(Controls);
+  FreeAndNil(SceneManager);
 end.
