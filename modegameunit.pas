@@ -106,7 +106,7 @@ var
   B: TBackground;
 begin
   {no need to clear COLOR_BUFFER - sky will cover everything}
-  GLClear([cbDepth], Black);
+  RenderContext.Clear([cbDepth], Black);
   glLoadIdentity;
 
   levelScene.BackgroundSkySphereRadius :=
@@ -199,7 +199,7 @@ procedure TGame2DControls.Render;
     glEnd;
 
     glColor4f(1, 1, 0, 0.8);
-    glPointSize(2);
+    RenderContext.PointSize := 2;
     glBegin(GL_POINTS);
       for i := 0 to enemyShips.Count-1 do
        if enemyShips[i] <> nil then
@@ -208,7 +208,7 @@ procedure TGame2DControls.Render;
         glVertex2i(x, y);
        end;
     glEnd;
-    glPointSize(1);
+    RenderContext.PointSize := 1;
 
     glDisable(GL_BLEND);
   end;
