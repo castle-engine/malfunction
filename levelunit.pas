@@ -97,7 +97,7 @@ type
 
   TMalfunctionLevelInfoNode = class(TX3DNode)
     procedure CreateNode; override;
-    class function ClassNodeTypeName: string; override;
+    class function ClassX3DType: string; override;
 
     private FFdType: TSFString;
     public property FdType: TSFString read FFdType;
@@ -146,7 +146,7 @@ begin
   AddField(FFdtype);
 end;
 
-class function TMalfunctionLevelInfoNode.ClassNodeTypeName: string;
+class function TMalfunctionLevelInfoNode.ClassX3DType: string;
 begin
   result := 'MalfunctionLevelInfo';
 end;
@@ -166,7 +166,7 @@ type
 
   TMalfunctionNotMovingEnemyNode = class(TVRMLMalfunctionEnemyNode)
     procedure CreateNode; override;
-    class function ClassNodeTypeName: string; override;
+    class function ClassX3DType: string; override;
 
     private FFdPosition: TSFVec3f;
     public property FdPosition: TSFVec3f read FFdPosition;
@@ -176,7 +176,7 @@ type
 
   TMalfunctionCircleMovingEnemyNode = class(TVRMLMalfunctionEnemyNode)
     procedure CreateNode; override;
-    class function ClassNodeTypeName: string; override;
+    class function ClassX3DType: string; override;
 
     private FFdCircleCenter: TSFVec3f;
     public property FdCircleCenter: TSFVec3f read FFdCircleCenter;
@@ -192,7 +192,7 @@ type
 
   TMalfunctionHuntingEnemyNode = class(TVRMLMalfunctionEnemyNode)
     procedure CreateNode; override;
-    class function ClassNodeTypeName: string; override;
+    class function ClassX3DType: string; override;
 
     private FFdPosition: TSFVec3f;
     public property FdPosition: TSFVec3f read FFdPosition;
@@ -221,7 +221,7 @@ begin
   AddField(FFdposition);
 end;
 
-class function TMalfunctionNotMovingEnemyNode.ClassNodeTypeName: string;
+class function TMalfunctionNotMovingEnemyNode.ClassX3DType: string;
 begin
   result := 'MalfunctionNotMovingEnemy';
 end;
@@ -245,7 +245,7 @@ begin
   AddField(FFduniqueCircleMovingSpeed);
 end;
 
-class function TMalfunctionCircleMovingEnemyNode.ClassNodeTypeName: string;
+class function TMalfunctionCircleMovingEnemyNode.ClassX3DType: string;
 begin
   result := 'MalfunctionCircleMovingEnemy';
 end;
@@ -264,7 +264,7 @@ begin
   AddField(FFdposition);
 end;
 
-class function TMalfunctionHuntingEnemyNode.ClassNodeTypeName: string;
+class function TMalfunctionHuntingEnemyNode.ClassX3DType: string;
 begin
   result := 'MalfunctionHuntingEnemy';
 end;
@@ -309,7 +309,6 @@ var
   vMiddle, vSizes: TVector3Single;
   halfMaxSize: Single;
   MoveLimitShape: TShape;
-  EnemiesConstructor: TEnemiesConstructor;
   DummyGravityUp: TVector3Single;
   BaseLights: TLightInstancesList;
 begin
@@ -372,7 +371,7 @@ begin
   {read enemy ships from file}
   enemyShips := TEnemyShipList.Create(false);
   levelScene.RootNode.EnumerateNodes(TVRMLMalfunctionEnemyNode,
-    @EnemiesConstructor.ConstructEnemy, true);
+    @TEnemiesConstructor(nil).ConstructEnemy, true);
 
   {reset some ship variables}
   playerShip.shipRotationSpeed := 0.0;
