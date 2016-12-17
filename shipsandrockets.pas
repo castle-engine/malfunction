@@ -143,7 +143,8 @@ type
    FireDelay dla tego shipKind. Pamietaj wywolac inherited w Update; }
   TFiringRocketsEnemyShip = class(TEnemyShip)
   private
-    LastFiredRocketTime, NextFireRocketDelay: TMilisecTime;
+    LastFiredRocketTime: TTimerResult;
+    NextFireRocketDelay: TFloatTime;
     RocketFiringInited: boolean;
   protected
     {uzywaj tego w podklasach aby sterowac tym kiedy statek strzela
@@ -289,7 +290,7 @@ type
 
     { Determinuje jak czesto statek bedzie strzelal rakiety,
       istotne tylko jesli statek jest TFiringRocketsEnemyShip. }
-    FireDelay: Int64;
+    FireDelay: TFloatTime;
 
     { Okreslaja jaka jest szybkosc statku przy danym stanie
       HuntingAttack, w skali gdzie wartosc 1.0 oznacza pewna domyslna
@@ -303,13 +304,13 @@ type
 const
   EnemyShipKindsInfos : array[TEnemyShipKind]of TEnemyShipKindInfo =
   (( MaxLife: 30; NameShcut: 'hedgehog'; Name: 'Black Hedgehog';
-     VrmlFname:'black_hedgehog.wrl'; FireDelay: 8000;
+     VrmlFname:'black_hedgehog.wrl'; FireDelay: 8.000;
      HuntingSpeed: (0.5, 0.5); CircleMovingSpeed: 1.0),
    ( MaxLife: 15; NameShcut: 'tieftr'; Name: 'Tie Fighter';
-     VrmlFname: 'tie_fighter.wrl'; FireDelay: 8000;
+     VrmlFname: 'tie_fighter.wrl'; FireDelay: 8.000;
      HuntingSpeed: (1, 1); CircleMovingSpeed: 1.0),
    ( MaxLife: 50; NameShcut:'destroyer'; Name: 'Destroyer';
-     VrmlFname: 'destroyer.wrl'; FireDelay: 4000;
+     VrmlFname: 'destroyer.wrl'; FireDelay: 4.000;
      HuntingSpeed: (1, 1); CircleMovingSpeed: 0.5)
   );
 
@@ -468,14 +469,14 @@ begin
  inherited;
  if RocketFiringInited then
  begin
-  if TimeTickSecondLater(LastFiredRocketTime, CastleTimeUtils.GetTickCount64, NextFireRocketDelay) then
+  if TimerSeconds(Timer, LastFiredRocketTime) >= NextFireRocketDelay then
   begin
    if FiringRocketsAllowed then
     FireRocket(VectorSubtract(playerShip.shipPos, shipPos), 1);
    {w ten sposob statki beda strzelaly w dosc zroznicowanych odstepach czasu}
-   LastFiredRocketTime := CastleTimeUtils.GetTickCount64;
+   LastFiredRocketTime := Timer;
    with EnemyShipKindsInfos[Kind] do
-    NextFireRocketDelay := FireDelay div 2+ Random(FireDelay div 2);
+    NextFireRocketDelay := (FireDelay / 2) + Random * (FireDelay / 2);
   end;
  end else
  begin
@@ -483,9 +484,9 @@ begin
    zamiast w naszym konstruktorze bo po skonstruowaniu obiektu enemyShip
    w LoadLevel moze minac duzo czasu do poczatku gry - np. czas na ten MessageOK
    w ModeGameUnit.modeGameEnter; }
-  LastFiredRocketTime := CastleTimeUtils.GetTickCount64;
+  LastFiredRocketTime := Timer;
   with EnemyShipKindsInfos[Kind] do
-   NextFireRocketDelay := FireDelay div 2+ Random(FireDelay div 2);
+   NextFireRocketDelay := (FireDelay / 2) + Random * (FireDelay / 2);
   RocketFiringInited := true;
  end;
 end;

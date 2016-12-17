@@ -344,10 +344,10 @@ begin
     {ustalamy shipPosBox na box o srodku tam gdzie levelScene.BoundingBox
      i rozmiarach piec razy wiekszych niz najwiekszy rozmiar
      levelScene.BounxingBox.}
-    vSizes := levelScene.BoundingBox.Sizes;
+    vSizes := levelScene.BoundingBox.Size;
     halfMaxSize := max(vSizes[0], vSizes[1], vSizes[2])* 2.5;
     vSizes := Vector3Single(halfMaxSize, halfMaxSize, halfMaxSize);
-    vMiddle := levelScene.BoundingBox.Middle;
+    vMiddle := levelScene.BoundingBox.Center;
     MoveLimit.Data[0] := VectorSubtract(vMiddle, vSizes);
     MoveLimit.Data[1] := VectorAdd(vMiddle, vSizes);
    end else
