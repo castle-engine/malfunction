@@ -36,7 +36,8 @@ uses CastleVectors, SysUtils, CastleGL, CastleWindow, GameGeneral, CastleGLUtils
   ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
   CastleStringUtils, CastleScene, CastleGLImages, X3DNodes,
   CastleSceneManager, CastleUIControls, CastleCameras, Castle3D,
-  CastleRenderingCamera, CastleBackground, CastleRays, CastleApplicationProperties;
+  CastleRenderingCamera, CastleBackground, CastleRays, CastleApplicationProperties,
+  CastleProjection;
 
 var
   kokpit_gl: TGLImage;

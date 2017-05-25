@@ -60,7 +60,7 @@ procedure Press(Container: TUIContainer; const Event: TInputPressRelease); forwa
 
 procedure modeEnter;
 begin
-  OrthoProjection(0, Window.width, 0, Window.height);
+  OrthoProjection(FloatRectangle(Window.Rect));
   Window.OnRender := @Render;
   Window.OnPress := @Press;
 end;
