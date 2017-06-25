@@ -369,6 +369,8 @@ begin
   rockets := TRocketList.Create(false);
 
   {read enemy ships from file}
+  { Note that enemyShips has FreeObjects = false,
+    so that we can set EnemyShips[I] := nil without freeing the item now. }
   enemyShips := TEnemyShipList.Create(false);
   levelScene.RootNode.EnumerateNodes(TVRMLMalfunctionEnemyNode,
     @TEnemiesConstructor(nil).ConstructEnemy, true);

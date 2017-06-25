@@ -332,7 +332,7 @@ begin
 
   {draw FadeOut}
   glLoadIdentity;
-  GLFadeRectangle(Window.Rect, FadeOutColor, FadeOutIntensity);
+  GLFadeRectangleDark(Window.Rect, FadeOutColor, FadeOutIntensity);
 end;
 
 { globa procs ------------------------------------------------------------ }

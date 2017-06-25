@@ -387,9 +387,16 @@ begin
 end;
 
 destructor TEnemyShip.Destroy;
+var
+  Index: Integer;
 begin
- if enemyShips <> nil then FPGObjectList_ReplaceAll(enemyShips, Self, nil);
- inherited;
+  if enemyShips <> nil then
+  begin
+    Index := enemyShips.IndexOf(Self);
+    if Index <> -1 then
+      enemyShips[Index] := nil;
+  end;
+  inherited;
 end;
 
 function TEnemyShip.ShipName: string;
@@ -451,7 +458,7 @@ begin
    (not levelScene.InternalOctreeCollisions.IsSegmentCollision(ShipPos, newShipPos,
      nil, false, nil)) and
    (CollisionWithOtherEnemyShip(newShipPos) = nil) and
-   MoveLimit.PointInside(newShipPos);
+   MoveLimit.Contains(newShipPos);
  if result then ShipPos := newShipPos;
 end;
 
@@ -614,10 +621,17 @@ begin
 end;
 
 destructor TRocket.Destroy;
+var
+  Index: Integer;
 begin
- if MotherShip <> nil then MotherShip.firedRockets.Remove(Self);
- if rockets <> nil then FPGObjectList_ReplaceAll(rockets, Self, nil);
- inherited;
+  if MotherShip <> nil then MotherShip.firedRockets.Remove(Self);
+  if rockets <> nil then
+  begin
+    Index := rockets.IndexOf(Self);
+    if Index <> -1 then
+      rockets[Index] := nil;
+  end;
+  inherited;
 end;
 
 procedure TRocket.Render(const Params: TRenderParams);
@@ -652,7 +666,7 @@ begin
  newRocPos := VectorAdd(rocPos, VectorScale(rocDir, Window.Fps.UpdateSecondsPassed * 50));
  if (levelScene.InternalOctreeCollisions.IsSegmentCollision(rocPos,
        newRocPos, nil, false, nil)) or
-    (not MoveLimit.PointInside(rocPos)) then
+    (not MoveLimit.Contains(rocPos)) then
   {rakieta zderzyla sie z czescia levelu lub wyleciala poza MoveLimit}
   Self.Destroy else
  begin
@@ -705,16 +719,40 @@ begin
 end;
 
 procedure ShipsAndRocketsUpdate;
-var i: integer;
+var
+  i: integer;
+  removedSomeEnemy: boolean;
 begin
- for i := 0 to rockets.Count-1 do
-  if rockets[i] <> nil then rockets[i].Update;
- for i := 0 to enemyShips.Count-1 do
-  if enemyShips[i] <> nil then enemyShips[i].Update;
+  for i := 0 to rockets.Count-1 do
+    if rockets[i] <> nil then
+      rockets[i].Update;
 
- FPGObjectList_RemoveNils(rockets);
- if (FPGObjectList_RemoveNils(enemyShips) > 0) and (enemyShips.Count = 0) then
-  Notifications.Show('ALL ENEMY SHIPS DESTROYED.');
+  for i := 0 to enemyShips.Count-1 do
+    if enemyShips[i] <> nil then
+      enemyShips[i].Update;
+
+  // remove nils
+  I := 0;
+  while I < rockets.Count do
+    if rockets[I] <> nil then
+      Inc(I)
+    else
+      rockets.Delete(I);
+
+  // remove nils
+  I := 0;
+  removedSomeEnemy := false;
+  while I < enemyShips.Count do
+    if enemyShips[I] <> nil then
+      Inc(I)
+    else
+    begin
+      removedSomeEnemy := true;
+      enemyShips.Delete(I);
+    end;
+
+  if removedSomeEnemy and (enemyShips.Count = 0) then
+    Notifications.Show('ALL ENEMY SHIPS DESTROYED.');
 end;
 
 function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
