@@ -38,15 +38,16 @@ unit ShipsAndRockets;
 
 interface
 
-uses CastleWindow, SysUtils, CastleGLUtils, CastleVectors, CastleUtils,
-  CastleClassUtils, Classes, CastleTimeUtils, CastleScene, Castle3D, FGL;
+uses SysUtils, Classes, Generics.Collections,
+  CastleWindow, CastleGLUtils, CastleVectors, CastleUtils,
+  CastleClassUtils, CastleTimeUtils, CastleScene, Castle3D;
 
 type
   TEnemyShipKind = (skHedgehog, skTieFighter, skDestroyer);
   TRocket = class;
   TEnemyShip = class;
 
-  TRocketList = specialize TFPGObjectList<TRocket>;
+  TRocketList = specialize TObjectList<TRocket>;
 
   TSpaceShip = class
   private
@@ -137,7 +138,7 @@ type
     function TryShipMove(const newShipPos: TVector3Single): boolean;
   end;
 
-  TEnemyShipList = specialize TFPGObjectList<TEnemyShip>;
+  TEnemyShipList = specialize TObjectList<TEnemyShip>;
 
   {statki tej klasy wywoluja w Update FireRocket co jakis czas, zalezny od
    FireDelay dla tego shipKind. Pamietaj wywolac inherited w Update; }

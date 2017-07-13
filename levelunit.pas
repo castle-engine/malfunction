@@ -396,18 +396,23 @@ begin
 end;
 
 procedure FreeLevel;
+var
+  R: TRocket;
+  E: TEnemyShip;
 begin
- FreeAndNil(levelScene);
- if rockets <> nil then
- begin
-   rockets.FreeObjects := true;
-   FreeAndNil(rockets);
- end;
- if enemyShips <> nil then
- begin
-   enemyShips.FreeObjects := true;
-   FreeAndNil(enemyShips);
- end;
+  FreeAndNil(levelScene);
+  if rockets <> nil then
+  begin
+    for R in Rockets do
+      R.Free;
+    FreeAndNil(rockets);
+  end;
+  if enemyShips <> nil then
+  begin
+    for E in EnemyShips do
+      E.Free;
+    FreeAndNil(enemyShips);
+  end;
 end;
 
 procedure PlayGame(const SceneURL: string);
