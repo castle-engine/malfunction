@@ -172,8 +172,8 @@ procedure TGame2DControls.Render;
 
     procedure MoveLimitPosToPixel(const pos: TVector3Single; var x, y: TGLint);
     begin
-     x := Round(MapRange(pos[0], MoveLimit.Data[0, 0], MoveLimit.Data[1, 0], MinInsideX, MaxInsideX));
-     y := Round(MapRange(pos[1], MoveLimit.Data[0, 1], MoveLimit.Data[1, 1], MinInsideY, MaxInsideY));
+     x := Round(MapRange(pos[0], MoveLimit.Data[0].Data[0], MoveLimit.Data[1].Data[0], MinInsideX, MaxInsideX));
+     y := Round(MapRange(pos[1], MoveLimit.Data[0].Data[1], MoveLimit.Data[1].Data[1], MinInsideY, MaxInsideY));
     end;
 
   var

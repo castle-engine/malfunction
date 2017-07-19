@@ -356,9 +356,10 @@ begin
        5 razy. Czyli nie pozwalamy statkowi wyleciec poza x, y-levelu ani ponizej
        z-ow, ale moze wzleciec dosc wysoko ponad z-ty.}
     MoveLimit := levelScene.BoundingBox;
-    MoveLimit.Data[1, 2] := MoveLimit.Data[1, 2] +
-                       4 * (MoveLimit.Data[1, 2] -
-                            MoveLimit.Data[0, 2]);
+    MoveLimit.Data[1].Data[2] :=
+      MoveLimit.Data[1].Data[2] +
+      4 * (MoveLimit.Data[1].Data[2] -
+           MoveLimit.Data[0].Data[2]);
    end;
   end;
 

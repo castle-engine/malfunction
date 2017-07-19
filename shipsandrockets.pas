@@ -316,7 +316,7 @@ const
   );
 
 const
-  modelDir3d: TVector3Single = (0, 0, 1);
+  modelDir3d: TVector3Single = (Data: (0, 0, 1));
 
 var
   { modeliki; ladowane w Window.Open, niszczone w Window.Close  }
@@ -600,10 +600,9 @@ begin
  ShipDir := VectorAdjustToLength(ShipDir, 20 *
    EnemyShipKindsInfos[Kind].HuntingSpeed[HuntingAttack]);
  if not HuntingAttack then
-  ShipDir := VectorNegate(ShipDir);
+  ShipDir := -ShipDir;
 
- if not TryShipMove( VectorAdd(ShipPos,
-   VectorScale(ShipDir, Window.Fps.UpdateSecondsPassed * 50)) ) then
+ if not TryShipMove(ShipPos + ShipDir * (Window.Fps.UpdateSecondsPassed * 50)) then
  begin
   Randomize;
   HuntingAttack := not HuntingAttack
@@ -617,7 +616,7 @@ constructor TRocket.Create(const ArocPos, ArocDir: TVector3Single;
 begin
  inherited Create;
  rocPos := ArocPos;
- rocDir := VectorAdjustToLength(ArocDir, speed * 50);
+ rocDir := ArocDir.AdjustToLength(speed * 50);
  FMotherShip := AMotherShip;
 end;
 
@@ -664,7 +663,7 @@ var newRocPos: TVector3Single;
 
 var i: integer;
 begin
- newRocPos := VectorAdd(rocPos, VectorScale(rocDir, Window.Fps.UpdateSecondsPassed * 50));
+ newRocPos := rocPos + rocDir * (Window.Fps.UpdateSecondsPassed * 50);
  if (levelScene.InternalOctreeCollisions.IsSegmentCollision(rocPos,
        newRocPos, nil, false, nil)) or
     (not MoveLimit.Contains(rocPos)) then

@@ -246,8 +246,8 @@ begin
  {move ship using shipSpeed,
   check for collisions with level using octree,
   check for collisions with enemyShips using simple sphere collision detecion}
- newShipPos := VectorAdd(shipPos, VectorScale(shipDir,
-   shipSpeed * Window.Fps.UpdateSecondsPassed * 50));
+ newShipPos := VectorAdd(shipPos, shipDir *
+   (shipSpeed * Window.Fps.UpdateSecondsPassed * 50));
  if CheatDontCheckCollisions then
   shipPos := newShipPos else
  begin
@@ -295,7 +295,7 @@ const
   SpeedRect: TRectangle = (Left: 80; Bottom: 20; Width: 30; Height: 70);
   LiveRect : TRectangle = (Left: 30; Bottom: 20; Width: 30; Height: 70);
   RectMargin = 2;
-  kompasMiddle: TVector2f = (560, 480 - 428);
+  kompasMiddle: TVector2f = (Data: (560, 480 - 428));
   kompasSrednica = 70;
 
   procedure DrawIndicator(R: TRectangle;
