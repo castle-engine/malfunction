@@ -132,7 +132,8 @@ procedure PlayGame(const SceneURL: string);
 
 implementation
 
-uses CastleVectors, CastleUtils, PlayerShipUnit, ShipsAndRockets,
+uses Math,
+  CastleVectors, CastleUtils, PlayerShipUnit, ShipsAndRockets,
   CastleMessages, CastleSceneCore, CastleUIControls, CastleURIUtils,
   CastleApplicationProperties;
 
@@ -345,7 +346,7 @@ begin
      i rozmiarach piec razy wiekszych niz najwiekszy rozmiar
      levelScene.BounxingBox.}
     vSizes := levelScene.BoundingBox.Size;
-    halfMaxSize := max(vSizes[0], vSizes[1], vSizes[2])* 2.5;
+    halfMaxSize := vSizes.Max * 2.5;
     vSizes := Vector3Single(halfMaxSize, halfMaxSize, halfMaxSize);
     vMiddle := levelScene.BoundingBox.Center;
     MoveLimit.Data[0] := VectorSubtract(vMiddle, vSizes);

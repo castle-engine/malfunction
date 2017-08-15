@@ -60,7 +60,6 @@ procedure Press(Container: TUIContainer; const Event: TInputPressRelease); forwa
 
 procedure modeEnter;
 begin
-  OrthoProjection(FloatRectangle(Window.Rect));
   Window.OnRender := @Render;
   Window.OnPress := @Press;
 end;
@@ -77,6 +76,8 @@ var
   X, Y: Integer;
   Color: TCastleColor;
 begin
+  OrthoProjection(FloatRectangle(Window.Rect));
+
   listBg.Draw(0, 0);
 
   X := Window.width*50 div 640;

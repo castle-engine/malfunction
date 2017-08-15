@@ -239,8 +239,8 @@ begin
   if Pressed[K_Right] then shipRotationSpeed -= ROT_SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50;
   if Pressed[K_Up] then shipVertRotationSpeed -= ROT_VERT_SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50;
   if Pressed[K_Down] then shipVertRotationSpeed += ROT_VERT_SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50;
-  if Pressed[K_A] then shipSpeed := CastleUtils.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50);
-  if Pressed[K_Z] then shipSpeed := CastleUtils.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50);
+  if Pressed[K_A] then shipSpeed := Math.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50);
+  if Pressed[K_Z] then shipSpeed := Math.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * Window.Fps.UpdateSecondsPassed * 50);
  end;
 
  {move ship using shipSpeed,
@@ -320,7 +320,7 @@ begin
   DrawIndicator(speedRect, Yellow, Black, LightBlue,
     shipSpeed, playerShipAbsoluteMinSpeed, playerShipAbsoluteMaxSpeed);
   DrawIndicator(liveRect, Yellow, Black, Red,
-    CastleUtils.max(shipLife, 0.0) , 0, MaxShipLife);
+    Math.max(shipLife, 0.0) , 0, MaxShipLife);
 
   {draw kompas arrow}
   glTranslatef(kompasMiddle[0], kompasMiddle[1], 0);
