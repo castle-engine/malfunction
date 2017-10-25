@@ -143,7 +143,7 @@ procedure TMalfunctionLevelInfoNode.CreateNode;
 begin
   inherited;
 
-  FFdtype := TSFString.Create(Self, 'type', 'planet');
+  FFdtype := TSFString.Create(Self, true, 'type', 'planet');
   AddField(FFdtype);
 end;
 
@@ -205,7 +205,7 @@ procedure TVRMLMalfunctionEnemyNode.CreateNode;
 begin
   inherited;
 
-  FFdkind := TSFString.Create(Self, 'kind', 'hedgehog');
+  FFdkind := TSFString.Create(Self, true, 'kind', 'hedgehog');
   AddField(FFdkind);
 end;
 
@@ -218,7 +218,7 @@ procedure TMalfunctionNotMovingEnemyNode.CreateNode;
 begin
   inherited;
 
-  FFdposition := TSFVec3f.Create(Self, 'position', Vector3Single(0, 0, 0));
+  FFdposition := TSFVec3f.Create(Self, true, 'position', Vector3Single(0, 0, 0));
   AddField(FFdposition);
 end;
 
@@ -236,13 +236,13 @@ procedure TMalfunctionCircleMovingEnemyNode.CreateNode;
 begin
   inherited;
 
-  FFdcircleCenter := TSFVec3f.Create(Self, 'circleCenter', Vector3Single(0, 0, 0));
+  FFdcircleCenter := TSFVec3f.Create(Self, true, 'circleCenter', Vector3Single(0, 0, 0));
   AddField(FFdcircleCenter);
 
-  FFdcircleRadius := TSFFloat.Create(Self, 'circleRadius', 1.0);
+  FFdcircleRadius := TSFFloat.Create(Self, true, 'circleRadius', 1.0);
   AddField(FFdcircleRadius);
 
-  FFduniqueCircleMovingSpeed := TSFFloat.Create(Self, 'uniqueCircleMovingSpeed', 1.0);
+  FFduniqueCircleMovingSpeed := TSFFloat.Create(Self, true, 'uniqueCircleMovingSpeed', 1.0);
   AddField(FFduniqueCircleMovingSpeed);
 end;
 
@@ -261,7 +261,7 @@ procedure TMalfunctionHuntingEnemyNode.CreateNode;
 begin
   inherited;
 
-  FFdposition := TSFVec3f.Create(Self, 'position', Vector3Single(0, 0, 0));
+  FFdposition := TSFVec3f.Create(Self, true, 'position', Vector3Single(0, 0, 0));
   AddField(FFdposition);
 end;
 
