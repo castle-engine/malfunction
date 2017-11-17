@@ -437,7 +437,8 @@ begin
      We should remake ships as Castle3D.T3DOrient, then this whole
      unit can be trivial. }
 
-   EnemyShipVRMLs[Kind].Render(nil, RenderingCamera.Frustum, Params);
+   EnemyShipVRMLs[Kind].InternalIgnoreFrustum := true;
+   EnemyShipVRMLs[Kind].Render(RenderingCamera.Frustum, Params);
  glPopMatrix;
 end;
 
@@ -648,7 +649,8 @@ begin
      We should remake rockets as Castle3D.T3DTransform, then this whole
      unit can be trivial. }
 
-   rocketVRML.Render(nil, RenderingCamera.Frustum, Params);
+   rocketVRML.InternalIgnoreFrustum := true;
+   rocketVRML.Render(RenderingCamera.Frustum, Params);
  glPopMatrix;
 end;
 

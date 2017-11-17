@@ -97,7 +97,8 @@ procedure TMalfunctionSceneManager.RenderFromViewEverything;
       and camera updated when it should be, then this whole
       unit can be trivial. }
 
-    levelScene.Render(nil, RenderingCamera.Frustum, Params);
+    levelScene.InternalIgnoreFrustum := true;
+    levelScene.Render(RenderingCamera.Frustum, Params);
     ShipsRender(Params);
     RocketsRender(Params);
   end;
