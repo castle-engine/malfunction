@@ -29,24 +29,7 @@ unit ModeGameUnit;
 
 interface
 
-implementation
-
-uses CastleVectors, SysUtils, CastleGL, CastleWindow, GameGeneral, CastleGLUtils,
-  CastleUtils, LevelUnit, CastleBoxes, CastleMessages, PlayerShipUnit, CastleImages,
-  ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
-  CastleStringUtils, CastleScene, CastleGLImages, X3DNodes,
-  CastleSceneManager, CastleUIControls, CastleCameras, Castle3D,
-  CastleRenderingCamera, CastleBackground, CastleRays, CastleApplicationProperties,
-  CastleProjection;
-
-var
-  kokpit_gl: TGLImage;
-  crossh_gl: TGLImage;
-  {crossh_orig_* to oryginalne (tzn. wzgledem ekranu 640x480) rozmiary
-   crosshair image (upakowanego w crossh_list) }
-  crossh_orig_width, crossh_orig_height: integer;
-
-{ TMalfunctionSceneManager --------------------------------------------------- }
+uses X3DNodes, CastleSceneManager, CastleProjection;
 
 type
   TMalfunctionSceneManager = class(TCastleSceneManager)
@@ -59,6 +42,27 @@ type
   public
     destructor Destroy; override;
   end;
+
+var
+  SceneManager: TMalfunctionSceneManager;
+
+implementation
+
+uses CastleVectors, SysUtils, CastleGL, CastleWindow, GameGeneral, CastleGLUtils,
+  CastleUtils, LevelUnit, CastleBoxes, CastleMessages, PlayerShipUnit, CastleImages,
+  ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
+  CastleStringUtils, CastleScene, CastleGLImages,
+  CastleUIControls, CastleCameras, Castle3D,
+  CastleRenderingCamera, CastleBackground, CastleRays, CastleApplicationProperties;
+
+var
+  kokpit_gl: TGLImage;
+  crossh_gl: TGLImage;
+  {crossh_orig_* to oryginalne (tzn. wzgledem ekranu 640x480) rozmiary
+   crosshair image (upakowanego w crossh_list) }
+  crossh_orig_width, crossh_orig_height: integer;
+
+{ TMalfunctionSceneManager --------------------------------------------------- }
 
 destructor TMalfunctionSceneManager.Destroy;
 begin
@@ -232,7 +236,6 @@ end;
 { mode enter/exit ----------------------------------------------------------- }
 
 var
-  SceneManager: TMalfunctionSceneManager;
   Controls: TGame2DControls;
   Camera: TWalkCamera;
 

@@ -135,7 +135,8 @@ implementation
 uses Math,
   CastleVectors, CastleUtils, PlayerShipUnit, ShipsAndRockets,
   CastleMessages, CastleSceneCore, CastleUIControls, CastleURIUtils,
-  CastleApplicationProperties;
+  CastleApplicationProperties,
+  ModeGameUnit;
 
 { TMalfunctionInfoNode ----------------------------------------------- }
 
@@ -311,7 +312,6 @@ var
   halfMaxSize: Single;
   MoveLimitShape: TShape;
   DummyGravityUp: TVector3Single;
-  BaseLights: TLightInstancesList;
 begin
  FreeLevel;
 
@@ -385,12 +385,7 @@ begin
   { zeby pierwsze OnRender gry nie zajmowalo zbyt duzo czasu zeby enemyShips
     nie strzelaly od razu kilkoma rakietami na starcie po zaladowaniu
     levelu. }
-  { TODO: it's not clean to create BaseLights here,
-    we should use SceneManager.BaseLights }
-  BaseLights := TLightInstancesList.Create;
-  try
-    levelScene.PrepareResources([prRender, prBackground, prBoundingBox], false, BaseLights);
-  finally FreeAndNil(BaseLights) end;
+  SceneManager.PrepareResources(levelScene);
 
   Notifications.Clear;
   Notifications.Show('Level '+URICaption(SceneURL)+' loaded.');

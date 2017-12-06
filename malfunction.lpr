@@ -39,7 +39,7 @@ program malfunction;
 
 uses CastleWindow, GameGeneral, SysUtils, CastleUtils, ModeMenuUnit, ModeGameUnit,
   CastleParameters, CastleClassUtils, CastleFilesUtils, CastleKeysMouse,
-  CastleURIUtils;
+  CastleURIUtils, CastleLog;
 
 { params ------------------------------------------------------------ }
 
@@ -94,6 +94,8 @@ begin
   Parameters.Parse(Options, @OptionProc, nil);
   if Parameters.High > 0 then
     raise EInvalidParams.Create('Unrecognized parameter : ' + Parameters[1]);
+
+  InitializeLog;
 
   { Mouse is useless, so hide }
   // TODO: Window.Cursor should not be assigned, only TUIControl.Cursor
