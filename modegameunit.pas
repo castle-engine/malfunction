@@ -322,6 +322,9 @@ procedure ContextOpen;
 var crossh_img: TCastleImage;
     kokpit_img: TCastleImage;
 begin
+  // TODO: we need EnableFixedFunction to work, as we do some rendering directly
+  GLFeatures.EnableFixedFunction := true;
+
   kokpit_img := LoadImage(ApplicationData('images/kokpit.png'),
     [TRGBAlphaImage, TGrayscaleAlphaImage]);
   kokpit_img.Resize(Window.width, kokpit_img.Height * Window.Height div 480);
