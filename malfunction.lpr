@@ -97,10 +97,6 @@ begin
 
   InitializeLog;
 
-  { Mouse is useless, so hide }
-  // TODO: Window.Cursor should not be assigned, only TUIControl.Cursor
-  Window.Cursor := mcForceNone;
-
   SetGameMode(modeMenu);
   Window.OpenAndRun;
 end.

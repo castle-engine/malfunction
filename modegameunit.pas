@@ -136,7 +136,7 @@ begin
     { Synchronize Camera with playerShip right before using BaseLights,
       as BaseLights initializes headlight based on Camera. }
     Camera.SetView(playerShip.shipPos,
-      Normalized(playerShip.shipDir), playerShip.shipUp);
+      playerShip.shipDir.Normalize, playerShip.shipUp);
     Params.FBaseLights.Assign(BaseLights);
 
     Params.Transparent := false; Params.ShadowVolumesReceivers := false; RenderAll(Params);
@@ -175,7 +175,7 @@ procedure TGame2DControls.Render;
   var
     MinInsideX, MaxInsideX, MinInsideY, MaxInsideY: Integer;
 
-    procedure MoveLimitPosToPixel(const pos: TVector3Single; var x, y: TGLint);
+    procedure MoveLimitPosToPixel(const pos: TVector3; var x, y: TGLint);
     begin
      x := Round(MapRange(pos[0], MoveLimit.Data[0].Data[0], MoveLimit.Data[1].Data[0], MinInsideX, MaxInsideX));
      y := Round(MapRange(pos[1], MoveLimit.Data[0].Data[1], MoveLimit.Data[1].Data[1], MinInsideY, MaxInsideY));

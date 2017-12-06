@@ -219,7 +219,7 @@ procedure TMalfunctionNotMovingEnemyNode.CreateNode;
 begin
   inherited;
 
-  FFdposition := TSFVec3f.Create(Self, true, 'position', Vector3Single(0, 0, 0));
+  FFdposition := TSFVec3f.Create(Self, true, 'position', Vector3(0, 0, 0));
   AddField(FFdposition);
 end;
 
@@ -237,7 +237,7 @@ procedure TMalfunctionCircleMovingEnemyNode.CreateNode;
 begin
   inherited;
 
-  FFdcircleCenter := TSFVec3f.Create(Self, true, 'circleCenter', Vector3Single(0, 0, 0));
+  FFdcircleCenter := TSFVec3f.Create(Self, true, 'circleCenter', Vector3(0, 0, 0));
   AddField(FFdcircleCenter);
 
   FFdcircleRadius := TSFFloat.Create(Self, true, 'circleRadius', 1.0);
@@ -262,7 +262,7 @@ procedure TMalfunctionHuntingEnemyNode.CreateNode;
 begin
   inherited;
 
-  FFdposition := TSFVec3f.Create(Self, true, 'position', Vector3Single(0, 0, 0));
+  FFdposition := TSFVec3f.Create(Self, true, 'position', Vector3(0, 0, 0));
   AddField(FFdposition);
 end;
 
@@ -308,10 +308,10 @@ end;
 
 procedure LoadLevel(const SceneURL: string);
 var
-  vMiddle, vSizes: TVector3Single;
+  vMiddle, vSizes: TVector3;
   halfMaxSize: Single;
   MoveLimitShape: TShape;
-  DummyGravityUp: TVector3Single;
+  DummyGravityUp: TVector3;
 begin
  FreeLevel;
 
@@ -347,10 +347,10 @@ begin
      levelScene.BounxingBox.}
     vSizes := levelScene.BoundingBox.Size;
     halfMaxSize := vSizes.Max * 2.5;
-    vSizes := Vector3Single(halfMaxSize, halfMaxSize, halfMaxSize);
+    vSizes := Vector3(halfMaxSize, halfMaxSize, halfMaxSize);
     vMiddle := levelScene.BoundingBox.Center;
-    MoveLimit.Data[0] := VectorSubtract(vMiddle, vSizes);
-    MoveLimit.Data[1] := VectorAdd(vMiddle, vSizes);
+    MoveLimit.Data[0] := vMiddle - vSizes;
+    MoveLimit.Data[1] := vMiddle + vSizes;
    end else
    begin
     {Ustalamy shipPosBox na box levelu, za wyjatkiem z-ta ktorego przedluzamy

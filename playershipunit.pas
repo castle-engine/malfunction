@@ -182,9 +182,10 @@ begin
 end;
 
 procedure TPlayerShip.PlayerShipApplyMatrix;
-var shipCenter: TVector3Single;
+var shipCenter: TVector3;
 begin
- shipCenter := VectorAdd(shipPos, shipDir);
+ shipCenter := shipPos + shipDir;
+ // TODO: do not call gluXxx routines, do not set fixed-function OpenGL directly
  gluLookAt(shipPos[0], shipPos[1], shipPos[2],
            shipCenter[0], shipCenter[1], shipCenter[2],
            shipUp[0], shipUp[1], shipUp[2]);
@@ -228,7 +229,7 @@ const
   ROT_SPEED_CHANGE = 0.3;
   ROT_VERT_SPEED_CHANGE = 0.24;
   SPEED_CHANGE = 2;
-var newShipPos, shipSideAxis: TVector3Single;
+var newShipPos, shipSideAxis: TVector3;
     sCollider: TEnemyShip;
     shipUpZSign: Single;
 begin
@@ -246,8 +247,8 @@ begin
  {move ship using shipSpeed,
   check for collisions with level using octree,
   check for collisions with enemyShips using simple sphere collision detecion}
- newShipPos := VectorAdd(shipPos, shipDir *
-   (shipSpeed * Window.Fps.UpdateSecondsPassed * 50));
+ newShipPos := shipPos + shipDir *
+   (shipSpeed * Window.Fps.UpdateSecondsPassed * 50);
  if CheatDontCheckCollisions then
   shipPos := newShipPos else
  begin
@@ -260,7 +261,7 @@ begin
   end else
   if not levelScene.InternalOctreeCollisions.MoveCollision(
     shipPos, newShipPos, true, shipRadius,
-    { boxes will be just ignored } EmptyBox3D, EmptyBox3D) then
+    { boxes will be just ignored } TBox3D.Empty, TBox3D.Empty) then
    Crash(Random(40)+40, '') else
    shipPos := newShipPos;
  end;
@@ -270,11 +271,11 @@ begin
  shipUpZSign := Sign(shipUp[2]);
  if shipUpZSign <> 0 then
  begin
-  shipDir := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.UpdateSecondsPassed * 50, shipDir, Vector3Single(0, 0, shipUpZSign));
-  shipUp := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.UpdateSecondsPassed * 50, shipUp, Vector3Single(0, 0, shipUpZSign));
+  shipDir := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.UpdateSecondsPassed * 50, shipDir, Vector3(0, 0, shipUpZSign));
+  shipUp := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.UpdateSecondsPassed * 50, shipUp, Vector3(0, 0, shipUpZSign));
  end;
  {apply speed vertical - here we will need shipSideAxis}
- shipSideAxis := VectorProduct(shipDir, shipUp);
+ shipSideAxis := TVector3.CrossProduct(shipDir, shipUp);
  shipDir := RotatePointAroundAxisDeg(shipVertRotationSpeed * Window.Fps.UpdateSecondsPassed * 50, shipDir, shipSideAxis);
  shipUp := RotatePointAroundAxisDeg(shipVertRotationSpeed * Window.Fps.UpdateSecondsPassed * 50, shipUp, shipSideAxis);
 
@@ -295,7 +296,7 @@ const
   SpeedRect: TRectangle = (Left: 80; Bottom: 20; Width: 30; Height: 70);
   LiveRect : TRectangle = (Left: 30; Bottom: 20; Width: 30; Height: 70);
   RectMargin = 2;
-  kompasMiddle: TVector2f = (Data: (560, 480 - 428));
+  kompasMiddle: TVector2 = (Data: (560, 480 - 428));
   kompasSrednica = 70;
 
   procedure DrawIndicator(R: TRectangle;

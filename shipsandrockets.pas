@@ -40,7 +40,7 @@ interface
 
 uses SysUtils, Classes, Generics.Collections,
   CastleWindow, CastleGLUtils, CastleVectors, CastleUtils,
-  CastleClassUtils, CastleTimeUtils, CastleScene, Castle3D;
+  CastleClassUtils, CastleTimeUtils, CastleScene, CastleTransform;
 
 type
   TEnemyShipKind = (skHedgehog, skTieFighter, skDestroyer);
@@ -79,7 +79,7 @@ type
       shipUp bylo mozliwie bliskie zadanemu.
 
       Koniecznie zadbaj o zainicjowanie tych trzech wektorow w podklasie !}
-    shipPos, shipDir, shipUp: TVector3Single;
+    shipPos, shipDir, shipUp: TVector3;
 
     { ShipLife MAxShipLife = pelna sprawnosc, 0 lub mniej => statek zniszczony.
       Player Ship ma MaxShipLife = 100 zeby byl jakis punkt odniesienia. }
@@ -89,7 +89,7 @@ type
     { zostanie zignorowane jezeli za duzo rakiet wystrzelonych przez ten
       statek juz jest w przestrzeni. Dlugosc rocketDir nie ma wplywu
       na szybkosc rakiety podobnie jak w TRocket.Create. }
-    procedure FireRocket(const rocketDir: TVector3Single; rocketSpeed: Single);
+    procedure FireRocket(const rocketDir: TVector3; rocketSpeed: Single);
 
     {kolizje statek/rakieta - level sa robione przy pomocy drzewa osemkowego ale
      kolizje statek - statek i statek - rakieta sa robione "recznie" tzn.
@@ -106,7 +106,7 @@ type
     {sprawdza czy gdybysmy stali na pozycji pos to kolidowalibysmy z jakims
      statkiem na liscie enemyShips (ale nie z samymi soba, naturalnie).
      Jezeli nie ma kolizji to zwraca nil. }
-    function CollisionWithOtherEnemyShip(const pos: TVector3Single): TEnemyShip;
+    function CollisionWithOtherEnemyShip(const pos: TVector3): TEnemyShip;
 
     constructor Create(const AMaxShipLife: TGLfloat);
     destructor Destroy; override;
@@ -119,7 +119,7 @@ type
     property Kind: TEnemyShipKind read FKind;
     function ShipName: string;
 
-    constructor Create(AKind: TEnemyShipKind; const AShipPos: TVector3Single);
+    constructor Create(AKind: TEnemyShipKind; const AShipPos: TVector3);
     destructor Destroy; override;
 
     {render yourself to OpenGL at the right position and direction.
@@ -135,7 +135,7 @@ type
       na newShipPos jest dobra), jesli true - zmien shipPos na newShipPos.
       Nie przeprowadza tak dokladnego testu na kolizje jaki trzeba robic
       dla playerShip, ale dla enemyShips jest dobre. }
-    function TryShipMove(const newShipPos: TVector3Single): boolean;
+    function TryShipMove(const newShipPos: TVector3): boolean;
   end;
 
   TEnemyShipList = specialize TObjectList<TEnemyShip>;
@@ -153,7 +153,7 @@ type
      Domyslnie jest true.}
     FiringRocketsAllowed: boolean;
   public
-    constructor Create(AKind: TEnemyShipKind; const AShipPos: TVector3Single);
+    constructor Create(AKind: TEnemyShipKind; const AShipPos: TVector3);
     procedure Update; override;
   end;
 
@@ -164,7 +164,7 @@ type
   private
     AngleRad: Single; { aktualny kat na kole (w radianach) }
     AngleRadChange: Single; { zmiana kata co Update (moze byc ujemna) }
-    FCircleCenter: TVector3Single;
+    FCircleCenter: TVector3;
     FCircleRadius: Single;
     FUniqueCircleMovingSpeed: Single;
     procedure SetUniqueCircleMovingSpeed(const value: Single);
@@ -173,14 +173,14 @@ type
     property UniqueCircleMovingSpeed: Single read FUniqueCircleMovingSpeed
       write SetUniqueCircleMovingSpeed;
     { promien i srodek kola po ktorym sie porusza w plaszczyznie XY statek }
-    property CircleCenter: TVector3Single read FCircleCenter;
+    property CircleCenter: TVector3 read FCircleCenter;
     property CircleRadius: Single read FCircleRadius;
 
     { zwroc uwage ze jako drugi parametr podajesz nie shipPos ale circleCenter.
       Poczatkowe ShipPos bedzie wyliczone (jako pozycja na zadanym kole
       dla AngleRad = 0 a wiec w [ CircleCenter[0]+CircleRadius,
        CircleCenter[1], CircleCenter[2] ] }
-    constructor Create(AKind: TEnemyShipKind; const ACircleCenter: TVector3Single;
+    constructor Create(AKind: TEnemyShipKind; const ACircleCenter: TVector3;
       const ACircleRadius, AUniqueCircleMovingSpeed: Single);
 
     procedure Update; override;
@@ -195,7 +195,7 @@ type
         na skutek ciaglego losowania nowego RandomVectora).
       Moga byc relosowane tylko raz na jakis czas - zeby nie spowodowac
         tego "trzesacego sie ruchu".}
-    RandomVector: TVector3Single;
+    RandomVector: TVector3;
     RandomAngleDeg: Single;
     procedure Randomize;
   private
@@ -203,7 +203,7 @@ type
     procedure SetHuntingAttack(value: boolean);
     property HuntingAttack: boolean read FHuntingAttack write SetHuntingAttack;
   public
-    constructor Create(AKind: TEnemyShipKind; const AShipPos: TVector3Single);
+    constructor Create(AKind: TEnemyShipKind; const AShipPos: TVector3);
     procedure Update; override;
   end;
 
@@ -211,7 +211,7 @@ type
   private
     FMotherShip: TSpaceShip;
   public
-    rocPos, rocDir: TVector3Single;
+    rocPos, rocDir: TVector3;
     { MotherShip = statek ktory wystrzelil ta rakiete. Gdy rakieta
       zostanie zniszczona (bo zderzyla sie z czyms lub wyleciala za level)
       powiadomi o tym swoj MotherShip usuwajac sie z jego listy firedRockets.
@@ -223,7 +223,7 @@ type
       tak jakby ten wektor byl zawsze normalizowany na poczatku tego
       konstruktora. Szybkosc lotu rakiety bedzie nastepnie ustalana na
       podstawie speed (speed = 1 oznacza "standardowa szybkosc rakiety"). }
-    constructor Create(const ArocPos, ArocDir: TVector3Single; const speed: TGLfloat; AmotherShip: TSpaceShip);
+    constructor Create(const ArocPos, ArocDir: TVector3; const speed: TGLfloat; AmotherShip: TSpaceShip);
     destructor Destroy; override;
 
     class function rocRadius: Single;
@@ -316,7 +316,7 @@ const
   );
 
 const
-  modelDir3d: TVector3Single = (Data: (0, 0, 1));
+  modelDir3d: TVector3 = (Data: (0, 0, 1));
 
 var
   { modeliki; ladowane w Window.Open, niszczone w Window.Close  }
@@ -345,7 +345,7 @@ begin
  inherited;
 end;
 
-procedure TSpaceShip.FireRocket(const rocketDir: TVector3Single; rocketSpeed: Single);
+procedure TSpaceShip.FireRocket(const rocketDir: TVector3; rocketSpeed: Single);
 var rocket: TRocket;
 begin
  if firedRockets.Count < maxFiredRocketsCount then
@@ -361,7 +361,7 @@ begin
  fshipLife := fshipLife - (Random(15)+5);
 end;
 
-function TSpaceShip.CollisionWithOtherEnemyShip(const pos: TVector3Single): TEnemyShip;
+function TSpaceShip.CollisionWithOtherEnemyShip(const pos: TVector3): TEnemyShip;
 var i: integer;
 begin
  {jak widac, sprawdzamy powyzej czy enemyShips[i] <> Self zeby gdy wywolamy
@@ -378,13 +378,13 @@ end;
 
 { TEnemyShip ---------------------------------------------------------------- }
 
-constructor TEnemyShip.Create(AKind: TEnemyShipKind; const AShipPos: TVector3Single);
+constructor TEnemyShip.Create(AKind: TEnemyShipKind; const AShipPos: TVector3);
 begin
  inherited Create(EnemyShipKindsInfos[AKind].MaxLife);
  FKind := AKind;
  ShipPos := AShipPos;
- ShipUp := Vector3Single(0, 0, 1);
- ShipDir := Vector3Single(1, 0, 0);
+ ShipUp := Vector3(0, 0, 1);
+ ShipDir := Vector3(1, 0, 0);
 end;
 
 destructor TEnemyShip.Destroy;
@@ -422,19 +422,19 @@ begin
 end;
 
 procedure TEnemyShip.Render(const Params: TRenderParams);
-var GoodShipUp: TVector3Single;
+var GoodShipUp: TVector3;
 begin
  glPushMatrix;
 
    GoodShipUp := ShipUp;
    MakeVectorsOrthoOnTheirPlane(GoodShipUp, ShipDir);
    glMultMatrix(TransformToCoordsNoScaleMatrix(
-     ShipPos, GoodShipUp, VectorProduct(ShipDir, GoodShipUp), ShipDir));
+     ShipPos, GoodShipUp, TVector3.CrossProduct(ShipDir, GoodShipUp), ShipDir));
 
    { TODO: RenderingCamera.Frustum is actually invalid, it's not transformed
      by matrix. But we pass TestShapeVisibility = nil, and we don't use
      VisibilitySensor inside these models, so frustum value isn't really used.
-     We should remake ships as Castle3D.T3DOrient, then this whole
+     We should remake ships as CastleTransform.TCastleTransform, then this whole
      unit can be trivial. }
 
    EnemyShipVRMLs[Kind].InternalIgnoreFrustum := true;
@@ -450,7 +450,7 @@ procedure TEnemyShip.Update;
 begin
 end;
 
-function TEnemyShip.TryShipMove(const newShipPos: TVector3Single): boolean;
+function TEnemyShip.TryShipMove(const newShipPos: TVector3): boolean;
 begin
  {jezeli mozna sie przesunac, to rusz sie; uwaga - nie uwzgledniamy tu
   ze statek moze tu przeleciec przez torpede lub przez statek gracza.
@@ -466,7 +466,7 @@ end;
 
 { TFiringRocketsEnemyShip ------------------------------------------------- }
 
-constructor TFiringRocketsEnemyShip.Create(AKind: TEnemyShipKind; const AShipPos: TVector3Single);
+constructor TFiringRocketsEnemyShip.Create(AKind: TEnemyShipKind; const AShipPos: TVector3);
 begin
  inherited;
  RocketFiringInited := false;
@@ -481,7 +481,7 @@ begin
   if TimerSeconds(Timer, LastFiredRocketTime) >= NextFireRocketDelay then
   begin
    if FiringRocketsAllowed then
-    FireRocket(VectorSubtract(playerShip.shipPos, shipPos), 1);
+    FireRocket(playerShip.shipPos - shipPos, 1);
    {w ten sposob statki beda strzelaly w dosc zroznicowanych odstepach czasu}
    LastFiredRocketTime := Timer;
    with EnemyShipKindsInfos[Kind] do
@@ -518,10 +518,10 @@ begin
 end;
 
 constructor TCircleMovingEnemyShip.Create(AKind: TEnemyShipKind;
-  const ACircleCenter: TVector3Single;
+  const ACircleCenter: TVector3;
   const ACircleRadius, AUniqueCircleMovingSpeed: Single);
 begin
- inherited Create(AKind, Vector3Single(ACircleCenter[0]+ACircleRadius,
+ inherited Create(AKind, Vector3(ACircleCenter[0]+ACircleRadius,
    ACircleCenter[1], ACircleCenter[2]));
 
  FCircleRadius := ACircleRadius;
@@ -534,7 +534,7 @@ end;
 
 procedure TCircleMovingEnemyShip.Update;
 var newAngleRad: Double;
-    newShipPos, newShipDir: TVector3Single;
+    newShipPos, newShipDir: TVector3;
 begin
  inherited;
 
@@ -543,7 +543,7 @@ begin
  newShipPos[1] := sin(newAngleRad)*CircleRadius + CircleCenter[1];
  newShipPos[2] := CircleCenter[2];
 
- newShipDir := VectorSubtract(newShipPos, shipPos);
+ newShipDir := newShipPos - shipPos;
 
  if TryShipMove(newShipPos) then
  begin
@@ -565,11 +565,11 @@ end;
 
 procedure THuntingEnemyShip.Randomize;
 begin
- RandomVector := Vector3Single(Random, Random, Random);
+ RandomVector := Vector3(Random, Random, Random);
  RandomAngleDeg := 15+Random(15);
 end;
 
-constructor THuntingEnemyShip.Create(AKind: TEnemyShipKind; const AShipPos: TVector3Single);
+constructor THuntingEnemyShip.Create(AKind: TEnemyShipKind; const AShipPos: TVector3);
 begin
  inherited;
  HuntingAttack := Boolean(Random(2));
@@ -596,10 +596,9 @@ begin
    kolizyjnego !)
   ma dlugosc wzieta z PlayerShipDirLength o naszego HuntingSpeed,
   dla not HuntingAttack jest skierowany po prostu w druga strone.}
- ShipDir := VectorSubtract(PlayerShip.ShipPos, ShipPos);
+ ShipDir := PlayerShip.ShipPos - ShipPos;
  ShipDir := RotatePointAroundAxisDeg(RandomAngleDeg, ShipDir, RandomVector);
- ShipDir := VectorAdjustToLength(ShipDir, 20 *
-   EnemyShipKindsInfos[Kind].HuntingSpeed[HuntingAttack]);
+ ShipDir := ShipDir.AdjustToLength(20 * EnemyShipKindsInfos[Kind].HuntingSpeed[HuntingAttack]);
  if not HuntingAttack then
   ShipDir := -ShipDir;
 
@@ -612,7 +611,7 @@ end;
 
 { TRocket ---------------------------------------------------------------- }
 
-constructor TRocket.Create(const ArocPos, ArocDir: TVector3Single;
+constructor TRocket.Create(const ArocPos, ArocDir: TVector3;
   const speed: TGLfloat; AmotherShip: TSpaceShip);
 begin
  inherited Create;
@@ -636,17 +635,17 @@ begin
 end;
 
 procedure TRocket.Render(const Params: TRenderParams);
-var axis: TVector3Single;
+var axis: TVector3;
 begin
  glPushMatrix;
    glTranslated(rocPos[0], rocPos[1], rocPos[2]);
-   axis := VectorProduct(modelDir3d, rocDir);
+   axis := TVector3.CrossProduct(modelDir3d, rocDir);
    glRotated(RadToDeg(AngleRadBetweenVectors(modelDir3d, rocDir)), axis[0], axis[1], axis[2]);
 
    { TODO: RenderingCamera.Frustum is actually invalid, it's not transformed
      by matrix. But we pass TestShapeVisibility = nil, and we don't use
      VisibilitySensor inside these models, so frustum value isn't really used.
-     We should remake rockets as Castle3D.T3DTransform, then this whole
+     We should remake rockets as CastleTransform.TCastleTransform, then this whole
      unit can be trivial. }
 
    rocketVRML.InternalIgnoreFrustum := true;
@@ -655,7 +654,7 @@ begin
 end;
 
 procedure TRocket.Update;
-var newRocPos: TVector3Single;
+var newRocPos: TVector3;
 
   function CollidesWith(ship: TSpaceShip): boolean;
   begin
