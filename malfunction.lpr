@@ -60,8 +60,6 @@ begin
         HelpOptionHelp+ nl+
         VersionOptionHelp +nl+
         TCastleWindowCustom.ParseParametersHelp(StandardParseOptions, true) +nl+
-        'By default, window size will be 640x480 (if your screen has size'+nl+
-        '  640x480 then we will run in --fullscreen).'+nl+
         nl+
         SCastleEngineProgramHelpSuffix(DisplayApplicationName, Version, true));
       Halt;
@@ -77,17 +75,7 @@ end;
 { main program ------------------------------------------------------- }
 
 begin
-  { This must be done before initial Application.ScreenWidth,
-    since Application.ScreenWidth already initializes display. }
-  Window.ParseParameters([poDisplay]);
-
-  { set initial size/fullscreen mode }
-  if (Application.ScreenWidth = 640) and (Application.ScreenHeight = 480) then
-   Window.FullScreen := true else
-  begin
-   Window.Width := 640;
-   Window.Height := 480;
-  end;
+  Window.FullScreen := true;
 
   { parse params }
   Window.ParseParameters(StandardParseOptions);
