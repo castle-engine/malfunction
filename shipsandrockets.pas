@@ -270,7 +270,7 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 implementation
 
 uses CastleBoxes, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
-  CastleRenderingCamera, CastleUIControls, CastleGL, CastleFilesUtils,
+  CastleUIControls, CastleGL, CastleFilesUtils,
   CastleApplicationProperties;
 
 type
@@ -431,14 +431,12 @@ begin
    glMultMatrix(TransformToCoordsNoScaleMatrix(
      ShipPos, GoodShipUp, TVector3.CrossProduct(ShipDir, GoodShipUp), ShipDir));
 
-   { TODO: RenderingCamera.Frustum is actually invalid, it's not transformed
-     by matrix. But we pass TestShapeVisibility = nil, and we don't use
-     VisibilitySensor inside these models, so frustum value isn't really used.
-     We should remake ships as CastleTransform.TCastleTransform, then this whole
-     unit can be trivial. }
-
+   { Params.Frustum is invalid now (it does not account the above glMultMatrix).
+     TODO: We should remake ships as CastleTransform.TCastleTransform,
+     then this whole unit can be trivial, and this hack could be removed. }
    EnemyShipVRMLs[Kind].InternalIgnoreFrustum := true;
-   EnemyShipVRMLs[Kind].Render(RenderingCamera.Frustum, Params);
+
+   EnemyShipVRMLs[Kind].Render(Params);
  glPopMatrix;
 end;
 
@@ -538,7 +536,7 @@ var newAngleRad: Double;
 begin
  inherited;
 
- newAngleRad := AngleRad + AngleRadChange * Window.Fps.UpdateSecondsPassed * 50;
+ newAngleRad := AngleRad + AngleRadChange * Window.Fps.SecondsPassed * 50;
  newShipPos[0] := cos(newAngleRad)*CircleRadius + CircleCenter[0];
  newShipPos[1] := sin(newAngleRad)*CircleRadius + CircleCenter[1];
  newShipPos[2] := CircleCenter[2];
@@ -602,7 +600,7 @@ begin
  if not HuntingAttack then
   ShipDir := -ShipDir;
 
- if not TryShipMove(ShipPos + ShipDir * (Window.Fps.UpdateSecondsPassed * 50)) then
+ if not TryShipMove(ShipPos + ShipDir * (Window.Fps.SecondsPassed * 50)) then
  begin
   Randomize;
   HuntingAttack := not HuntingAttack
@@ -642,14 +640,12 @@ begin
    axis := TVector3.CrossProduct(modelDir3d, rocDir);
    glRotated(RadToDeg(AngleRadBetweenVectors(modelDir3d, rocDir)), axis[0], axis[1], axis[2]);
 
-   { TODO: RenderingCamera.Frustum is actually invalid, it's not transformed
-     by matrix. But we pass TestShapeVisibility = nil, and we don't use
-     VisibilitySensor inside these models, so frustum value isn't really used.
-     We should remake rockets as CastleTransform.TCastleTransform, then this whole
-     unit can be trivial. }
+   { TODO: Params.Frustum is actually invalid, it's not transformed
+     by matrix. We should remake rockets as CastleTransform.TCastleTransform,
+     then this whole unit can be trivial. }
 
    rocketVRML.InternalIgnoreFrustum := true;
-   rocketVRML.Render(RenderingCamera.Frustum, Params);
+   rocketVRML.Render(Params);
  glPopMatrix;
 end;
 
@@ -664,7 +660,7 @@ var newRocPos: TVector3;
 
 var i: integer;
 begin
- newRocPos := rocPos + rocDir * (Window.Fps.UpdateSecondsPassed * 50);
+ newRocPos := rocPos + rocDir * (Window.Fps.SecondsPassed * 50);
  if (levelScene.InternalOctreeCollisions.IsSegmentCollision(rocPos,
        newRocPos, nil, false, nil)) or
     (not MoveLimit.Contains(rocPos)) then

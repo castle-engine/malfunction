@@ -53,7 +53,7 @@ uses CastleVectors, SysUtils, CastleGL, CastleWindow, GameGeneral, CastleGLUtils
   ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
   CastleStringUtils, CastleScene, CastleGLImages,
   CastleUIControls, CastleCameras, Castle3D,
-  CastleRenderingCamera, CastleBackground, CastleRays, CastleApplicationProperties;
+  CastleBackground, CastleRays, CastleApplicationProperties;
 
 var
   kokpit_gl: TGLImage;
@@ -93,16 +93,14 @@ procedure TMalfunctionSceneManager.RenderFromViewEverything;
 
   procedure RenderAll(Params: TRenderParams);
   begin
-    { TODO: RenderingCamera.Frustum is actually invalid, it's not derived from
-      current camera. But we pass TestShapeVisibility = nil, and we don't use
-      VisibilitySensor inside these models, so frustum value isn't really used.
+    { TODO: Params.Frustum is now invalid, it's not derived from current camera.
 
       We should remake Level to be placed on scene manager,
       and camera updated when it should be, then this whole
       unit can be trivial. }
 
     levelScene.InternalIgnoreFrustum := true;
-    levelScene.Render(RenderingCamera.Frustum, Params);
+    levelScene.Render(Params);
     ShipsRender(Params);
     RocketsRender(Params);
   end;
@@ -125,7 +123,7 @@ begin
   begin
     glPushMatrix;
       playerShip.PlayerShipApplyMatrixNoTranslate;
-      levelScene.Background.Render(false, RenderingCamera.Frustum);
+      levelScene.Background.Render(false);
     glPopMatrix;
   end;
 
