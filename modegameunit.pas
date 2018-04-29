@@ -29,7 +29,7 @@ unit ModeGameUnit;
 
 interface
 
-uses X3DNodes, CastleSceneManager, CastleProjection;
+uses X3DNodes, CastleSceneManager, CastleProjection, CastleTransform;
 
 type
   TMalfunctionSceneManager = class(TCastleSceneManager)
@@ -37,7 +37,7 @@ type
     DefaultHeadlightNode: TDirectionalLightNode;
   protected
     function CalculateProjection: TProjection; override;
-    procedure RenderFromViewEverything; override;
+    procedure RenderFromViewEverything(const RenderingCamera: TRenderingCamera); override;
     function Headlight: TAbstractLightNode; override;
   public
     destructor Destroy; override;
@@ -89,7 +89,7 @@ begin
   Result.ProjectionFar := Result.ProjectionFarFinite;
 end;
 
-procedure TMalfunctionSceneManager.RenderFromViewEverything;
+procedure TMalfunctionSceneManager.RenderFromViewEverything(const RenderingCamera: TRenderingCamera);
 
   procedure RenderAll(Params: TRenderParams);
   begin
@@ -123,7 +123,7 @@ begin
   begin
     glPushMatrix;
       playerShip.PlayerShipApplyMatrixNoTranslate;
-      levelScene.Background.Render(false);
+      levelScene.Background.Render(RenderingCamera, false);
     glPopMatrix;
   end;
 
@@ -131,6 +131,8 @@ begin
 
   Params := TBasicRenderParams.Create;
   try
+    Params.RenderingCamera := RenderingCamera;
+
     { Synchronize Camera with playerShip right before using BaseLights,
       as BaseLights initializes headlight based on Camera. }
     Camera.SetView(playerShip.shipPos,
