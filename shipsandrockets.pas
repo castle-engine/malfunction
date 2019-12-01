@@ -27,9 +27,8 @@ unit ShipsAndRockets;
 
   W implementacji ten modul zarzadza tez ladowaniem i uzywaniem VRMLi modeli.
   Konwencje VRMLi modeli :
-    Caly model musi byc zbudowany rownomiernie wokolo punktu 0, 0, 0
-    (ShipPos bedzie punktem 0, 0, 0 dla modelu).
-    Cos co jest uwazane za "przod" modelu (tam gdzie ma wskazywac ShipDir)
+    Caly model musi byc zbudowany rownomiernie wokolo punktu 0, 0, 0.
+    Cos co jest uwazane za "przod" modelu (tam gdzie ma wskazywac Direction)
     musi byc skierowane w strone +Z.
     Cos co jest uwazane za "up" modelu musi byc skierowane w strone +X.
 }
@@ -49,7 +48,7 @@ type
 
   TRocketList = specialize TObjectList<TRocket>;
 
-  TSpaceShip = class
+  TSpaceShip = class(TCastleTransform)
   private
     {rakiety tego statku jakie kraza w przestrzeni.
      Zeby nie przeciazac programu kazdy statek moze miec ich maksymalnie
@@ -60,31 +59,18 @@ type
       (zeby torpedy wiedzialy ze kiedy one zostane zniszczone to nie musza
       o tym powiadamiac zadnego statku). }
     firedRockets: TRocketList;
-    FMaxShipLife, FShipLife: TGLfloat;
+    FMaxShipLife, FShipLife: Single;
   protected
     { mozesz zwiekszyc wartosc tego pola dla jakiejs bardzo istotnej podklasy
       TSpaceShip (np. dla TPlayerShip) }
     MaxFiredRocketsCount: integer; { =10 }
   public
-    { dlugosc shipDir jak zwykle odpowiedzialna jest za szybkosc poruszania sie
-      (chociaz niektore podklasy TEnemyShip moga byc tu wyjatkiem -
-      np. CircleMoving ma wlasna mechanike poruszania sie i ustawia shipDir
-      (aby byla ladna wizualizacja statku) ale go nie uzywa do wlasnych obliczen).
-
-      ShipUp POWINNO byc prostopadle do ShipDir ale nie musi.
-      Nie jest zdefiniowane jak shipUp bedzie zmienione na potrzeby wyswietlania
-      modelu ale okreslam sobie ze shipDir ma priorytet nad shipUp, wiec jesli
-      Dir z Up nie beda prostopadle to postaram sie zeby dziob statku NA PEWNO
-      wskazywal na shipDir, a potem zastanowie sie jak ulozyc model zeby wyswietlane
-      shipUp bylo mozliwie bliskie zadanemu.
-
-      Koniecznie zadbaj o zainicjowanie tych trzech wektorow w podklasie !}
-    shipPos, shipDir, shipUp: TVector3;
+    Speed: Single;
 
     { ShipLife MAxShipLife = pelna sprawnosc, 0 lub mniej => statek zniszczony.
       Player Ship ma MaxShipLife = 100 zeby byl jakis punkt odniesienia. }
-    property ShipLife: TGLfloat read FShipLife write FShipLife; { =MaxShipLife }
-    property MaxShipLife: TGLfloat read FMaxShipLife;
+    property ShipLife: Single read FShipLife write FShipLife; { =MaxShipLife }
+    property MaxShipLife: Single read FMaxShipLife;
 
     { zostanie zignorowane jezeli za duzo rakiet wystrzelonych przez ten
       statek juz jest w przestrzeni. Dlugosc rocketDir nie ma wplywu
@@ -94,7 +80,7 @@ type
     {kolizje statek/rakieta - level sa robione przy pomocy drzewa osemkowego ale
      kolizje statek - statek i statek - rakieta sa robione "recznie" tzn.
      kazdy z kazdym i to uzywajac najprostrzego modelu : statek to sfera
-     o promieniu shipRadius wokol shipPos. }
+     o promieniu shipRadius wokol Translation. }
     function shipRadius: Single; virtual; abstract;
 
     {w tej klasie HitByRocket powoduje tylko ze shipLife spada.
@@ -108,7 +94,7 @@ type
      Jezeli nie ma kolizji to zwraca nil. }
     function CollisionWithOtherEnemyShip(const pos: TVector3): TEnemyShip;
 
-    constructor Create(const AMaxShipLife: TGLfloat);
+    constructor Create(const AMaxShipLife: Single); reintroduce;
     destructor Destroy; override;
   end;
 
@@ -119,23 +105,18 @@ type
     property Kind: TEnemyShipKind read FKind;
     function ShipName: string;
 
-    constructor Create(AKind: TEnemyShipKind; const AShipPos: TVector3);
+    constructor Create(const AKind: TEnemyShipKind; const AShipPos: TVector3);
     destructor Destroy; override;
 
-    {render yourself to OpenGL at the right position and direction.
-     You should use glPush/PopMatrix mechanism to save current matrix.
-     Zawsze wywoluj inherited w podklasach. }
-    procedure Render(const Params: TRenderParams); virtual;
-    procedure Update; virtual;
-
     procedure HitByRocket; override;
+    procedure Update(const SecondsPassed: Single; var RemoveMe: TRemoveType); override;
     function ShipRadius: Single; override;
 
-    { sprawdz czy nowa pozycja jest dobra (a wiec takze czy droga z shipPos
-      na newShipPos jest dobra), jesli true - zmien shipPos na newShipPos.
+    { sprawdz czy nowa pozycja jest dobra (a wiec takze czy droga z Translation
+      na NewTranslation jest dobra), jesli true - zmien Translation na NewTranslation.
       Nie przeprowadza tak dokladnego testu na kolizje jaki trzeba robic
       dla playerShip, ale dla enemyShips jest dobre. }
-    function TryShipMove(const newShipPos: TVector3): boolean;
+    function TryShipMove(const NewTranslation: TVector3): boolean;
   end;
 
   TEnemyShipList = specialize TObjectList<TEnemyShip>;
@@ -153,8 +134,8 @@ type
      Domyslnie jest true.}
     FiringRocketsAllowed: boolean;
   public
-    constructor Create(AKind: TEnemyShipKind; const AShipPos: TVector3);
-    procedure Update; override;
+    constructor Create(const AKind: TEnemyShipKind; const AShipPos: TVector3);
+    procedure Update(const SecondsPassed: Single; var RemoveMe: TRemoveType); override;
   end;
 
   TNotMovingEnemyShip = class(TFiringRocketsEnemyShip)
@@ -176,19 +157,19 @@ type
     property CircleCenter: TVector3 read FCircleCenter;
     property CircleRadius: Single read FCircleRadius;
 
-    { zwroc uwage ze jako drugi parametr podajesz nie shipPos ale circleCenter.
-      Poczatkowe ShipPos bedzie wyliczone (jako pozycja na zadanym kole
+    { zwroc uwage ze jako drugi parametr podajesz nie Translation ale circleCenter.
+      Poczatkowe Translation bedzie wyliczone (jako pozycja na zadanym kole
       dla AngleRad = 0 a wiec w [ CircleCenter[0]+CircleRadius,
        CircleCenter[1], CircleCenter[2] ] }
-    constructor Create(AKind: TEnemyShipKind; const ACircleCenter: TVector3;
+    constructor Create(const AKind: TEnemyShipKind; const ACircleCenter: TVector3;
       const ACircleRadius, AUniqueCircleMovingSpeed: Single);
 
-    procedure Update; override;
+    procedure Update(const SecondsPassed: Single; var RemoveMe: TRemoveType); override;
   end;
 
   THuntingEnemyShip = class(TFiringRocketsEnemyShip)
   private
-    { Random* - uzywane do modyfikowania ShipDir.
+    { Random* - uzywane do modyfikowania Direction.
         Sa losowane w Randomize uzywanym z Create i zapamietywane w tych polach
         obiektu zeby zawsze uzywac tego samego wektora losowego i kata dla
         jednego statku (zeby statki nie poruszaly sie w takiej "trzesawce"
@@ -203,15 +184,15 @@ type
     procedure SetHuntingAttack(value: boolean);
     property HuntingAttack: boolean read FHuntingAttack write SetHuntingAttack;
   public
-    constructor Create(AKind: TEnemyShipKind; const AShipPos: TVector3);
-    procedure Update; override;
+    constructor Create(const AKind: TEnemyShipKind; const AShipPos: TVector3);
+    procedure Update(const SecondsPassed: Single; var RemoveMe: TRemoveType); override;
   end;
 
-  TRocket = class
+  TRocket = class(TCastleTransform)
   private
     FMotherShip: TSpaceShip;
+    FSpeed: Single;
   public
-    rocPos, rocDir: TVector3;
     { MotherShip = statek ktory wystrzelil ta rakiete. Gdy rakieta
       zostanie zniszczona (bo zderzyla sie z czyms lub wyleciala za level)
       powiadomi o tym swoj MotherShip usuwajac sie z jego listy firedRockets.
@@ -219,48 +200,27 @@ type
       to musi on powiadomic o tym wszystkie swoje rakiety ustawiajac im
       motherShip na nil. }
     property MotherShip: TSpaceShip read FMotherShip;
-    { inaczej niz zazwyczaj, dlugosc ArocDir nie ma tu znaczenia -
-      tak jakby ten wektor byl zawsze normalizowany na poczatku tego
-      konstruktora. Szybkosc lotu rakiety bedzie nastepnie ustalana na
-      podstawie speed (speed = 1 oznacza "standardowa szybkosc rakiety"). }
-    constructor Create(const ArocPos, ArocDir: TVector3; const speed: TGLfloat; AmotherShip: TSpaceShip);
+    constructor Create(const ArocPos, ArocDir: TVector3;
+      const speed: Single; AmotherShip: TSpaceShip); reintroduce;
     destructor Destroy; override;
 
     class function rocRadius: Single;
 
-    {render yourself to OpenGL at the right position and direction.
-     You should use glPush/PopMatrix mechanism to save current matrix.}
-    procedure Render(const Params: TRenderParams);
-    procedure Update;
+    procedure Update(const SecondsPassed: Single; var RemoveMe: TRemoveType); override;
   end;
 
 var
-  {wszystkie rakiety i statki wroga jakie istnieja w przestrzeni.
+  { Wszystkie rakiety i statki wroga jakie istnieja w przestrzeni.
 
-   Te listy POSIADAJA swoje elementy, to znaczy te listy sa niszczone przez
-   FreeWithContents. Tworzone i niszczone w LevelUnit przy LoadLevel/FreeLevel.
+    These lists do not own children (it would be too easy to free rockets/ships too early then),
+    rockets and ships are owned by SceneManager.
+    This way they are freed at the end of game (unless freed earlier).
 
-   Na obydwu listach moga wystepowac elementy = nil. To dlatego ze elementy
-   TEnemyShip i TRocket kiedy sa niszczone zmieniaja wszystkie swoje
-   wystapienia na odpowiednich listach na nil. NIE moga sie z nich usuwac
-   bo byc moze beda musialy to zrobic kiedy jakis kod iteruje po tych listach.
-   (np. w ShipsAndRocketsUpdate jest robione
-    for i := 0 to rockets.Count-1 do rockets[i].Update;
-    a przeciez rakieta moze zostac zniszczona w czasie swojego Update.
-    Statki chwilowo nie moga zostac zniszczone w czasie wlasnego Update
-    ale z pewnoscia myslac przyszlosciowo nalezy dopuscic taka mozliwosc
-    (statki - kamikadze na przyklad).
-   Listy sa czyszczone z nil'i na koncu ShipsAndRocketsUpdate kiedy jest to
-     bezpieczne (wiadomo ze nic nie iteruje wtedy po listach) i nie powinny
-     byc czyszczone z nil'i nigdzie indziej (uzywamy wyniku DeleteAll(nil)
-     aby ew. wypisac komunikat "All enemy ships destroyed") }
+    These lists are synchronized with SceneManager contents,
+    when we add new rocket/enemy, and when it is destroyed. }
   rockets: TRocketList;
   enemyShips: TEnemyShipList;
 
-{ funcs below should be called from ModeGameUnit at appropriate times.
-  They don't modify current matrix. }
-procedure ShipsRender(const Params: TRenderParams);
-procedure RocketsRender(const Params: TRenderParams);
 procedure ShipsAndRocketsUpdate;
 
 { inne funkcje }
@@ -270,8 +230,8 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 implementation
 
 uses CastleBoxes, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
-  CastleUIControls, CastleGL, CastleFilesUtils,
-  CastleApplicationProperties;
+  CastleUIControls, CastleGL, CastleFilesUtils, CastleApplicationProperties,
+  ModeGameUnit;
 
 type
   TEnemyShipKindInfo = record
@@ -315,19 +275,16 @@ const
      HuntingSpeed: (1, 1); CircleMovingSpeed: 0.5)
   );
 
-const
-  modelDir3d: TVector3 = (Data: (0, 0, 1));
-
 var
-  { modeliki; ladowane w Window.Open, niszczone w Window.Close  }
-  rocketVRML: TCastleScene;
-  enemyShipVRMLs: array[TEnemyShipKind]of TCastleScene;
+  { Shared models.  }
+  RocketScene: TCastleScene;
+  EnemyShipScenes: array [TEnemyShipKind] of TCastleScene;
 
 { TSpaceShip ----------------------------------------------------------------- }
 
-constructor TSpaceShip.Create(const AMaxShipLife: TGLfloat);
+constructor TSpaceShip.Create(const AMaxShipLife: Single);
 begin
- inherited Create;
+ inherited Create(SceneManager);
  MaxFiredRocketsCount := 10;
  FMaxShipLife := AMaxShipLife;
  FShipLife := MaxShipLife;
@@ -350,8 +307,9 @@ var rocket: TRocket;
 begin
  if firedRockets.Count < maxFiredRocketsCount then
  begin
-  rocket := TRocket.Create(shipPos, rocketDir, rocketSpeed, Self);
+  rocket := TRocket.Create(Translation, rocketDir, rocketSpeed, Self);
   rockets.Add(rocket);
+  SceneManager.ITems.Add(rocket);
   firedRockets.Add(rocket);
  end;
 end;
@@ -370,7 +328,7 @@ begin
  for i := 0 to enemyShips.Count-1 do
   if (enemyShips[i] <> nil) and
     IsSpheresCollision(pos, shipRadius,
-                       enemyShips[i].shipPos, enemyShips[i].shipRadius) and
+                       enemyShips[i].Translation, enemyShips[i].shipRadius) and
     (enemyShips[i] <> Self) then
    exit(enemyShips[i]);
  result := nil;
@@ -378,13 +336,14 @@ end;
 
 { TEnemyShip ---------------------------------------------------------------- }
 
-constructor TEnemyShip.Create(AKind: TEnemyShipKind; const AShipPos: TVector3);
+constructor TEnemyShip.Create(const AKind: TEnemyShipKind; const AShipPos: TVector3);
 begin
  inherited Create(EnemyShipKindsInfos[AKind].MaxLife);
+ Add(EnemyShipScenes[AKind]);
  FKind := AKind;
- ShipPos := AShipPos;
- ShipUp := Vector3(0, 0, 1);
- ShipDir := Vector3(1, 0, 0);
+ Translation := AShipPos;
+ Up := Vector3(0, 0, 1);
+ Direction := Vector3(1, 0, 0);
 end;
 
 destructor TEnemyShip.Destroy;
@@ -412,66 +371,48 @@ begin
  if ShipLife <= 0 then
  begin
   Notifications.Show('"'+ShipName+'" was destroyed.');
-  Self.Destroy;
  end;
+end;
+
+procedure TEnemyShip.Update(const SecondsPassed: Single; var RemoveMe: TRemoveType);
+begin
+  inherited;
+  if ShipLife <= 0 then
+  begin
+    RemoveMe := rtRemoveAndFree;
+    enemyShips.Remove(Self);
+  end;
 end;
 
 function TEnemyShip.ShipRadius: Single;
 begin
- result := EnemyShipVRMLs[Kind].BoundingBox.AverageSize * Sqrt2/2;
+ result := EnemyShipScenes[Kind].BoundingBox.AverageSize * Sqrt2/2;
 end;
 
-procedure TEnemyShip.Render(const Params: TRenderParams);
-var GoodShipUp: TVector3;
-begin
- glPushMatrix;
-
-   GoodShipUp := ShipUp;
-   MakeVectorsOrthoOnTheirPlane(GoodShipUp, ShipDir);
-   glMultMatrix(TransformToCoordsNoScaleMatrix(
-     ShipPos, GoodShipUp, TVector3.CrossProduct(ShipDir, GoodShipUp), ShipDir));
-
-   { Params.Frustum is invalid now (it does not account the above glMultMatrix).
-     TODO: We should remake ships as CastleTransform.TCastleTransform,
-     then this whole unit can be trivial, and this hack could be removed. }
-   EnemyShipVRMLs[Kind].InternalIgnoreFrustum := true;
-
-   EnemyShipVRMLs[Kind].Render(Params);
- glPopMatrix;
-end;
-
-procedure TEnemyShip.Update;
-{ w klasie TEnemyShip Update nie robi nic; ale nie jest zdefiniowane
-  jako abstrakcyjne zeby mozna bylo bezproblemowo ZAWSZE zrobic inherited
-  w podklasach (i nie martwic sie tym samym czy klasa dziedziczy posrednio
-  czy bezposrednio od TEnemyShip) }
-begin
-end;
-
-function TEnemyShip.TryShipMove(const newShipPos: TVector3): boolean;
+function TEnemyShip.TryShipMove(const NewTranslation: TVector3): boolean;
 begin
  {jezeli mozna sie przesunac, to rusz sie; uwaga - nie uwzgledniamy tu
   ze statek moze tu przeleciec przez torpede lub przez statek gracza.
   Wszystko to dla prostoty i szybkosci.}
 
  result :=
-   (not levelScene.InternalOctreeCollisions.IsSegmentCollision(ShipPos, newShipPos,
+   (not levelScene.InternalOctreeCollisions.IsSegmentCollision(Translation, NewTranslation,
      nil, false, nil)) and
-   (CollisionWithOtherEnemyShip(newShipPos) = nil) and
-   MoveLimit.Contains(newShipPos);
- if result then ShipPos := newShipPos;
+   (CollisionWithOtherEnemyShip(NewTranslation) = nil) and
+   MoveLimit.Contains(NewTranslation);
+ if result then Translation := NewTranslation;
 end;
 
 { TFiringRocketsEnemyShip ------------------------------------------------- }
 
-constructor TFiringRocketsEnemyShip.Create(AKind: TEnemyShipKind; const AShipPos: TVector3);
+constructor TFiringRocketsEnemyShip.Create(const AKind: TEnemyShipKind; const AShipPos: TVector3);
 begin
  inherited;
  RocketFiringInited := false;
  FiringRocketsAllowed := true;
 end;
 
-procedure TFiringRocketsEnemyShip.Update;
+procedure TFiringRocketsEnemyShip.Update(const SecondsPassed: Single; var RemoveMe: TRemoveType);
 begin
  inherited;
  if RocketFiringInited then
@@ -479,7 +420,7 @@ begin
   if TimerSeconds(Timer, LastFiredRocketTime) >= NextFireRocketDelay then
   begin
    if FiringRocketsAllowed then
-    FireRocket(playerShip.shipPos - shipPos, 1);
+    FireRocket(playerShip.Translation - Translation, 1);
    {w ten sposob statki beda strzelaly w dosc zroznicowanych odstepach czasu}
    LastFiredRocketTime := Timer;
    with EnemyShipKindsInfos[Kind] do
@@ -515,7 +456,7 @@ begin
       tego wlasnie statku};
 end;
 
-constructor TCircleMovingEnemyShip.Create(AKind: TEnemyShipKind;
+constructor TCircleMovingEnemyShip.Create(const AKind: TEnemyShipKind;
   const ACircleCenter: TVector3;
   const ACircleRadius, AUniqueCircleMovingSpeed: Single);
 begin
@@ -530,22 +471,22 @@ begin
  UniqueCircleMovingSpeed := AUniqueCircleMovingSpeed;
 end;
 
-procedure TCircleMovingEnemyShip.Update;
+procedure TCircleMovingEnemyShip.Update(const SecondsPassed: Single; var RemoveMe: TRemoveType);
 var newAngleRad: Double;
-    newShipPos, newShipDir: TVector3;
+    NewTranslation, NewDirection: TVector3;
 begin
  inherited;
 
  newAngleRad := AngleRad + AngleRadChange * Window.Fps.SecondsPassed * 50;
- newShipPos[0] := cos(newAngleRad)*CircleRadius + CircleCenter[0];
- newShipPos[1] := sin(newAngleRad)*CircleRadius + CircleCenter[1];
- newShipPos[2] := CircleCenter[2];
+ NewTranslation[0] := cos(newAngleRad)*CircleRadius + CircleCenter[0];
+ NewTranslation[1] := sin(newAngleRad)*CircleRadius + CircleCenter[1];
+ NewTranslation[2] := CircleCenter[2];
 
- newShipDir := newShipPos - shipPos;
+ NewDirection := NewTranslation - Translation;
 
- if TryShipMove(newShipPos) then
+ if TryShipMove(NewTranslation) then
  begin
-  ShipDir := newShipDir;
+  Direction := NewDirection;
   AngleRad := newAngleRad;
  end else
   AngleRadChange := -AngleRadChange;
@@ -567,40 +508,41 @@ begin
  RandomAngleDeg := 15+Random(15);
 end;
 
-constructor THuntingEnemyShip.Create(AKind: TEnemyShipKind; const AShipPos: TVector3);
+constructor THuntingEnemyShip.Create(const AKind: TEnemyShipKind; const AShipPos: TVector3);
 begin
  inherited;
  HuntingAttack := Boolean(Random(2));
  Randomize;
 end;
 
-procedure THuntingEnemyShip.Update;
+procedure THuntingEnemyShip.Update(const SecondsPassed: Single; var RemoveMe: TRemoveType);
 begin
  inherited;
 
  if ( HuntingAttack and
-      ( PointsDistanceSqr(ShipPos, PlayerShip.ShipPos)<=
+      ( PointsDistanceSqr(Translation, PlayerShip.Translation)<=
         Sqr((ShipRadius+PlayerShip.ShipRadius)*10) )
     ) or
     ( (not HuntingAttack) and
-      (PointsDistanceSqr(ShipPos, PlayerShip.ShipPos) > Sqr(10000.0))
+      (PointsDistanceSqr(Translation, PlayerShip.Translation) > Sqr(10000.0))
     ) then
   HuntingAttack := not HuntingAttack;
 
- {ustal ShipDir: dla HuntingAttack, shipDir kieruje sie w strone gracza,
+ {ustal Direction: dla HuntingAttack, shipDir kieruje sie w strone gracza,
   potem jest nieznacznie zmodyfikowany o maly obrot wokol losowej osi
    (zeby statek nie lecial DOKLADNIE na/od gracza, bo wtedy latwo
    go trafic ! Statek ma leciec tylko tak mniej-wiecej po torze w poblizu
    kolizyjnego !)
-  ma dlugosc wzieta z PlayerShipDirLength o naszego HuntingSpeed,
+  ma dlugosc wzieta z PlayerDirectionLength o naszego HuntingSpeed,
   dla not HuntingAttack jest skierowany po prostu w druga strone.}
- ShipDir := PlayerShip.ShipPos - ShipPos;
- ShipDir := RotatePointAroundAxisDeg(RandomAngleDeg, ShipDir, RandomVector);
- ShipDir := ShipDir.AdjustToLength(20 * EnemyShipKindsInfos[Kind].HuntingSpeed[HuntingAttack]);
+ Direction := PlayerShip.Translation - Translation;
+ Direction := RotatePointAroundAxisDeg(RandomAngleDeg, Direction, RandomVector);
+ Speed := 20 * EnemyShipKindsInfos[Kind].HuntingSpeed[HuntingAttack];
  if not HuntingAttack then
-  ShipDir := -ShipDir;
+  Direction := -Direction;
 
- if not TryShipMove(ShipPos + ShipDir * (Window.Fps.SecondsPassed * 50)) then
+ if not TryShipMove(Translation +
+   Direction * Speed * Window.Fps.SecondsPassed * 50) then
  begin
   Randomize;
   HuntingAttack := not HuntingAttack
@@ -610,12 +552,14 @@ end;
 { TRocket ---------------------------------------------------------------- }
 
 constructor TRocket.Create(const ArocPos, ArocDir: TVector3;
-  const speed: TGLfloat; AmotherShip: TSpaceShip);
+  const speed: Single; AmotherShip: TSpaceShip);
 begin
- inherited Create;
- rocPos := ArocPos;
- rocDir := ArocDir.AdjustToLength(speed * 50);
- FMotherShip := AMotherShip;
+  inherited Create(SceneManager);
+  Translation := ArocPos;
+  Direction := ArocDir;
+  FSpeed := Speed * 50 * 50;
+  FMotherShip := AMotherShip;
+  Add(RocketScene);
 end;
 
 destructor TRocket.Destroy;
@@ -632,40 +576,27 @@ begin
   inherited;
 end;
 
-procedure TRocket.Render(const Params: TRenderParams);
-var axis: TVector3;
-begin
- glPushMatrix;
-   glTranslated(rocPos[0], rocPos[1], rocPos[2]);
-   axis := TVector3.CrossProduct(modelDir3d, rocDir);
-   glRotated(RadToDeg(AngleRadBetweenVectors(modelDir3d, rocDir)), axis[0], axis[1], axis[2]);
-
-   { TODO: Params.Frustum is actually invalid, it's not transformed
-     by matrix. We should remake rockets as CastleTransform.TCastleTransform,
-     then this whole unit can be trivial. }
-
-   rocketVRML.InternalIgnoreFrustum := true;
-   rocketVRML.Render(Params);
- glPopMatrix;
-end;
-
-procedure TRocket.Update;
-var newRocPos: TVector3;
+procedure TRocket.Update(const SecondsPassed: Single; var RemoveMe: TRemoveType);
+var NewTranslation: TVector3;
 
   function CollidesWith(ship: TSpaceShip): boolean;
   begin
-   result := IsTunnelSphereCollision(rocPos, newRocPos, rocRadius,
-     ship.shipPos, ship.shipRadius);
+   result := IsTunnelSphereCollision(Translation, NewTranslation, rocRadius,
+     ship.Translation, ship.shipRadius);
   end;
 
 var i: integer;
 begin
- newRocPos := rocPos + rocDir * (Window.Fps.SecondsPassed * 50);
- if (levelScene.InternalOctreeCollisions.IsSegmentCollision(rocPos,
-       newRocPos, nil, false, nil)) or
-    (not MoveLimit.Contains(rocPos)) then
+ inherited;
+ NewTranslation := Translation + Direction * FSpeed * Window.Fps.SecondsPassed;
+ if (levelScene.InternalOctreeCollisions.IsSegmentCollision(Translation,
+       NewTranslation, nil, false, nil)) or
+    (not MoveLimit.Contains(Translation)) then
+ begin
   {rakieta zderzyla sie z czescia levelu lub wyleciala poza MoveLimit}
-  Self.Destroy else
+  RemoveMe := rtRemoveAndFree;
+  rockets.Remove(Self);
+ end else
  begin
   {sprawdzamy czy rakieta zderzyla sie z jakims statkiem, naszym lub wroga.
    Uzywamy testowania kolizji na kulach. Jak widac rakieta nie moze
@@ -678,77 +609,34 @@ begin
      CollidesWith(enemyShips[i]) and (enemyShips[i] <> motherShip) then
    begin
     enemyShips[i].HitByRocket;
-    Self.Destroy;
+    RemoveMe := rtRemoveAndFree;
+    rockets.Remove(Self);
     exit;
    end;
 
   if CollidesWith(playerShip) and (playerShip <> motherShip) then
   begin
    playerShip.HitByRocket;
-   Self.Destroy;
+   RemoveMe := rtRemoveAndFree;
+   rockets.Remove(Self);
    exit
   end;
 
   {nie bylo zderzenia ? to lec dalej.}
-  rocPos := newRocPos;
+  Translation := NewTranslation;
  end;
 end;
 
 class function TRocket.rocRadius: Single;
 begin
- result := rocketVRML.BoundingBox.AverageSize / 2;
+ result := RocketScene.BoundingBox.AverageSize / 2;
 end;
 
 { global funcs ----------------------------------------------------------- }
 
-procedure ShipsRender(const Params: TRenderParams);
-var i: integer;
-begin
- for i := 0 to enemyShips.Count-1 do
-  if enemyShips[i] <> nil then enemyShips[i].Render(Params);
-end;
-
-procedure RocketsRender(const Params: TRenderParams);
-var i: integer;
-begin
- for i := 0 to rockets.Count-1 do
-  if rockets[i] <> nil then rockets[i].Render(Params);
-end;
-
 procedure ShipsAndRocketsUpdate;
-var
-  i: integer;
-  removedSomeEnemy: boolean;
 begin
-  for i := 0 to rockets.Count-1 do
-    if rockets[i] <> nil then
-      rockets[i].Update;
-
-  for i := 0 to enemyShips.Count-1 do
-    if enemyShips[i] <> nil then
-      enemyShips[i].Update;
-
-  // remove nils
-  I := 0;
-  while I < rockets.Count do
-    if rockets[I] <> nil then
-      Inc(I)
-    else
-      rockets.Delete(I);
-
-  // remove nils
-  I := 0;
-  removedSomeEnemy := false;
-  while I < enemyShips.Count do
-    if enemyShips[I] <> nil then
-      Inc(I)
-    else
-    begin
-      removedSomeEnemy := true;
-      enemyShips.Delete(I);
-    end;
-
-  if removedSomeEnemy and (enemyShips.Count = 0) then
+  if enemyShips.Count = 0 then
     Notifications.Show('ALL ENEMY SHIPS DESTROYED.');
 end;
 
@@ -765,25 +653,28 @@ end;
 procedure ContextOpen;
 var sk: TEnemyShipKind;
 begin
- rocketVRML := TCastleScene.Create(nil);
- rocketVRML.Load(ApplicationData('vrmls/rocket.wrl'));
- rocketVRML.Attributes.Lighting := false;
+ RocketScene := TCastleScene.Create(nil);
+ RocketScene.Load('castle-data:/vrmls/rocket.wrl');
+ RocketScene.Rotation := Vector4(0, 1, 0, -Pi / 2);
+ RocketScene.Attributes.Lighting := false;
 
  for sk := Low(sk) to High(sk) do
  begin
-  EnemyShipVRMLs[sk] := TCastleScene.Create(nil);
-  EnemyShipVRMLs[sk].Load(ApplicationData('vrmls/' + EnemyShipKindsInfos[sk].VrmlFname));
+  EnemyShipScenes[sk] := TCastleScene.Create(nil);
+  EnemyShipScenes[sk].Rotation := Vector4(0, 1, 0, -Pi / 2);
+  EnemyShipScenes[sk].Load('castle-data:/vrmls/' + EnemyShipKindsInfos[sk].VrmlFname);
  end;
 end;
 
 procedure ContextClose;
 var sk: TEnemyShipKind;
 begin
- FreeAndNil(rocketVRML);
- for sk := Low(sk) to High(sk) do FreeAndNil(EnemyShipVRMLs[sk]);
+ FreeAndNil(RocketScene);
+ for sk := Low(sk) to High(sk) do FreeAndNil(EnemyShipScenes[sk]);
 end;
 
 initialization
+ TCastleTransform.DefaultOrientation := otUpZDirectionX;
  ApplicationProperties.OnGLContextOpen.Add(@ContextOpen);
  ApplicationProperties.OnGLContextClose.Add(@ContextClose);
 end.

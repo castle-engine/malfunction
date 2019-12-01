@@ -29,10 +29,11 @@ interface
 implementation
 
 uses SysUtils, CastleWindow, GameGeneral, CastleFonts,
-  CastleTextureFont_suckgolf_32, CastleGLUtils, CastleMessages, LevelUnit,
+  CastleTextureFont_suckgolf_32, CastleGLUtils, CastleMessages,
   CastleImages, CastleVectors, CastleUtils, CastleGLImages, CastleColors,
   CastleUIControls, CastleKeysMouse, CastleControls, CastleRectangles,
-  CastleFilesUtils, CastleApplicationProperties;
+  CastleFilesUtils, CastleApplicationProperties,
+  ModeGameUnit;
 
 { module consts and vars ---------------------------------------------------- }
 
@@ -50,7 +51,7 @@ const
 
 var
   currentMenu: TMenuItem = Low(TMenuItem);
-  listBg: TGLImage;
+  listBg: TDrawableImage;
   menuFont: TTextureFont;
 
 { mode enter/exit ----------------------------------------------------------- }
@@ -73,21 +74,21 @@ end;
 procedure Render(Container: TUIContainer);
 var
   mi: TMenuItem;
-  X, Y: Integer;
+  X, Y: Single;
   Color: TCastleColor;
 begin
   OrthoProjection(FloatRectangle(Window.Rect));
 
   listBg.Draw(0, 0);
 
-  X := Window.width*50 div 640;
-  Y := Window.height*350 div 480;
+  X := Window.width*50 / 640;
+  Y := Window.height*350 / 480;
   for mi := Low(mi) to High(mi) do
   begin
     Y -= menufont.RowHeight+10;
     if mi = currentMenu then
     begin
-      Theme.Draw(Rectangle(X - 10, Y - menufont.Descend,
+      Theme.Draw(FloatRectangle(X - 10, Y - menufont.Descend,
         menufont.TextWidth(menuNames[mi]) + 20,
         menufont.Descend + menuFont.RowHeight), tiActiveFrame);
       Color := Yellow;
@@ -140,9 +141,9 @@ begin
             'There is only one goal: destroy all enemy ships on every level.' +nl+
             nl+
             SCastleEngineProgramHelpSuffix(DisplayApplicationName, Version, false));
-        miPlaySunnyDay: PlayGame(ApplicationData('vrmls/lake.wrl'));
-        miPlayDeepSpace: PlayGame(ApplicationData('vrmls/mobius.wrl'));
-        miPlayRainMountains: PlayGame(ApplicationData('vrmls/wawoz.wrl'));
+        miPlaySunnyDay: PlayGame('castle-data:/vrmls/lake.wrl');
+        miPlayDeepSpace: PlayGame('castle-data:/vrmls/mobius.wrl');
+        miPlayRainMountains: PlayGame('castle-data:/vrmls/wawoz.wrl');
         miQuit:
           if MessageYesNo(Window, 'Are you sure you want to quit ?') then Window.close;
       end;
@@ -151,7 +152,7 @@ end;
 
 procedure ContextOpen;
 begin
-  listBg := TGLImage.Create(ApplicationData('images/menubg.png'), [TRGBImage],
+  listBg := TDrawableImage.Create('castle-data:/images/menubg.png', [TRGBImage],
     Window.width, Window.height, riBilinear);
   menuFont := TTextureFont.Create(TextureFont_suckgolf_32);
 end;

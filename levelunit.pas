@@ -109,26 +109,8 @@ var
   levelInfo: TMalfunctionLevelInfoNode;
   MoveLimit: TBox3D; { poza ten box nie moze NIC wyleciec }
 
-{ Loading and free'ing level NEEDS active gl context.
-
-  Zwalnianie nie zainicjowanego levelu nie powoduje bledu,
-  po prostu nic nie robi.
-
-  Poniewaz caly czas tylko jeden level na raz jest zainicjowany
-  (w rezultacie czego zmienne w rodzaju levelScene moga byc globalne)
-  level jest zawsze automatycznie zwalniany przed kazdym LoadLevel
-  i w czasie Window.EventClose. W rezultacie wlasciwie mozesz nigdy nie
-  wywolywac FreeLevel z zewnatrz tego modulu.
-
-  LoadLevel jest odpowiedzialne za czesciowa inicjalizacje PlayerShip.  }
 procedure LoadLevel(const SceneURL: string);
-procedure FreeLevel;
-
-{ LoadGame loads NewPlayer and then loads LoadLevel and then
-  SetGameMode(modeGame).
-
-  You should terminate any TCastleWindowCustom event handling after PlayGame call. }
-procedure PlayGame(const SceneURL: string);
+procedure UnloadLevel;
 
 implementation
 
@@ -284,25 +266,28 @@ type
   end;
 
   class procedure TEnemiesConstructor.ConstructEnemy(node: TX3DNode);
+  var
+    E: TEnemyShip;
   begin
-   EnemyShips.Add(TVRMLMalfunctionEnemyNode(node).CreateEnemyShip);
+    E := TVRMLMalfunctionEnemyNode(node).CreateEnemyShip;
+    EnemyShips.Add(E);
+    SceneManager.Items.Add(E);
   end;
 
 function FindBlenderMesh(ShapeTree: TShapeTree;
   const AName: string; OnlyActive: boolean = false): TShape;
 var
-  SI: TShapeTreeIterator;
+  Shape: TShape;
+  ShapeList: TShapeList;
   BlenderPlaceholder: TPlaceholderName;
 begin
   BlenderPlaceholder := PlaceholderNames['blender'];
-  SI := TShapeTreeIterator.Create(ShapeTree, OnlyActive);
-  try
-    while SI.GetNext do
-    begin
-      if BlenderPlaceholder(SI.Current) = AName then
-        Exit(SI.Current);
-    end;
-  finally FreeAndNil(SI) end;
+  ShapeList := ShapeTree.TraverseList(OnlyActive);
+  for Shape in ShapeList do
+  begin
+    if BlenderPlaceholder(Shape) = AName then
+      Exit(Shape);
+  end;
   Result := nil;
 end;
 
@@ -311,18 +296,23 @@ var
   vMiddle, vSizes: TVector3;
   halfMaxSize: Single;
   MoveLimitShape: TShape;
-  DummyGravityUp: TVector3;
+  DummyGravityUp, InitialPos, InitialDir, InitialUp: TVector3;
 begin
- FreeLevel;
-
- try
   levelScene := TCastleScene.Create(nil);
   levelScene.Load(SceneURL);
-  levelScene.GetPerspectiveViewpoint(playerShip.shipPos, playerShip.shipDir,
-    playerShip.shipUp,
+
+  // determine initial pos
+  levelScene.GetPerspectiveViewpoint(InitialPos, InitialDir, InitialUp,
     { We don't need GravityUp, we know it should be +Z in malfunction
       levels. }
     DummyGravityUp);
+  playerShip.SetView(InitialPos, InitialDir, InitialUp);
+  // playerShip and SceneManager.Camera will be always synchonized
+  SceneManager.Camera.SetView(InitialPos, InitialDir, InitialUp);
+
+  SceneManager.Items.Add(levelScene);
+  SceneManager.MainScene := levelScene;
+
   levelInfo := TMalfunctionLevelInfoNode(levelScene.RootNode.FindNode(TMalfunctionLevelInfoNode, true));
   levelType := TLevelType(ArrayPosText(levelInfo.FdType.Value, ['planet', 'space'] ));
 
@@ -342,7 +332,7 @@ begin
    {ustal domyslnego MoveLimit na podstawie levelScene.BoundingBox}
    if levelType = ltSpace then
    begin
-    {ustalamy shipPosBox na box o srodku tam gdzie levelScene.BoundingBox
+    {ustalamy MoveLimit na box o srodku tam gdzie levelScene.BoundingBox
      i rozmiarach piec razy wiekszych niz najwiekszy rozmiar
      levelScene.BounxingBox.}
     vSizes := levelScene.BoundingBox.Size;
@@ -353,7 +343,7 @@ begin
     MoveLimit.Data[1] := vMiddle + vSizes;
    end else
    begin
-    {Ustalamy shipPosBox na box levelu, za wyjatkiem z-ta ktorego przedluzamy
+    {Ustalamy MoveLimit na box levelu, za wyjatkiem z-ta ktorego przedluzamy
        5 razy. Czyli nie pozwalamy statkowi wyleciec poza x, y-levelu ani ponizej
        z-ow, ale moze wzleciec dosc wysoko ponad z-ty.}
     MoveLimit := levelScene.BoundingBox;
@@ -371,8 +361,6 @@ begin
   rockets := TRocketList.Create(false);
 
   {read enemy ships from file}
-  { Note that enemyShips has FreeObjects = false,
-    so that we can set EnemyShips[I] := nil without freeing the item now. }
   enemyShips := TEnemyShipList.Create(false);
   levelScene.RootNode.EnumerateNodes(TVRMLMalfunctionEnemyNode,
     @TEnemiesConstructor(nil).ConstructEnemy, true);
@@ -389,45 +377,18 @@ begin
 
   Notifications.Clear;
   Notifications.Show('Level '+URICaption(SceneURL)+' loaded.');
- except FreeLevel; raise end;
 end;
 
-procedure FreeLevel;
-var
-  R: TRocket;
-  E: TEnemyShip;
+procedure UnloadLevel;
 begin
   FreeAndNil(levelScene);
-  if rockets <> nil then
-  begin
-    for R in Rockets do
-      R.Free;
-    FreeAndNil(rockets);
-  end;
-  if enemyShips <> nil then
-  begin
-    for E in EnemyShips do
-      E.Free;
-    FreeAndNil(enemyShips);
-  end;
-end;
-
-procedure PlayGame(const SceneURL: string);
-begin
- NewPlayerShip;
- LoadLevel(SceneURL);
- SetGameMode(modeGame);
+  FreeAndNil(rockets);
+  FreeAndNil(enemyShips);
 end;
 
 { glw callbacks ----------------------------------------------------------- }
 
-procedure ContextClose;
-begin
- FreeLevel;
-end;
-
 initialization
- ApplicationProperties.OnGLContextClose.Add(@ContextClose);
  NodesManager.RegisterNodeClasses([ TMalfunctionLevelInfoNode,
    TMalfunctionNotMovingEnemyNode,
    TMalfunctionCircleMovingEnemyNode,

@@ -59,7 +59,7 @@ begin
         'Accepted command-line options:' +nl+
         HelpOptionHelp+ nl+
         VersionOptionHelp +nl+
-        TCastleWindowCustom.ParseParametersHelp(StandardParseOptions, true) +nl+
+        TCastleWindowBase.ParseParametersHelp(StandardParseOptions, true) +nl+
         nl+
         SCastleEngineProgramHelpSuffix(DisplayApplicationName, Version, true));
       Halt;

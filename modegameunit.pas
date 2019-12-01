@@ -24,9 +24,6 @@ unit ModeGameUnit;
 
 {$I castleconf.inc}
 
-{ zeby wejsc w modeGame level musi byc loaded.
-  I nie wolno robic FreeLevel dopoki jestesmy w modeGame. }
-
 interface
 
 uses X3DNodes, CastleSceneManager, CastleProjection, CastleTransform;
@@ -37,14 +34,17 @@ type
     DefaultHeadlightNode: TDirectionalLightNode;
   protected
     function CalculateProjection: TProjection; override;
-    procedure RenderFromViewEverything(const RenderingCamera: TRenderingCamera); override;
     function Headlight: TAbstractLightNode; override;
   public
+    procedure Update(const SecondsPassed: Single;
+      var HandleInput: Boolean); override;
     destructor Destroy; override;
   end;
 
 var
   SceneManager: TMalfunctionSceneManager;
+
+procedure PlayGame(const SceneURL: string);
 
 implementation
 
@@ -53,11 +53,11 @@ uses CastleVectors, SysUtils, CastleGL, CastleWindow, GameGeneral, CastleGLUtils
   ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
   CastleStringUtils, CastleScene, CastleGLImages,
   CastleUIControls, CastleCameras, Castle3D,
-  CastleBackground, CastleRays, CastleApplicationProperties;
+  CastleRays, CastleApplicationProperties;
 
 var
-  kokpit_gl: TGLImage;
-  crossh_gl: TGLImage;
+  kokpit_gl: TDrawableImage;
+  crossh_gl: TDrawableImage;
   {crossh_orig_* to oryginalne (tzn. wzgledem ekranu 640x480) rozmiary
    crosshair image (upakowanego w crossh_list) }
   crossh_orig_width, crossh_orig_height: integer;
@@ -78,7 +78,7 @@ const
 begin
   Result.ProjectionType := ptPerspective;
   Result.PerspectiveAngles[0] := AdjustViewAngleDegToAspectRatio(
-    AngleOfViewY, Rect.Width / Rect.Height); // actually unused for now
+    AngleOfViewY, EffectiveWidth / EffectiveHeight); // actually unused for now
   Result.PerspectiveAngles[1] := AngleOfViewY;
   Result.ProjectionNear := PLAYER_SHIP_CAMERA_RADIUS;
   { Player jest zawsze w obrebie MoveLimit i widzi rzeczy w obrebie
@@ -89,61 +89,14 @@ begin
   Result.ProjectionFar := Result.ProjectionFarFinite;
 end;
 
-procedure TMalfunctionSceneManager.RenderFromViewEverything(const RenderingCamera: TRenderingCamera);
-
-  procedure RenderAll(Params: TRenderParams);
-  begin
-    { TODO: Params.Frustum is now invalid, it's not derived from current camera.
-
-      We should remake Level to be placed on scene manager,
-      and camera updated when it should be, then this whole
-      unit can be trivial. }
-
-    levelScene.InternalIgnoreFrustum := true;
-    levelScene.Render(Params);
-    ShipsRender(Params);
-    RocketsRender(Params);
-  end;
-
-var
-  Params: TBasicRenderParams;
-  B: TBackground;
+procedure TMalfunctionSceneManager.Update(const SecondsPassed: Single;
+  var HandleInput: Boolean);
 begin
-  {no need to clear COLOR_BUFFER - sky will cover everything}
-  RenderContext.Clear([cbDepth], Black);
-  glLoadIdentity;
-
-  levelScene.BackgroundSkySphereRadius :=
-    TBackground.NearFarToSkySphereRadius(
-      Projection.ProjectionNear, Projection.ProjectionFar,
-      levelScene.BackgroundSkySphereRadius);
-
-  B := levelScene.Background;
-  if B <> nil then
-  begin
-    glPushMatrix;
-      playerShip.PlayerShipApplyMatrixNoTranslate;
-      levelScene.Background.Render(RenderingCamera, false);
-    glPopMatrix;
-  end;
-
-  playerShip.PlayerShipApplyMatrix;
-
-  Params := TBasicRenderParams.Create;
-  try
-    Params.RenderingCamera := RenderingCamera;
-
-    { Synchronize Camera with playerShip right before using BaseLights,
-      as BaseLights initializes headlight based on Camera. }
-    Camera.SetView(playerShip.shipPos,
-      playerShip.shipDir.Normalize, playerShip.shipUp);
-    Params.FBaseLights.Assign(BaseLights);
-
-    Params.Transparent := false; Params.ShadowVolumesReceivers := false; RenderAll(Params);
-    Params.Transparent := false; Params.ShadowVolumesReceivers := true ; RenderAll(Params);
-    Params.Transparent := true ; Params.ShadowVolumesReceivers := false; RenderAll(Params);
-    Params.Transparent := true ; Params.ShadowVolumesReceivers := true ; RenderAll(Params);
-  finally FreeAndNil(Params) end;
+  inherited;
+  Camera.SetView(
+    playerShip.Translation,
+    playerShip.Direction,
+    playerShip.Up);
 end;
 
 function TMalfunctionSceneManager.Headlight: TAbstractLightNode;
@@ -156,7 +109,7 @@ end;
 { TGame2DControls ------------------------------------------------------------ }
 
 type
-  TGame2DControls = class(TUIControl)
+  TGame2DControls = class(TCastleUserInterface)
   public
     procedure Render; override;
   end;
@@ -197,7 +150,7 @@ procedure TGame2DControls.Render;
     glRectf(Window.Width-ScreenMargin-Size, Window.Height-ScreenMargin-Size,
             Window.Width-ScreenMargin, Window.Height-ScreenMargin);
 
-    MoveLimitPosToPixel(playerShip.shipPos, x, y);
+    MoveLimitPosToPixel(playerShip.Translation, x, y);
     glColor4f(1, 1, 1, 0.8);
     glBegin(GL_LINES);
       glVertex2i(MinInsideX, y);  glVertex2i(MaxInsideX, y);
@@ -210,7 +163,7 @@ procedure TGame2DControls.Render;
       for i := 0 to enemyShips.Count-1 do
        if enemyShips[i] <> nil then
        begin
-        MoveLimitPosToPixel(enemyShips[i].shipPos, x, y);
+        MoveLimitPosToPixel(enemyShips[i].Translation, x, y);
         glVertex2i(x, y);
        end;
     glEnd;
@@ -237,15 +190,18 @@ end;
 
 var
   Controls: TGame2DControls;
-  Camera: TWalkCamera;
+
+  { Set before SetGameMode(modeGame); }
+  GameModeLevelUrl: String;
 
 procedure Press(Container: TUIContainer; const Event: TInputPressRelease); forward;
 procedure Update(Container: TUIContainer); forward;
 
 procedure modeEnter;
 begin
- Assert(levelScene <> nil,
-   'Error - setting game mode to modeGame but level uninitialized');
+ Controls := TGame2DControls.Create(nil);
+ SceneManager := TMalfunctionSceneManager.Create(nil);
+ SceneManager.AutoNavigation := false;
 
  Window.Controls.InsertFront(SceneManager);
  Window.Controls.InsertFront(Controls);
@@ -255,10 +211,16 @@ begin
  Window.OnUpdate := @Update;
 
  Window.AutoRedisplay := true;
+
+ NewPlayerShip;
+ LoadLevel(GameModeLevelUrl);
 end;
 
 procedure modeExit;
 begin
+ PlayerShip := nil; // will be freed be freeing SceneManager that owns it
+ UnloadLevel;
+
  glDisable(GL_DEPTH_TEST);
  glDisable(GL_LIGHTING);
  glDisable(GL_LIGHT0);
@@ -271,6 +233,15 @@ begin
  Window.Controls.Remove(Controls);
  Window.Controls.Remove(Notifications);
  Window.Controls.Remove(SceneManager);
+
+ FreeAndNil(Controls);
+ FreeAndNil(SceneManager);
+end;
+
+procedure PlayGame(const SceneURL: string);
+begin
+ GameModeLevelUrl := SceneURL;
+ SetGameMode(modeGame);
 end;
 
 { glw callbacks ----------------------------------------------------------- }
@@ -280,7 +251,7 @@ var fname: string;
 begin
  if Event.EventType <> itKey then Exit;
  case Event.key of
-  K_Space: playerShip.FireRocket(playerShip.shipDir, 1);
+  K_Space: playerShip.FireRocket(playerShip.Direction, 1);
   K_Escape:
     if MessageYesNo(Window, 'End this game and return to menu ?') then
       SetGameMode(modeMenu);
@@ -325,20 +296,20 @@ begin
   // TODO: we need EnableFixedFunction to work, as we do some rendering directly
   GLFeatures.EnableFixedFunction := true;
 
-  kokpit_img := LoadImage(ApplicationData('images/kokpit.png'),
+  kokpit_img := LoadImage('castle-data:/images/kokpit.png',
     [TRGBAlphaImage, TGrayscaleAlphaImage]);
   kokpit_img.Resize(Window.width, kokpit_img.Height * Window.Height div 480);
-  kokpit_gl := TGLImage.Create(kokpit_img, false { smooth scaling }, true { owns image });
+  kokpit_gl := TDrawableImage.Create(kokpit_img, false { smooth scaling }, true { owns image });
 
   { przyjmujemy ze crosshair.png bylo przygotowane dla ekranu 640x480.
     Resizujemy odpowiednio do naszego okienka. }
-  crossh_img := LoadImage(ApplicationData('images/crosshair.png'),
+  crossh_img := LoadImage('castle-data:/images/crosshair.png',
     [TRGBAlphaImage, TGrayscaleAlphaImage]);
   crossh_orig_width := crossh_img.Width;
   crossh_orig_height := crossh_img.Height;
   crossh_img.Resize(crossh_img.Width * Window.width div 640,
                     crossh_img.Height * Window.height div 480);
-  crossh_gl := TGLImage.Create(crossh_img, false { smooth scaling }, true { owns image });
+  crossh_gl := TDrawableImage.Create(crossh_img, false { smooth scaling }, true { owns image });
 end;
 
 procedure ContextClose;
@@ -352,13 +323,4 @@ initialization
   gameModeExit[modeGame] := @modeExit;
   ApplicationProperties.OnGLContextOpen.Add(@ContextOpen);
   ApplicationProperties.OnGLContextClose.Add(@ContextClose);
-
-  Controls := TGame2DControls.Create(nil);
-  SceneManager := TMalfunctionSceneManager.Create(nil);
-  Camera := TWalkCamera.Create(SceneManager);
-  Camera.Input := [];
-  SceneManager.Camera := Camera;
-finalization
-  FreeAndNil(Controls);
-  FreeAndNil(SceneManager);
 end.

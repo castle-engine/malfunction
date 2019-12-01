@@ -87,11 +87,6 @@ type
     procedure HitByRocket; override;
     function shipRadius: Single; override;
 
-    { multiply curr OpenGL matrix by player ship camera matrix.
-      "NoTranslate" version applies matrix not taking shipPos into account -
-      - like if shipPos would be = (0, 0, 0). }
-    procedure PlayerShipApplyMatrix;
-    procedure PlayerShipApplyMatrixNoTranslate;
     { call PlayerShipUpdate in Update in modeGame }
     procedure PlayerShipUpdate;
 
@@ -181,22 +176,6 @@ begin
  WoundedPlayerShip('You were hit by the rocket !');
 end;
 
-procedure TPlayerShip.PlayerShipApplyMatrix;
-var shipCenter: TVector3;
-begin
- shipCenter := shipPos + shipDir;
- // TODO: do not call gluXxx routines, do not set fixed-function OpenGL directly
- gluLookAt(shipPos[0], shipPos[1], shipPos[2],
-           shipCenter[0], shipCenter[1], shipCenter[2],
-           shipUp[0], shipUp[1], shipUp[2]);
-end;
-
-procedure TPlayerShip.PlayerShipApplyMatrixNoTranslate;
-begin
- gluLookAt(0, 0, 0, shipDir[0], shipDir[1], shipDir[2],
-                    shipUp[0] , shipUp[1] , shipUp[2]);
-end;
-
 procedure TPlayerShip.PlayerShipUpdate;
 
   procedure RotationSpeedBackToZero(var rotSpeed: Single;
@@ -229,9 +208,10 @@ const
   ROT_SPEED_CHANGE = 0.3;
   ROT_VERT_SPEED_CHANGE = 0.24;
   SPEED_CHANGE = 2;
-var newShipPos, shipSideAxis: TVector3;
-    sCollider: TEnemyShip;
-    shipUpZSign: Single;
+var
+  NewTranslation, shipSideAxis, T: TVector3;
+  sCollider: TEnemyShip;
+  UpZSign: Single;
 begin
  {odczytaj wcisniete klawisze}
  with Window do
@@ -247,12 +227,12 @@ begin
  {move ship using shipSpeed,
   check for collisions with level using octree,
   check for collisions with enemyShips using simple sphere collision detecion}
- newShipPos := shipPos + shipDir *
+ NewTranslation := Translation + Direction *
    (shipSpeed * Window.Fps.SecondsPassed * 50);
  if CheatDontCheckCollisions then
-  shipPos := newShipPos else
+  Translation := NewTranslation else
  begin
-  sCollider := CollisionWithOtherEnemyShip(newShipPos);
+  sCollider := CollisionWithOtherEnemyShip(NewTranslation);
   if sCollider <> nil then
   begin
    Crash(Random(20)+20, '"'+sCollider.ShipName+'"');
@@ -260,31 +240,33 @@ begin
    sCollider.Free;
   end else
   if not levelScene.InternalOctreeCollisions.MoveCollision(
-    shipPos, newShipPos, true, shipRadius,
+    Translation, NewTranslation, true, shipRadius,
     { boxes will be just ignored } TBox3D.Empty, TBox3D.Empty) then
    Crash(Random(40)+40, '') else
-   shipPos := newShipPos;
+   Translation := NewTranslation;
  end;
 
  {apply shipRotationSpeed variable and rotate ship around (0, 0, 1) or (0, 0, -1)
   (we use 1 or -1 to allow rotation direction consistent with keys left-right) }
- shipUpZSign := Sign(shipUp[2]);
- if shipUpZSign <> 0 then
+ UpZSign := Sign(Up[2]);
+ if UpZSign <> 0 then
  begin
-  shipDir := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.SecondsPassed * 50, shipDir, Vector3(0, 0, shipUpZSign));
-  shipUp := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.SecondsPassed * 50, shipUp, Vector3(0, 0, shipUpZSign));
+  Direction := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.SecondsPassed * 50, Direction, Vector3(0, 0, UpZSign));
+  Up := RotatePointAroundAxisDeg(shipRotationSpeed * Window.Fps.SecondsPassed * 50, Up, Vector3(0, 0, UpZSign));
  end;
  {apply speed vertical - here we will need shipSideAxis}
- shipSideAxis := TVector3.CrossProduct(shipDir, shipUp);
- shipDir := RotatePointAroundAxisDeg(shipVertRotationSpeed * Window.Fps.SecondsPassed * 50, shipDir, shipSideAxis);
- shipUp := RotatePointAroundAxisDeg(shipVertRotationSpeed * Window.Fps.SecondsPassed * 50, shipUp, shipSideAxis);
+ shipSideAxis := TVector3.CrossProduct(Direction, Up);
+ Direction := RotatePointAroundAxisDeg(shipVertRotationSpeed * Window.Fps.SecondsPassed * 50, Direction, shipSideAxis);
+ Up := RotatePointAroundAxisDeg(shipVertRotationSpeed * Window.Fps.SecondsPassed * 50, Up, shipSideAxis);
 
  {decrease rotations speeds}
  RotationSpeedBackToZero(shipRotationSpeed, ROT_SPEED_CHANGE * Window.Fps.SecondsPassed * 50);
  RotationSpeedBackToZero(shipVertRotationSpeed, ROT_VERT_SPEED_CHANGE * Window.Fps.SecondsPassed * 50);
 
- {apply shipPosBox}
- MoveLimit.ClampVar(shipPos);
+ {apply MoveLimit}
+ T := Translation;
+ MoveLimit.ClampVar(T);
+ Translation := T;
 
  if FadeOutIntensity > 0 then
    FadeOutIntensity -= 0.02 * Window.Fps.SecondsPassed * 50;
@@ -325,7 +307,7 @@ begin
 
   {draw kompas arrow}
   glTranslatef(kompasMiddle[0], kompasMiddle[1], 0);
-  glRotatef(RadToDeg(AngleRadPointToPoint(0, 0, shipDir[0], shipDir[1]))-90, 0, 0, 1);
+  glRotatef(RadToDeg(AngleRadPointToPoint(0, 0, Direction[0], Direction[1]))-90, 0, 0, 1);
   glScalef(10, kompasSrednica/2, 1);
   glTranslatef(0, -1, 0);
   glColorv(Yellow);
