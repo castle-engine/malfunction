@@ -30,15 +30,10 @@ uses X3DNodes, CastleSceneManager, CastleProjection, CastleTransform;
 
 type
   TMalfunctionSceneManager = class(TCastleSceneManager)
-  private
-    DefaultHeadlightNode: TDirectionalLightNode;
-  protected
-    function CalculateProjection: TProjection; override;
-    function Headlight: TAbstractLightNode; override;
   public
     procedure Update(const SecondsPassed: Single;
       var HandleInput: Boolean); override;
-    destructor Destroy; override;
+    procedure AdjustProjection;
   end;
 
 var
@@ -48,12 +43,13 @@ procedure PlayGame(const SceneURL: string);
 
 implementation
 
-uses CastleVectors, SysUtils, CastleGL, CastleWindow, GameGeneral, CastleGLUtils,
-  CastleUtils, LevelUnit, CastleBoxes, CastleMessages, PlayerShipUnit, CastleImages,
+uses SysUtils, Math,
+  CastleGL, CastleWindow, GameGeneral, CastleGLUtils,
+  CastleVectors, CastleUtils, LevelUnit, CastleBoxes, CastleMessages, PlayerShipUnit,
+  CastleImages,
   ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
   CastleStringUtils, CastleScene, CastleGLImages,
-  CastleUIControls, CastleCameras, Castle3D,
-  CastleRays, CastleApplicationProperties;
+  CastleUIControls, CastleCameras, CastleRays, CastleApplicationProperties;
 
 var
   kokpit_gl: TDrawableImage;
@@ -64,29 +60,21 @@ var
 
 { TMalfunctionSceneManager --------------------------------------------------- }
 
-destructor TMalfunctionSceneManager.Destroy;
-begin
-  FreeAndNil(DefaultHeadlightNode);
-  inherited;
-end;
-
-function TMalfunctionSceneManager.CalculateProjection: TProjection;
+procedure TMalfunctionSceneManager.AdjustProjection;
 var
   wholeMoveLimit: TBox3D;
 const
   AngleOfViewY = 30;
 begin
-  Result.ProjectionType := ptPerspective;
-  Result.PerspectiveAngles[0] := AdjustViewAngleDegToAspectRatio(
-    AngleOfViewY, EffectiveWidth / EffectiveHeight); // actually unused for now
-  Result.PerspectiveAngles[1] := AngleOfViewY;
-  Result.ProjectionNear := PLAYER_SHIP_CAMERA_RADIUS;
+  Camera.ProjectionType := ptPerspective;
+  Camera.Perspective.FieldOfView := DegToRad(AngleOfViewY);
+  Camera.Perspective.FieldOfViewAxis := faVertical;
+  Camera.ProjectionNear := PLAYER_SHIP_CAMERA_RADIUS;
   { Player jest zawsze w obrebie MoveLimit i widzi rzeczy w obrebie
     levelScene.BoundingBox. Wiec far = dlugosc przekatnej
     Box3DSum(MoveLimit, levelScene.BoundingBox) bedzie na pewno wystarczajace. }
   wholeMoveLimit := levelScene.BoundingBox + MoveLimit;
-  Result.ProjectionFarFinite := PointsDistance(wholeMoveLimit.Data[0], wholeMoveLimit.Data[1]);
-  Result.ProjectionFar := Result.ProjectionFarFinite;
+  Camera.ProjectionFar := PointsDistance(wholeMoveLimit.Data[0], wholeMoveLimit.Data[1]);
 end;
 
 procedure TMalfunctionSceneManager.Update(const SecondsPassed: Single;
@@ -97,13 +85,6 @@ begin
     playerShip.Translation,
     playerShip.Direction,
     playerShip.Up);
-end;
-
-function TMalfunctionSceneManager.Headlight: TAbstractLightNode;
-begin
-  if DefaultHeadlightNode = nil then
-    DefaultHeadlightNode := TDirectionalLightNode.Create('', '');;
-  Result := DefaultHeadlightNode;
 end;
 
 { TGame2DControls ------------------------------------------------------------ }
@@ -199,49 +180,52 @@ procedure Update(Container: TUIContainer); forward;
 
 procedure modeEnter;
 begin
- Controls := TGame2DControls.Create(nil);
- SceneManager := TMalfunctionSceneManager.Create(nil);
- SceneManager.AutoNavigation := false;
+  Controls := TGame2DControls.Create(nil);
+  SceneManager := TMalfunctionSceneManager.Create(nil);
+  SceneManager.AutoNavigation := false;
 
- Window.Controls.InsertFront(SceneManager);
- Window.Controls.InsertFront(Controls);
- Window.Controls.InsertFront(Notifications);
+  Window.Controls.InsertFront(SceneManager);
+  Window.Controls.InsertFront(Controls);
+  Window.Controls.InsertFront(Notifications);
 
- Window.OnPress := @Press;
- Window.OnUpdate := @Update;
+  Window.OnPress := @Press;
+  Window.OnUpdate := @Update;
 
- Window.AutoRedisplay := true;
+  Window.AutoRedisplay := true;
 
- NewPlayerShip;
- LoadLevel(GameModeLevelUrl);
+  NewPlayerShip;
+  LoadLevel(GameModeLevelUrl);
+
+  // once LevelScene initialized
+  SceneManager.AdjustProjection;
 end;
 
 procedure modeExit;
 begin
- PlayerShip := nil; // will be freed be freeing SceneManager that owns it
- UnloadLevel;
+  PlayerShip := nil; // will be freed be freeing SceneManager that owns it
+  UnloadLevel;
 
- glDisable(GL_DEPTH_TEST);
- glDisable(GL_LIGHTING);
- glDisable(GL_LIGHT0);
+  glDisable(GL_DEPTH_TEST);
+  glDisable(GL_LIGHTING);
+  glDisable(GL_LIGHT0);
 
- { Check Window <> nil, as it may be already nil (during destruction)
-   now in case of some errors }
- if Window <> nil then
-   Window.AutoRedisplay := false;
+  { Check Window <> nil, as it may be already nil (during destruction)
+    now in case of some errors }
+  if Window <> nil then
+    Window.AutoRedisplay := false;
 
- Window.Controls.Remove(Controls);
- Window.Controls.Remove(Notifications);
- Window.Controls.Remove(SceneManager);
+  Window.Controls.Remove(Controls);
+  Window.Controls.Remove(Notifications);
+  Window.Controls.Remove(SceneManager);
 
- FreeAndNil(Controls);
- FreeAndNil(SceneManager);
+  FreeAndNil(Controls);
+  FreeAndNil(SceneManager);
 end;
 
 procedure PlayGame(const SceneURL: string);
 begin
- GameModeLevelUrl := SceneURL;
- SetGameMode(modeGame);
+  GameModeLevelUrl := SceneURL;
+  SetGameMode(modeGame);
 end;
 
 { glw callbacks ----------------------------------------------------------- }
@@ -249,49 +233,50 @@ end;
 procedure Press(Container: TUIContainer; const Event: TInputPressRelease);
 var fname: string;
 begin
- if Event.EventType <> itKey then Exit;
- case Event.key of
-  K_Space: playerShip.FireRocket(playerShip.Direction, 1);
-  K_Escape:
-    if MessageYesNo(Window, 'End this game and return to menu ?') then
-      SetGameMode(modeMenu);
-  K_C:
-    if Window.Pressed.Modifiers=[mkShift, mkCtrl] then
-     with playerShip do CheatDontCheckCollisions := not CheatDontCheckCollisions else
-    if Window.Pressed.Modifiers=[] then
-     with playerShip do drawCrosshair := not drawCrosshair;
-  K_I:
-    if Window.Pressed[K_Shift] and Window.Pressed[K_Ctrl] then
-     with playerShip do CheatImmuneToRockets := not CheatImmuneToRockets;
-  K_R:
-    with playerShip do drawRadar := not drawRadar;
-  K_F5:
-    begin
-     fname := FileNameAutoInc('malfunction_screen_%d.png');
-     Window.SaveScreen(fname);
-     Notifications.Show('Screen saved to '+fname);
-    end;
- end;
+  if Event.EventType <> itKey then Exit;
+  case Event.key of
+    K_Space: playerShip.FireRocket(playerShip.Direction, 1);
+    K_Escape:
+      if MessageYesNo(Window, 'End this game and return to menu ?') then
+        SetGameMode(modeMenu);
+    K_C:
+      if Window.Pressed.Modifiers=[mkShift, mkCtrl] then
+        with playerShip do CheatDontCheckCollisions := not CheatDontCheckCollisions else
+      if Window.Pressed.Modifiers=[] then
+        with playerShip do drawCrosshair := not drawCrosshair;
+    K_I:
+      if Window.Pressed[K_Shift] and Window.Pressed[K_Ctrl] then
+        with playerShip do CheatImmuneToRockets := not CheatImmuneToRockets;
+    K_R:
+      with playerShip do drawRadar := not drawRadar;
+    K_F5:
+      begin
+        fname := FileNameAutoInc('malfunction_screen_%d.png');
+        Window.SaveScreen(fname);
+        Notifications.Show('Screen saved to '+fname);
+      end;
+  end;
 end;
 
 procedure Update(Container: TUIContainer);
 begin
- if playerShip.ShipLife <= 0 then
- begin
-  MessageOK(Window,['Your ship has been destroyed !','Game over.']);
-  SetGameMode(modeMenu);
-  Exit;
- end;
+  if playerShip.ShipLife <= 0 then
+  begin
+    MessageOK(Window,['Your ship has been destroyed !','Game over.']);
+    SetGameMode(modeMenu);
+    Exit;
+  end;
 
- playerShip.PlayerShipUpdate;
- ShipsAndRocketsUpdate;
+  playerShip.PlayerShipUpdate;
+  ShipsAndRocketsUpdate;
 end;
 
 { Open/Close Window -------------------------------------------------------- }
 
 procedure ContextOpen;
-var crossh_img: TCastleImage;
-    kokpit_img: TCastleImage;
+var
+  crossh_img: TCastleImage;
+  kokpit_img: TCastleImage;
 begin
   // TODO: we need EnableFixedFunction to work, as we do some rendering directly
   GLFeatures.EnableFixedFunction := true;
