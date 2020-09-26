@@ -49,7 +49,8 @@ uses SysUtils, Math,
   CastleImages,
   ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
   CastleStringUtils, CastleScene, CastleGLImages,
-  CastleUIControls, CastleCameras, CastleRays, CastleApplicationProperties;
+  CastleUIControls, CastleCameras, CastleRays, CastleApplicationProperties,
+  CastleRenderContext;
 
 var
   kokpit_gl: TDrawableImage;

@@ -32,7 +32,7 @@ uses SysUtils, CastleWindow, GameGeneral, CastleFonts,
   CastleTextureFont_suckgolf_32, CastleGLUtils, CastleMessages,
   CastleImages, CastleVectors, CastleUtils, CastleGLImages, CastleColors,
   CastleUIControls, CastleKeysMouse, CastleControls, CastleRectangles,
-  CastleFilesUtils, CastleApplicationProperties,
+  CastleFilesUtils, CastleApplicationProperties, CastleRenderContext,
   ModeGameUnit;
 
 { module consts and vars ---------------------------------------------------- }
