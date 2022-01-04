@@ -39,7 +39,7 @@ program malfunction;
 
 uses CastleWindow, GameGeneral, SysUtils, CastleUtils, ModeMenuUnit, ModeGameUnit,
   CastleParameters, CastleClassUtils, CastleFilesUtils, CastleKeysMouse,
-  CastleURIUtils, CastleLog;
+  CastleURIUtils, CastleLog, CastleApplicationProperties;
 
 { params ------------------------------------------------------------ }
 
@@ -61,7 +61,7 @@ begin
         VersionOptionHelp +nl+
         TCastleWindowBase.ParseParametersHelp(StandardParseOptions, true) +nl+
         nl+
-        SCastleEngineProgramHelpSuffix(DisplayApplicationName, Version, true));
+        ApplicationProperties.Description);
       Halt;
      end;
   1: begin
@@ -75,6 +75,9 @@ end;
 { main program ------------------------------------------------------- }
 
 begin
+  ApplicationProperties.ApplicationName := DisplayApplicationName;
+  ApplicationProperties.Version := Version;
+
   Window.FullScreen := true;
 
   { parse params }

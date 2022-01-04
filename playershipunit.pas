@@ -216,12 +216,12 @@ begin
  {odczytaj wcisniete klawisze}
  with Window do
  begin
-  if Pressed[K_Left] then shipRotationSpeed += ROT_SPEED_CHANGE * Window.Fps.SecondsPassed * 50;
-  if Pressed[K_Right] then shipRotationSpeed -= ROT_SPEED_CHANGE * Window.Fps.SecondsPassed * 50;
-  if Pressed[K_Up] then shipVertRotationSpeed -= ROT_VERT_SPEED_CHANGE * Window.Fps.SecondsPassed * 50;
-  if Pressed[K_Down] then shipVertRotationSpeed += ROT_VERT_SPEED_CHANGE * Window.Fps.SecondsPassed * 50;
-  if Pressed[K_A] then shipSpeed := Math.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * Window.Fps.SecondsPassed * 50);
-  if Pressed[K_Z] then shipSpeed := Math.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * Window.Fps.SecondsPassed * 50);
+  if Pressed[keyArrowLeft] then shipRotationSpeed += ROT_SPEED_CHANGE * Window.Fps.SecondsPassed * 50;
+  if Pressed[keyArrowRight] then shipRotationSpeed -= ROT_SPEED_CHANGE * Window.Fps.SecondsPassed * 50;
+  if Pressed[keyArrowUp] then shipVertRotationSpeed -= ROT_VERT_SPEED_CHANGE * Window.Fps.SecondsPassed * 50;
+  if Pressed[keyArrowDown] then shipVertRotationSpeed += ROT_VERT_SPEED_CHANGE * Window.Fps.SecondsPassed * 50;
+  if Pressed[keyA] then shipSpeed := Math.min(playerShipAbsoluteMaxSpeed, shipSpeed + SPEED_CHANGE * Window.Fps.SecondsPassed * 50);
+  if Pressed[keyZ] then shipSpeed := Math.max(playerShipAbsoluteMinSpeed, shipSpeed - SPEED_CHANGE * Window.Fps.SecondsPassed * 50);
  end;
 
  {move ship using shipSpeed,

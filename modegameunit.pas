@@ -236,21 +236,21 @@ var fname: string;
 begin
   if Event.EventType <> itKey then Exit;
   case Event.key of
-    K_Space: playerShip.FireRocket(playerShip.Direction, 1);
-    K_Escape:
+    keySpace: playerShip.FireRocket(playerShip.Direction, 1);
+    keyEscape:
       if MessageYesNo(Window, 'End this game and return to menu ?') then
         SetGameMode(modeMenu);
-    K_C:
+    keyC:
       if Window.Pressed.Modifiers=[mkShift, mkCtrl] then
         with playerShip do CheatDontCheckCollisions := not CheatDontCheckCollisions else
       if Window.Pressed.Modifiers=[] then
         with playerShip do drawCrosshair := not drawCrosshair;
-    K_I:
-      if Window.Pressed[K_Shift] and Window.Pressed[K_Ctrl] then
+    keyI:
+      if Window.Pressed[keyShift] and Window.Pressed[keyCtrl] then
         with playerShip do CheatImmuneToRockets := not CheatImmuneToRockets;
-    K_R:
+    keyR:
       with playerShip do drawRadar := not drawRadar;
-    K_F5:
+    keyF5:
       begin
         fname := FileNameAutoInc('malfunction_screen_%d.png');
         Window.SaveScreen(fname);

@@ -52,7 +52,7 @@ const
 var
   currentMenu: TMenuItem = Low(TMenuItem);
   listBg: TDrawableImage;
-  menuFont: TTextureFont;
+  menuFont: TCastleFont;
 
 { mode enter/exit ----------------------------------------------------------- }
 
@@ -102,21 +102,21 @@ procedure Press(Container: TUIContainer; const Event: TInputPressRelease);
 begin
   if Event.EventType <> itKey then Exit;
   case Event.key of
-    K_Up:
+    keyArrowUp:
       begin
         if currentMenu = Low(currentMenu) then
           currentMenu := High(currentMenu) else
           currentMenu := Pred(currentMenu);
         Window.Invalidate;
       end;
-    K_Down:
+    keyArrowDown:
       begin
         if currentMenu = High(currentMenu) then
           currentMenu := Low(currentMenu) else
           currentMenu := Succ(currentMenu);
         Window.Invalidate;
       end;
-    K_Enter:
+    keyEnter:
       case currentMenu of
         miGameManual:
           MessageOK(Window,
@@ -140,13 +140,14 @@ begin
             nl+
             'There is only one goal: destroy all enemy ships on every level.' +nl+
             nl+
-            SCastleEngineProgramHelpSuffix(DisplayApplicationName, Version, false));
+            ApplicationProperties.Description);
         miPlaySunnyDay: PlayGame('castle-data:/vrmls/lake.wrl');
         miPlayDeepSpace: PlayGame('castle-data:/vrmls/mobius.wrl');
         miPlayRainMountains: PlayGame('castle-data:/vrmls/wawoz.wrl');
         miQuit:
           if MessageYesNo(Window, 'Are you sure you want to quit ?') then Window.close;
       end;
+    else ;
   end;
 end;
 
@@ -154,7 +155,8 @@ procedure ContextOpen;
 begin
   listBg := TDrawableImage.Create('castle-data:/images/menubg.png', [TRGBImage],
     Window.width, Window.height, riBilinear);
-  menuFont := TTextureFont.Create(TextureFont_suckgolf_32);
+  menuFont := TCastleFont.Create(nil);
+  menuFont.Load(TextureFont_suckgolf_32);
 end;
 
 procedure ContextClose;
