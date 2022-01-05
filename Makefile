@@ -1,6 +1,6 @@
 # This Makefile uses "castle-engine" build tool for most operations
 # (like compilation).
-# See https://github.com/castle-engine/castle-engine/wiki/Build-Tool
+# See https://castle-engine.io/build_tool
 # for instructions how to install/use this build tool.
 
 .PHONY: standalone
