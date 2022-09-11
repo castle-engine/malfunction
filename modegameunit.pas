@@ -1,5 +1,5 @@
 {
-  Copyright 2003-2017 Michalis Kamburelis.
+  Copyright 2003-2022 Michalis Kamburelis.
 
   This file is part of "malfunction".
 
@@ -49,7 +49,7 @@ uses SysUtils, Math,
   CastleImages,
   ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,
   CastleStringUtils, CastleScene, CastleGLImages,
-  CastleUIControls, CastleCameras, CastleRays, CastleApplicationProperties,
+  CastleUIControls, CastleCameras, CastleApplicationProperties,
   CastleRenderContext;
 
 var
@@ -112,8 +112,8 @@ procedure TGame2DControls.Render;
 
     procedure MoveLimitPosToPixel(const pos: TVector3; var x, y: TGLint);
     begin
-     x := Round(MapRange(pos[0], MoveLimit.Data[0].Data[0], MoveLimit.Data[1].Data[0], MinInsideX, MaxInsideX));
-     y := Round(MapRange(pos[1], MoveLimit.Data[0].Data[1], MoveLimit.Data[1].Data[1], MinInsideY, MaxInsideY));
+     x := Round(MapRange(pos[0], MoveLimit.Data[0].X, MoveLimit.Data[1].X, MinInsideX, MaxInsideX));
+     y := Round(MapRange(pos[1], MoveLimit.Data[0].Y, MoveLimit.Data[1].Y, MinInsideY, MaxInsideY));
     end;
 
   var

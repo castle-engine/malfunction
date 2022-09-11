@@ -1,5 +1,5 @@
 {
-  Copyright 2003-2017 Michalis Kamburelis.
+  Copyright 2003-2022 Michalis Kamburelis.
 
   This file is part of "malfunction".
 
@@ -478,9 +478,9 @@ begin
  inherited;
 
  newAngleRad := AngleRad + AngleRadChange * Window.Fps.SecondsPassed * 50;
- NewTranslation[0] := cos(newAngleRad)*CircleRadius + CircleCenter[0];
- NewTranslation[1] := sin(newAngleRad)*CircleRadius + CircleCenter[1];
- NewTranslation[2] := CircleCenter[2];
+ NewTranslation.X := cos(newAngleRad)*CircleRadius + CircleCenter.X;
+ NewTranslation.Y := sin(newAngleRad)*CircleRadius + CircleCenter.Y;
+ NewTranslation.Z := CircleCenter.Z;
 
  NewDirection := NewTranslation - Translation;
 

@@ -1,5 +1,5 @@
 {
-  Copyright 2003-2017 Michalis Kamburelis.
+  Copyright 2003-2022 Michalis Kamburelis.
 
   This file is part of "malfunction".
 
@@ -278,7 +278,7 @@ const
   SpeedRect: TRectangle = (Left: 80; Bottom: 20; Width: 30; Height: 70);
   LiveRect : TRectangle = (Left: 30; Bottom: 20; Width: 30; Height: 70);
   RectMargin = 2;
-  kompasMiddle: TVector2 = (Data: (560, 480 - 428));
+  kompasMiddle: TVector2 = (X: 560; Y: 52);
   kompasSrednica = 70;
 
   procedure DrawIndicator(R: TRectangle;

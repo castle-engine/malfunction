@@ -1,5 +1,5 @@
 {
-  Copyright 2002-2017 Michalis Kamburelis.
+  Copyright 2002-2022 Michalis Kamburelis.
 
   This file is part of "malfunction".
 
@@ -59,7 +59,7 @@ begin
         'Accepted command-line options:' +nl+
         HelpOptionHelp+ nl+
         VersionOptionHelp +nl+
-        TCastleWindowBase.ParseParametersHelp(StandardParseOptions, true) +nl+
+        TCastleWindow.ParseParametersHelp(StandardParseOptions, true) +nl+
         nl+
         ApplicationProperties.Description);
       Halt;
