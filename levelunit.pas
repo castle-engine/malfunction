@@ -1,5 +1,5 @@
 {
-  Copyright 2003-2017 Michalis Kamburelis.
+  Copyright 2003-2023 Michalis Kamburelis.
 
   This file is part of "malfunction".
 
@@ -354,9 +354,7 @@ begin
    end;
   end;
 
-  {pamietaj ze konstruowanie octree musi byc PO ew. usunieciu node'a MoveLimitXY}
-  levelScene.TriangleOctreeProgressTitle := 'Loading ...';
-  levelScene.Spatial := [ssDynamicCollisions];
+  levelScene.PreciseCollisions := true;
 
   rockets := TRocketList.Create(false);
 
