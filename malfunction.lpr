@@ -57,8 +57,8 @@ begin
       InfoWrite(
         'malfunction: small 3d game in OpenGL.' +nl+
         'Accepted command-line options:' +nl+
-        HelpOptionHelp+ nl+
-        VersionOptionHelp +nl+
+        OptionDescription('-h / --help', 'Print this help message and exit.') + NL +
+        OptionDescription('-v / --version', 'Print the version number and exit.') + NL +
         TCastleWindow.ParseParametersHelp +nl+
         nl+
         ApplicationProperties.Description);
@@ -81,7 +81,7 @@ begin
   Window.FullScreen := true;
 
   { parse params }
-  Window.ParseParameters(StandardParseOptions);
+  Window.ParseParameters;
   Parameters.Parse(Options, @OptionProc, nil);
   if Parameters.High > 0 then
     raise EInvalidParams.Create('Unrecognized parameter : ' + Parameters[1]);

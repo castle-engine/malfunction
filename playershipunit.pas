@@ -1,5 +1,5 @@
 {
-  Copyright 2003-2022 Michalis Kamburelis.
+  Copyright 2003-2023 Michalis Kamburelis.
 
   This file is part of "malfunction".
 
@@ -109,7 +109,7 @@ implementation
 
 uses CastleGL, GameGeneral, CastleWindow, CastleUtils, Math,
   LevelUnit, CastleMessages, CastleUIControls, CastleRectangles,
-  CastleApplicationProperties;
+  CastleApplicationProperties, CastleInternalGLUtils;
 
 constructor TPlayerShip.Create;
 begin
@@ -292,6 +292,38 @@ const
     DrawRectangle(R, InsideCol);
   end;
 
+  { Draw arrow shape. Arrow is placed on Z = 0 plane, points to the up,
+    has height = 2 (from y = 0 to y = 2) and width 1 (from x = -0.5 to 0.5).
+
+    Everything is drawn CCW when seen from standard view (x grows right, y up).
+    Uses current OpenGL color. }
+  procedure GLDrawArrow(HeadThickness: TGLfloat = 0.4;
+    HeadLength: TGLfloat = 0.5);
+  begin
+    HeadLength := 2*HeadLength; { map HeadLength to 0..2 }
+
+    glBegin(GL_TRIANGLES);
+      glVertex2f(0, 2);
+      glVertex2f(-1, HeadLength);
+      glVertex2f(-HeadThickness, HeadLength);
+
+      glVertex2f(0, 2);
+      glVertex2f(-HeadThickness, HeadLength);
+      glVertex2f(HeadThickness, HeadLength);
+
+      glVertex2f(0, 2);
+      glVertex2f(HeadThickness, HeadLength);
+      glVertex2f(1, HeadLength);
+    glEnd;
+
+    glBegin(GL_QUADS);
+      glVertex2f(-HeadThickness, HeadLength);
+      glVertex2f(-HeadThickness, 0);
+      glVertex2f(HeadThickness, 0);
+      glVertex2f(HeadThickness, HeadLength);
+    glEnd;
+  end;
+
 begin
   glLoadIdentity;
 
@@ -306,6 +338,7 @@ begin
     Math.max(shipLife, 0.0) , 0, MaxShipLife);
 
   {draw kompas arrow}
+  { TODO: seems to be drawn at wrong position now }
   glTranslatef(kompasMiddle[0], kompasMiddle[1], 0);
   glRotatef(RadToDeg(AngleRadPointToPoint(0, 0, Direction[0], Direction[1]))-90, 0, 0, 1);
   glScalef(10, kompasSrednica/2, 1);

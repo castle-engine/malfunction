@@ -1,5 +1,5 @@
 {
-  Copyright 2003-2022 Michalis Kamburelis.
+  Copyright 2003-2023 Michalis Kamburelis.
 
   This file is part of "malfunction".
 
@@ -279,9 +279,6 @@ var
   crossh_img: TCastleImage;
   kokpit_img: TCastleImage;
 begin
-  // TODO: we need EnableFixedFunction to work, as we do some rendering directly
-  GLFeatures.EnableFixedFunction := true;
-
   kokpit_img := LoadImage('castle-data:/images/kokpit.png',
     [TRGBAlphaImage, TGrayscaleAlphaImage]);
   kokpit_img.Resize(Window.width, kokpit_img.Height * Window.Height div 480);
@@ -305,6 +302,9 @@ begin
 end;
 
 initialization
+  // TODO: we need EnableFixedFunction to work, as we do some rendering directly
+  TGLFeatures.RequestCapabilities := rcForceFixedFunction;
+
   gameModeEnter[modeGame] := @modeEnter;
   gameModeExit[modeGame] := @modeExit;
   ApplicationProperties.OnGLContextOpen.Add(@ContextOpen);

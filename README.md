@@ -6,6 +6,12 @@ Complete documentation on http://castle-engine.sourceforge.net/malfunction.php .
 
 Using Castle Game Engine, see http://castle-engine.sourceforge.net/ .
 
+## Big TODO
+
+**Do not use this code a basis for your projects. It uses really outdated Castle Game Engine API with outdated (deprecated) direct OpenGL fixed-function access.** This is not a way to render on modern GPUs, and this is not a way to use Castle Game Engine :)
+
+This project is only for historical purposes.
+
 ## License
 
 GNU GPL >= 2.
