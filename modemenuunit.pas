@@ -22,8 +22,6 @@
 
 unit ModeMenuUnit;
 
-{$I castleconf.inc}
-
 interface
 
 implementation

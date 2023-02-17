@@ -28,8 +28,6 @@ unit PlayerShipUnit;
     zainicjowany.
 }
 
-{$I castleconf.inc}
-
 interface
 
 uses CastleBoxes, ShipsAndRockets, SysUtils, CastleGLUtils, CastleColors,
@@ -107,7 +105,9 @@ procedure NewPlayerShip;
 
 implementation
 
-uses CastleGL, GameGeneral, CastleWindow, CastleUtils, Math,
+uses
+  {$ifdef FPC} GL, GLExt, {$else} OpenGL, OpenGLext, {$endif}
+  GameGeneral, CastleWindow, CastleUtils, Math,
   LevelUnit, CastleMessages, CastleUIControls, CastleRectangles,
   CastleApplicationProperties, CastleInternalGLUtils;
 

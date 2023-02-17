@@ -22,8 +22,6 @@
 
 unit ModeGameUnit;
 
-{$I castleconf.inc}
-
 interface
 
 uses X3DNodes, CastleSceneManager, CastleProjection, CastleTransform;
@@ -44,7 +42,8 @@ procedure PlayGame(const SceneURL: string);
 implementation
 
 uses SysUtils, Math,
-  CastleGL, CastleWindow, GameGeneral, CastleGLUtils,
+  {$ifdef FPC} GL, GLExt, {$else} OpenGL, OpenGLext, {$endif}
+  CastleWindow, GameGeneral, CastleGLUtils,
   CastleVectors, CastleUtils, LevelUnit, CastleBoxes, CastleMessages, PlayerShipUnit,
   CastleImages,
   ShipsAndRockets, CastleKeysMouse, CastleFilesUtils, CastleColors,

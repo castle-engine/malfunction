@@ -4,3 +4,6 @@
 malfunction
 malfunction.exe
 castle-engine-output/
+*.lps
+backup/
+*.compiled

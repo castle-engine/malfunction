@@ -33,8 +33,6 @@ unit ShipsAndRockets;
     Cos co jest uwazane za "up" modelu musi byc skierowane w strone +X.
 }
 
-{$I castleconf.inc}
-
 interface
 
 uses SysUtils, Classes, Generics.Collections,
@@ -229,8 +227,10 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 
 implementation
 
-uses CastleBoxes, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
-  CastleUIControls, CastleGL, CastleFilesUtils, CastleApplicationProperties,
+uses
+  {$ifdef FPC} GL, GLExt, {$else} OpenGL, OpenGLext, {$endif}
+  CastleBoxes, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
+  CastleUIControls, CastleFilesUtils, CastleApplicationProperties,
   ModeGameUnit;
 
 type
