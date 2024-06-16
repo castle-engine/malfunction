@@ -80,6 +80,11 @@ procedure TMalfunctionSceneManager.Update(const SecondsPassed: Single;
   var HandleInput: Boolean);
 begin
   inherited;
+  { TODO: For some reason, doing this once, in modeEnter, is not enough.
+    We have to do this every frame.
+    Otherwise camera projection gets reset to default, which is not good
+    for us -- we need larger ProjectionNear to Z-fighting on some far objects. }
+  AdjustProjection;
   Camera.SetView(
     playerShip.Translation,
     playerShip.Direction,
