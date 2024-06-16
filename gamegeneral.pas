@@ -38,7 +38,7 @@ interface
 uses SysUtils, CastleWindow, CastleNotifications;
 
 const
-  Version = '1.2.8';
+  Version = '1.3.0';
   DisplayApplicationName = 'malfunction';
 
 var
