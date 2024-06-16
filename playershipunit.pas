@@ -106,7 +106,6 @@ procedure NewPlayerShip;
 implementation
 
 uses
-  {$ifdef FPC} GL, GLExt, {$else} OpenGL, OpenGLext, {$endif}
   GameGeneral, CastleWindow, CastleUtils, Math,
   LevelUnit, CastleMessages, CastleUIControls, CastleRectangles,
   CastleApplicationProperties, CastleInternalGLUtils;
@@ -292,6 +291,7 @@ const
     DrawRectangle(R, InsideCol);
   end;
 
+  (*
   { Draw arrow shape. Arrow is placed on Z = 0 plane, points to the up,
     has height = 2 (from y = 0 to y = 2) and width 1 (from x = -0.5 to 0.5).
 
@@ -323,13 +323,13 @@ const
       glVertex2f(HeadThickness, HeadLength);
     glEnd;
   end;
+  *)
 
 begin
-  glLoadIdentity;
-
   { Sizes below are adjusted to 640x480, it's easiest to just scale
     to make them work for all window sizes }
-  glScalef(Window.Width / 640, Window.Height / 480, 1);
+  // TODO: No direct drawing using GL fixed-function anymore
+  //glScalef(Window.Width / 640, Window.Height / 480, 1);
 
   {draw speed and live indicators}
   DrawIndicator(speedRect, Yellow, Black, LightBlue,
@@ -338,16 +338,18 @@ begin
     Math.max(shipLife, 0.0) , 0, MaxShipLife);
 
   {draw kompas arrow}
-  { TODO: seems to be drawn at wrong position now }
+  // TODO: seems to be drawn at wrong position now
+  // TODO: No direct drawing using GL fixed-function anymore
+  (*
   glTranslatef(kompasMiddle[0], kompasMiddle[1], 0);
   glRotatef(RadToDeg(AngleRadPointToPoint(0, 0, Direction[0], Direction[1]))-90, 0, 0, 1);
   glScalef(10, kompasSrednica/2, 1);
   glTranslatef(0, -1, 0);
   glColorv(Yellow);
   GLDrawArrow(0.3, 0.8);
+  *)
 
   {draw FadeOut}
-  glLoadIdentity;
   GLFadeRectangleDark(Window.Rect, FadeOutColor, FadeOutIntensity);
 end;
 

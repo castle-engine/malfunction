@@ -42,7 +42,6 @@ procedure PlayGame(const SceneURL: string);
 implementation
 
 uses SysUtils, Math,
-  {$ifdef FPC} GL, GLExt, {$else} OpenGL, OpenGLext, {$endif}
   CastleWindow, GameGeneral, CastleGLUtils,
   CastleVectors, CastleUtils, LevelUnit, CastleBoxes, CastleMessages, PlayerShipUnit,
   CastleImages,
@@ -119,6 +118,9 @@ procedure TGame2DControls.Render;
     i: integer;
     x, y: TGLint;
   begin
+    // TODO: No direct drawing using GL fixed-function anymore
+    (*
+
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_BLEND);
 
@@ -151,6 +153,7 @@ procedure TGame2DControls.Render;
     RenderContext.PointSize := 1;
 
     glDisable(GL_BLEND);
+    *)
   end;
 
 begin
@@ -204,10 +207,6 @@ procedure modeExit;
 begin
   PlayerShip := nil; // will be freed be freeing SceneManager that owns it
   UnloadLevel;
-
-  glDisable(GL_DEPTH_TEST);
-  glDisable(GL_LIGHTING);
-  glDisable(GL_LIGHT0);
 
   { Check Window <> nil, as it may be already nil (during destruction)
     now in case of some errors }

@@ -228,7 +228,6 @@ function NameShcutToEnemyShipKind(const ANameShcut: string): TEnemyShipKind;
 implementation
 
 uses
-  {$ifdef FPC} GL, GLExt, {$else} OpenGL, OpenGLext, {$endif}
   CastleBoxes, GameGeneral, X3DNodes, LevelUnit, Math, PlayerShipUnit,
   CastleUIControls, CastleFilesUtils, CastleApplicationProperties,
   ModeGameUnit;
