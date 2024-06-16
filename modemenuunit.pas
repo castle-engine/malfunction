@@ -118,12 +118,7 @@ begin
       case currentMenu of
         miGameManual:
           MessageOK(Window,
-            'If you want, you can dream that you''re a saviour of galaxy or' +
-            ' something like that. The truth is:' +nl+
-            '1. You sit inside the most junky and malfunctioning space ship in the whole universe.' +nl+
-            '2. Noone knows what''s going on but there are some ' +
-            'freakin'' ALIEN SPACESHIPS everywhere around, and THEY JUST GOT' +
-            ' DOWN ON YOU.' +nl+
+            'You sit inside the most malfunctioning space ship in the whole universe. You are surrounded by alien spaceships. Destroy them all!' +nl+
             nl+
             'Keys :' +nl+
             '  Arrows = rotate' +nl+
