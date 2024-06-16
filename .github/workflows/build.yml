@@ -1,7 +1,7 @@
 # ----------------------------------------------------------------------------
 # GitHub Actions workflow to build this application.
 # Using latest Castle Game Engine ( https://castle-engine.io/ ) snapshot.
-# For multiple platforms (Linux, Windows, Android).
+# For multiple platforms (Linux, Windows).
 #
 # This uses GitHub-hosted runners, that is: you don't need to set up any server
 # infrastructure, GitHub provides it all for free for open-source projects.
@@ -48,15 +48,6 @@ jobs:
         with:
           name: linux-build
           path: "*-linux-x86_64.tar.gz"
-          if-no-files-found: error
-
-      - name: Package Android
-        run: castle-engine package --target=android --verbose
-      - name: Archive Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-build
-          path: "*.apk"
           if-no-files-found: error
 
   release:
